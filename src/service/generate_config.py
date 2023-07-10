@@ -2,7 +2,7 @@ from webuiapi import HiResUpscaler, ControlNetUnit
 from typing import List, Dict, Any
 from feishu.message_card import LIST_INFO_CARD, handle_list_info_card
 from service.aliyun_translator import aliyun_translator
-
+import string
 
 class GenerateConfig:
     def get_as_json(self) -> dict:
@@ -18,59 +18,64 @@ class GenerateConfig:
     def translate_to_english(self, translator='alibaba'):
         # def translate(text):
         #     return html.unescape(ts.translate_text(query_text=text, translator=translator, from_language='auto', to_language='en'))
+        def is_english_chars_and_punctuation(s):
+            for c in s:
+                if not (c.isascii() and (c.isalnum() or c in string.punctuation)):
+                    return False
+            return True
 
-        if len(self.prompt) > 0:
+        if len(self.prompt) > 0 and not is_english_chars_and_punctuation(self.prompt):
             self.prompt = aliyun_translator.translate(self.prompt)
-        if len(self.negative_prompt) > 0:
+        if len(self.negative_prompt) > 0 and not is_english_chars_and_punctuation(self.negative_prompt):
             self.negative_prompt = aliyun_translator.translate(self.negative_prompt)
 
 
 class TextToImageConfig(GenerateConfig):
     def __init__(
-        self,
-        enable_hr=True,
-        denoising_strength=0.7,
-        firstphase_width=0,
-        firstphase_height=0,
-        hr_scale=1,
-        hr_upscaler=HiResUpscaler.Latent,
-        hr_second_pass_steps=0,
-        hr_resize_x=0,
-        hr_resize_y=0,
-        prompt="",
-        styles=[],
-        seed=-1,
-        subseed=-1,
-        subseed_strength=0.0,
-        seed_resize_from_h=0,
-        seed_resize_from_w=0,
-        sampler_name=None,  # use this instead of sampler_index
-        batch_size=1,
-        n_iter=1,
-        steps=None,
-        cfg_scale=7.0,
-        width=512,
-        height=768,
-        restore_faces=True,
-        tiling=False,
-        do_not_save_samples=False,
-        do_not_save_grid=False,
-        negative_prompt="EasyNegative,NG_DeepNegative_V1_75T, worst quality, low quality, nsfw, nipples, nude, lowres, bad anatomy, badhandv4",
-        eta=1.0,
-        s_churn=0,
-        s_tmax=0,
-        s_tmin=0,
-        s_noise=1,
-        override_settings={},
-        override_settings_restore_afterwards=True,
-        script_args=None,  # List of arguments for the script "script_name"
-        script_name=None,
-        send_images=True,
-        save_images=False,
-        alwayson_scripts={},
-        controlnet_units: List[ControlNetUnit] = [],
-        sampler_index=None,  # deprecated: use sampler_name
-        use_deprecated_controlnet=False,
+            self,
+            enable_hr=True,
+            denoising_strength=0.7,
+            firstphase_width=0,
+            firstphase_height=0,
+            hr_scale=1,
+            hr_upscaler=HiResUpscaler.Latent,
+            hr_second_pass_steps=0,
+            hr_resize_x=0,
+            hr_resize_y=0,
+            prompt="",
+            styles=[],
+            seed=-1,
+            subseed=-1,
+            subseed_strength=0.0,
+            seed_resize_from_h=0,
+            seed_resize_from_w=0,
+            sampler_name=None,  # use this instead of sampler_index
+            batch_size=1,
+            n_iter=1,
+            steps=None,
+            cfg_scale=7.0,
+            width=512,
+            height=768,
+            restore_faces=True,
+            tiling=False,
+            do_not_save_samples=False,
+            do_not_save_grid=False,
+            negative_prompt="EasyNegative,NG_DeepNegative_V1_75T, worst quality, low quality, normal quality, nsfw, nipples, nude, lowres, bad anatomy, bad eyes, negative_hand-neg:11",
+            eta=1.0,
+            s_churn=0,
+            s_tmax=0,
+            s_tmin=0,
+            s_noise=1,
+            override_settings={},
+            override_settings_restore_afterwards=True,
+            script_args=None,  # List of arguments for the script "script_name"
+            script_name=None,
+            send_images=True,
+            save_images=False,
+            alwayson_scripts={},
+            controlnet_units: List[ControlNetUnit] = [],
+            sampler_index=None,  # deprecated: use sampler_name
+            use_deprecated_controlnet=False,
     ):
         self.enable_hr = enable_hr
         self.denoising_strength = denoising_strength
@@ -119,53 +124,53 @@ class TextToImageConfig(GenerateConfig):
 
 class ImageToImageConfig(GenerateConfig):
     def __init__(
-        self,
-        images=[],  # list of PIL Image
-        resize_mode=0,
-        denoising_strength=0.75,
-        image_cfg_scale=1.5,
-        mask_image=None,  # PIL Image mask
-        mask_blur=4,
-        inpainting_fill=0,
-        inpaint_full_res=True,
-        inpaint_full_res_padding=0,
-        inpainting_mask_invert=0,
-        initial_noise_multiplier=1,
-        prompt="<lora:Moxin_10:1>",
-        styles=[],
-        seed=-1,
-        subseed=-1,
-        subseed_strength=0,
-        seed_resize_from_h=0,
-        seed_resize_from_w=0,
-        sampler_name="Euler a",  # use this instead of sampler_index
-        batch_size=1,
-        n_iter=1,
-        steps=None,
-        cfg_scale=7.0,
-        width=512,
-        height=768,
-        restore_faces=True,
-        tiling=False,
-        do_not_save_samples=False,
-        do_not_save_grid=False,
-        negative_prompt="NG_DeepNegative_V1_75T, worst quality, low quality, nsfw, nipples, nude, lowres, bad anatomy, bad hands",
-        eta=1.0,
-        s_churn=0,
-        s_tmax=0,
-        s_tmin=0,
-        s_noise=1,
-        override_settings={},
-        override_settings_restore_afterwards=True,
-        script_args=None,  # List of arguments for the script "script_name"
-        sampler_index=None,  # deprecated: use sampler_name
-        include_init_images=False,
-        script_name=None,
-        send_images=True,
-        save_images=False,
-        alwayson_scripts={},
-        controlnet_units: List[ControlNetUnit] = [],
-        use_deprecated_controlnet=False,
+            self,
+            images=[],  # list of PIL Image
+            resize_mode=0,
+            denoising_strength=0.75,
+            image_cfg_scale=1.5,
+            mask_image=None,  # PIL Image mask
+            mask_blur=4,
+            inpainting_fill=0,
+            inpaint_full_res=True,
+            inpaint_full_res_padding=0,
+            inpainting_mask_invert=0,
+            initial_noise_multiplier=1,
+            prompt="<lora:Moxin_10:1>",
+            styles=[],
+            seed=-1,
+            subseed=-1,
+            subseed_strength=0,
+            seed_resize_from_h=0,
+            seed_resize_from_w=0,
+            sampler_name="Euler a",  # use this instead of sampler_index
+            batch_size=1,
+            n_iter=1,
+            steps=None,
+            cfg_scale=7.0,
+            width=512,
+            height=768,
+            restore_faces=True,
+            tiling=False,
+            do_not_save_samples=False,
+            do_not_save_grid=False,
+            negative_prompt="NG_DeepNegative_V1_75T, worst quality, low quality, nsfw, nipples, nude, lowres, bad anatomy, bad hands",
+            eta=1.0,
+            s_churn=0,
+            s_tmax=0,
+            s_tmin=0,
+            s_noise=1,
+            override_settings={},
+            override_settings_restore_afterwards=True,
+            script_args=None,  # List of arguments for the script "script_name"
+            sampler_index=None,  # deprecated: use sampler_name
+            include_init_images=False,
+            script_name=None,
+            send_images=True,
+            save_images=False,
+            alwayson_scripts={},
+            controlnet_units: List[ControlNetUnit] = [],
+            use_deprecated_controlnet=False,
     ):
         self.images = images
         self.resize_mode = resize_mode
