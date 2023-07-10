@@ -74,11 +74,12 @@ def handle_image_card(image_info, img_key_list, prompt):
 
     for index, img_key in enumerate(img_key_list):
 # 调整lora   options = ['', a, b, c]
-        a = ',<lora:Moxin_10:0.7>'
-        b = ',<lora:BeautyNwsjMajic2-01:0.8>'
-        c = ',<lora:koreaface15:1>'
-        options = ['', a, b, c]
-        random.shuffle(options)
+        m1_a = ',<lora:Moxin_10:0.7>,small eyes'
+        m1_b = ',<lora:BeautyNwsjMajic2-01:0.6>'
+        m1_c = ',<lora:shojovibe_v11:0.7>'
+        m1_d = ',<lora:Cohen_EuropeanStyle_V10:0.9>'
+        m1_options = [m1_a, m1_b, m1_c, m1_d]
+        random.shuffle(m1_options)
 
         elements.append(
             {
@@ -92,15 +93,15 @@ def handle_image_card(image_info, img_key_list, prompt):
                 "preview": True
             })
 
-        temple = options.pop()
-        options.insert(0, prompt)
+        m1_temple = m1_options.pop()
+        m1_options.insert(0, prompt)
         handle_infotexts(image_info)
 
-        prompt_tmp = temple + prompt.replace(a, '').replace(b, '').replace(c, '')
-        if image_info["model"] != "m1 majicmixRealistic_v6":
-            prompt_tmp = prompt.replace(a, '').replace(b, '').replace(c, '')
-
-
+        prompt_origin = prompt.replace(m1_a, '').replace(m1_b, '').replace(m1_c, '').replace(m1_d, '')
+        if image_info["model"] == "m1 麦橘写实":
+            prompt_remix = m1_temple + prompt_origin
+        else:
+            prompt_remix = prompt_origin
 
         elements.append({
             "tag": "action",
@@ -115,7 +116,7 @@ def handle_image_card(image_info, img_key_list, prompt):
                     "type": "primary",
                     "value": {
                         "type": "reload",
-                        "prompt": prompt_tmp,
+                        "prompt": prompt_remix,
                     }
                 }
             ]

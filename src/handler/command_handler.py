@@ -53,13 +53,12 @@ class CommandHandler:
                 model = sd_webui.get_model()
                 message_sender.send_text_message(myevent, f'当前模型为: [{model}]')
             else:
-                print("##########################")
                 print(model)
                 print(myevent)
                 sd_webui.set_model(model)
                 message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == 'm1':
-            model = "m1 majicmixRealistic_v6"
+            model = "m1 麦橘写实"
             sd_webui.set_model(model)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == 'm2':
