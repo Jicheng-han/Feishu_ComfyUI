@@ -15,6 +15,7 @@ class ImageHandler:
 
     def img2txt(self, img) -> str:
         result = sd_webui.interrogate(img)
+#        print('模    块: image_handler - img2txt')
         return result['info']
 
     # 根据指令生成不同的消息卡片
@@ -27,13 +28,13 @@ class ImageHandler:
             images_key.append(upload_image(img_data))
         return handle_image_card(result['info'], images_key, prompts)
 
+
     def handle_image(self, myevent: MyReceiveEvent):
         if myevent.image_key is None:
             return False
 
         img = get_message_resource(myevent.get_message_id(), myevent.image_key)
         img = Image.open(BytesIO(img))
-
         if myevent.text is None:
             message_sender.send_text_message(myevent, f"正在以图生文，{sd_webui.queue()}")
             clip_info_en = self.img2txt(img)

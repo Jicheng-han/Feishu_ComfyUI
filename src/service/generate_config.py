@@ -16,17 +16,19 @@ class GenerateConfig:
                 print(f'Unknown key {key} in json')
 
     def translate_to_english(self, translator='alibaba'):
+        def contains_chinese(text):
+            return any('\u4e00' <= char <= '\u9fff' for char in text)
+
         # def translate(text):
         #     return html.unescape(ts.translate_text(query_text=text, translator=translator, from_language='auto', to_language='en'))
-        def is_english_chars_and_punctuation(s):
-            for c in s:
-                if not (c.isascii() and (c.isalnum() or c in string.punctuation)):
-                    return False
-            return True
-
-        if len(self.prompt) > 0 and not is_english_chars_and_punctuation(self.prompt):
-            self.prompt = aliyun_translator.translate(self.prompt)
-        if len(self.negative_prompt) > 0 and not is_english_chars_and_punctuation(self.negative_prompt):
+        print(f'\n模    块: generate_config')
+        print(f'原始输入: {self.prompt}')
+        if len(self.prompt) > 0:
+            self.prompt = self.prompt.replace('@_user_1','').replace('@_user_2','').replace('@_user_3','').replace('@_user_4','').replace('@_user_5','').replace('@_user_6','').replace('裸', 'sheer').replace('naked', 'sheer').replace('nude','revealing').replace('bare','sheer').replace('undressed','sheer').replace('exposed','sheer').replace('Stripped','sheer').replace('Unclothed','sheer').replace('Au naturel','sheer').replace('In the buff','sheer')
+            if contains_chinese(self.prompt):
+                self.prompt = aliyun_translator.translate(self.prompt)
+                print(f'翻译输出: {self.prompt}\n')
+        if len(self.negative_prompt) > 0 and contains_chinese(self.negative_prompt):
             self.negative_prompt = aliyun_translator.translate(self.negative_prompt)
 
 
@@ -37,9 +39,9 @@ class TextToImageConfig(GenerateConfig):
             denoising_strength=0.7,
             firstphase_width=0,
             firstphase_height=0,
-            hr_scale=1,
-            hr_upscaler=HiResUpscaler.Latent,
-            hr_second_pass_steps=0,
+            hr_scale=1.5,
+            hr_upscaler="4x-UltraSharp",
+            hr_second_pass_steps=10,
             hr_resize_x=0,
             hr_resize_y=0,
             prompt="",
@@ -49,18 +51,18 @@ class TextToImageConfig(GenerateConfig):
             subseed_strength=0.0,
             seed_resize_from_h=0,
             seed_resize_from_w=0,
-            sampler_name=None,  # use this instead of sampler_index
+            sampler_name="DPM++ 2M Karras",  # use this instead of sampler_index
             batch_size=1,
             n_iter=1,
-            steps=None,
-            cfg_scale=7.0,
+            steps=30,
+            cfg_scale=8.0,
             width=512,
             height=768,
             restore_faces=True,
             tiling=False,
             do_not_save_samples=False,
             do_not_save_grid=False,
-            negative_prompt="EasyNegative,NG_DeepNegative_V1_75T, worst quality, low quality, normal quality, nsfw, nipples, nude, lowres, bad anatomy, bad eyes, negative_hand-neg:11",
+            negative_prompt="badhandv4, EasyNegative,NG_DeepNegative_V1_75T, worst quality, low quality, normal quality, naked, nsfw, nipples, nude, lowres, bad anatomy, bad eyes, negative_hand-neg:11",
             eta=1.0,
             s_churn=0,
             s_tmax=0,
@@ -76,6 +78,8 @@ class TextToImageConfig(GenerateConfig):
             controlnet_units: List[ControlNetUnit] = [],
             sampler_index=None,  # deprecated: use sampler_name
             use_deprecated_controlnet=False,
+            # use_async=True,
+
     ):
         self.enable_hr = enable_hr
         self.denoising_strength = denoising_strength
@@ -120,6 +124,7 @@ class TextToImageConfig(GenerateConfig):
         self.controlnet_units = controlnet_units
         self.sampler_index = sampler_index
         self.use_deprecated_controlnet = use_deprecated_controlnet
+        # self.use_async = use_async
 
 
 class ImageToImageConfig(GenerateConfig):
@@ -143,7 +148,7 @@ class ImageToImageConfig(GenerateConfig):
             subseed_strength=0,
             seed_resize_from_h=0,
             seed_resize_from_w=0,
-            sampler_name="Euler a",  # use this instead of sampler_index
+            sampler_name="DPM++ 2M Karras",  # use this instead of sampler_index
             batch_size=1,
             n_iter=1,
             steps=None,
@@ -154,7 +159,7 @@ class ImageToImageConfig(GenerateConfig):
             tiling=False,
             do_not_save_samples=False,
             do_not_save_grid=False,
-            negative_prompt="NG_DeepNegative_V1_75T, worst quality, low quality, nsfw, nipples, nude, lowres, bad anatomy, bad hands",
+            negative_prompt="NG_DeepNegative_V1_75T, worst quality, low quality, naked, nsfw, nipples, nude, lowres, bad anatomy, bad hands",
             eta=1.0,
             s_churn=0,
             s_tmax=0,

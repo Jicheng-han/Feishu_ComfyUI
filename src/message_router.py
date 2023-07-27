@@ -44,7 +44,9 @@ def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> 
     if myevent.is_group_chat() and not myevent.is_mentioned_bot():
         return
 
-    feishu_logger.info('Feishu message: %s', attr.asdict(event))
+    # feishu_logger.info('Feishu message: %s', attr.asdict(event))
+    # feishu_logger.info('User ID: %s',event.event.sender.sender_id.user_id)
+    print(f'User   id: {event.event.sender.sender_id.user_id}')
 
     # ignore request if event has no content
     if not myevent.has_content():

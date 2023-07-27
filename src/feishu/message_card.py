@@ -31,7 +31,7 @@ def handle_list_info_card(LIST_INFO_CARD, list):
         }
         LIST_INFO_CARD["elements"].append(element)
     return LIST_INFO_CARD
-
+print('模    块: message_card - format_input_str')
 def handle_infotexts(obj):
     # 获取 Model 信息并将其作为一个新的字段添加到对象中
     model_info = ''
@@ -63,6 +63,8 @@ def handle_infotexts(obj):
     formatted_str = format_input_str('', obj.keys())
     for key, value in obj.items():
         formatted_str += '\n **【' + key + '】** ' + str(value).replace('<', ' &lt ').replace('>', ' &gt ')
+#        print('模    块: message_card - formatted_str')
+#        print(formatted_str)
     return formatted_str
 
 def handle_image_card(image_info, img_key_list, prompt):
@@ -74,10 +76,10 @@ def handle_image_card(image_info, img_key_list, prompt):
 
     for index, img_key in enumerate(img_key_list):
 # 调整lora   options = ['', a, b, c]
-        m1_a = ',<lora:Moxin_10:0.7>, small eyes'
-        m1_b = ',<lora:BeautyNwsjMajic2-01:0.6>'
-        m1_c = ',<lora:shojovibe_v11:1>'
-        m1_d = ',<lora:BeautyNwsjMajic2-01:0.6>'
+        m1_a = '<lora:add_detail:0.7>, '
+        m1_b = '<lora:BeautyNwsjMajic2-01:0.6>, '
+        m1_c = '<lora:blindbox_v1_mix:1>, '
+        m1_d = '<lora:BeautyNwsjMajic2-01:0.6>, '
         m1_options = [m1_a, m1_b, m1_c, m1_d]
         random.shuffle(m1_options)
 
@@ -96,13 +98,17 @@ def handle_image_card(image_info, img_key_list, prompt):
         m1_temple = m1_options.pop()
         m1_options.insert(0, prompt)
         handle_infotexts(image_info)
+        print('模    块: message_card')
+        print(f'当前模型: {image_info["model"]}')
 
         prompt_origin = prompt.replace(m1_a, '').replace(m1_b, '').replace(m1_c, '').replace(m1_d, '')
-        if image_info["model"] == "m1 麦橘写实":
+        if image_info["model"] == "2_3D真人_现实主义":
             prompt_remix = m1_temple + prompt_origin
+            print(f'载入lora: {prompt_remix}')
+            print(prompt_remix)
         else:
             prompt_remix = prompt_origin
-
+#            print(f'手气之前：{prompt_remix}')
         elements.append({
             "tag": "action",
 
@@ -122,6 +128,7 @@ def handle_image_card(image_info, img_key_list, prompt):
             ]
         })
         result = {"config": {"wide_screen_mode": True}, "elements": elements}
+#        print(f'手气之后：{prompt_remix}')
     return result
 
 

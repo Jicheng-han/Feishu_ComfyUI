@@ -11,7 +11,7 @@ import re
 
 class StableDiffusionWebUI:
     def __init__(self, webui_host, webui_port=7860, webui_user=None, webui_password=None, use_https=False):
-        self.webui_api = webuiapi.WebUIApi(host=webui_host, port=webui_port, use_https=use_https, steps=25)
+        self.webui_api = webuiapi.WebUIApi(host=webui_host, port=webui_port, use_https=use_https, steps=30)
         if webui_user is not None and webui_password is not None:
             self.webui_api.set_auth(webui_user, webui_password)
 
@@ -32,7 +32,24 @@ class StableDiffusionWebUI:
     #     response.raise_for_status()
 
     #     return response.json()
+    def list_models_card(self):
+        models = self.webui_api.get_sd_models()
+        cmd_list = []
+        for model_info in models:
+            model_name = model_info['model_name']
+            cmd_list.append({"label": model_name , "cmd": "/model "+model_name+""})
+        a = [
+            {"tag": "div", "text": {"content": "**我是SD-BOT，由StableDiffusion赋能的AIGC机器人**", "tag": "lark_md"}},
+            {"tag": "hr"},
+            {"tag": "div", "text": {"content": "** 获取所有模型**\n\"/model_list\"", "tag": "lark_md"}},
+            {"tag": "hr"},
+            {"tag": "div", "text": {"content": "**切换模型**", "tag": "lark_md"}},
+        ]
 
+        a.extend([{"tag": "div", "text": {"content": "**" + cmd.get('label') + "**\n文本回复\"" + cmd.get('cmd') + "\"", "tag": "lark_md"}} for cmd in cmd_list[:]]),
+        print(a)
+        help_card = {"elements": a, "header": {"template": "blue", "title": {"content": "🎒模型列表", "tag": "plain_text"}}}
+        return help_card
     # Methods for displaying information
     def helpCard(self):
         cmd_list = [
@@ -75,7 +92,7 @@ class StableDiffusionWebUI:
         models_list_txt = f'共有[{len(models)}]个模型\n'
         for model_info in models_sorted:
             model_name = model_info['model_name']
-            models_list_txt += f'模型：{model_name}\n'
+            models_list_txt += f'{model_name}\n'
 
 
         return models_list_txt
@@ -135,7 +152,7 @@ class StableDiffusionWebUI:
     def queue(self):
         queue = self.webui_api.get_progress()
         modelx = self.webui_api.util_get_current_model()[0:self.webui_api.util_get_current_model().index(".")]
-        queue_msg = f'[当前模型:  {modelx}]\n[模型列表: /m  模型切换: /m1]'
+        queue_msg = f'[当前模型:  {modelx}]\n[模型列表: /m  模型切换: /1]'
 
         return queue_msg
 
@@ -194,6 +211,7 @@ class StableDiffusionWebUI:
 
     def txt2img(self, gen_cfg: TextToImageConfig):
         gen_cfg.translate_to_english()
+        print('模    块: stabledeffusion')
         result = self.webui_api.txt2img(**gen_cfg.get_as_json())
         return result.__dict__
 
@@ -205,6 +223,5 @@ class StableDiffusionWebUI:
     def interrogate(self, img):
         result = self.webui_api.interrogate(img)
         return result.__dict__
-
 
 sd_webui = StableDiffusionWebUI(app_config.WEBUI_HOST, app_config.WEBUI_PORT, app_config.WEBUI_USER, app_config.WEBUI_PASSWORD, app_config.WEBUI_USE_HTTPS)

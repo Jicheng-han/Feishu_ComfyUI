@@ -16,12 +16,14 @@ class MessageHandler:
     def handle_update_message_card(self, token, openId, prompt):
         messageCard = self.handle_prompt(prompt)
         messageCard["open_ids"] = [openId]
+        print(f'模    块: message_handler - handle_update_message_card')
         return message_sender.update_message_card(token, messageCard)
 
     # 根据指令生成不同的消息卡片
     def handle_prompt(self, prompts):
         gen_cfg = TextToImageConfig()
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts))
+        print(f'模    块: message_handler - handle_prompt')
         result = sd_webui.txt2img(gen_cfg)
         images_key = []
         for img_data in result['images']:
@@ -31,5 +33,6 @@ class MessageHandler:
     def handle_message(self, myevent: MyReceiveEvent):
         message_sender.send_text_message(myevent, f"{sd_webui.queue()}")
         messageCard = self.handle_prompt(myevent.text)
-
+        print(f'模    块: message_handler - handle_message')
+        print('------------------------------------------------------')
         return message_sender.send_message_card(myevent, messageCard)

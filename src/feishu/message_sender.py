@@ -73,6 +73,7 @@ class MessageSender:
             request_opts=[set_timeout(3)],
         )
         resp = req.do(self.conf)
+        print('模    块: message_sender-发送消息卡片')
         app_logger.debug("send_command_card to %s", chat_id)
         if resp.code == 0:
             return True
@@ -100,6 +101,7 @@ class MessageSender:
             request_opts=[set_timeout(3)],
         )
         resp = req.do(self.conf)
+        print('模    块: message_sender-更新消息卡片')
         app_logger.debug("update_message_card to %s", token)
         if resp.code == 0:
             return True

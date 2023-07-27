@@ -13,6 +13,7 @@ def action_im_message(ctx: Context, conf: Config, card: MessageReceiveEvent) -> 
 
 def handledelayedUpdateMessageCard(token,openId, prompt):
     message_handler.handle_update_message_card(token, openId, prompt)
+    print('模    块: message_action')
 
 def delayedUpdateMessageCard(card):
     if card.action:
