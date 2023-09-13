@@ -21,6 +21,7 @@ str_arr = [
     "Seed",
     "Negative prompt",
     "prompt",
+    "negative_prompt",
 ]
 def handle_list_info_card(LIST_INFO_CARD, list):
     LIST_INFO_CARD["elements"] = []
@@ -76,12 +77,12 @@ def handle_image_card(image_info, img_key_list, prompt):
 
     for index, img_key in enumerate(img_key_list):
 # 调整lora   options = ['', a, b, c]
-        m1_a = '<lora:add_detail:0.7>, '
-        m1_b = '<lora:BeautyNwsjMajic2-01:0.6>, '
-        m1_c = '<lora:blindbox_v1_mix:1>, '
-        m1_d = '<lora:BeautyNwsjMajic2-01:0.6>, '
-        m1_options = [m1_a, m1_b, m1_c, m1_d]
-        random.shuffle(m1_options)
+        m1_a = 'xxmix_girl, '
+        m1_b = ''
+        m1_c = 'xxmix_girl,<lora:xxmix0731girl:0.4>,'
+        m1_d = ''
+        # m1_options = [m1_a, m1_b, m1_c, m1_d]
+        # random.shuffle(m1_options)
 
         elements.append(
             {
@@ -95,17 +96,24 @@ def handle_image_card(image_info, img_key_list, prompt):
                 "preview": True
             })
 
-        m1_temple = m1_options.pop()
-        m1_options.insert(0, prompt)
+        # m1_temple = m1_options.pop()
+        # m1_options.insert(0, prompt)
         handle_infotexts(image_info)
         print('模    块: message_card')
         print(f'当前模型: {image_info["model"]}')
 
+
         prompt_origin = prompt.replace(m1_a, '').replace(m1_b, '').replace(m1_c, '').replace(m1_d, '')
-        if image_info["model"] == "2_3D真人_现实主义":
-            prompt_remix = m1_temple + prompt_origin
+        negative_prompt = ""
+
+        if image_info["model"] == "2_3D真人_女孩半身像":
+            prompt_remix = m1_a + prompt_origin
+            negative_prompt = '(unaestheticXLv31:0.6),  negativeXL_D, noise, grit, dull, washed out, low contrast, blurry, hazy, malformed, warped, deformed, text, watermark, worst quality, low quality, illustration, 3d, 2d, painting, cartoons, sketch, bad anatomy, bad hands, multiple eyebrow, (cropped), extra limb, missing limbs, deformed hands, long neck, long body, (bad hands), signature, username, artist name, conjoined fingers, deformed fingers, ugly eyes, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, painting by bad-artist",deformed hands, long neck, long body, (bad hands), conjoined fingers, deformed fingers,'
             print(f'载入lora: {prompt_remix}')
-            print(prompt_remix)
+        if image_info["model"] == "1_排名第一模型_Crystal":
+            prompt_remix = m1_b + prompt_origin
+            negative_prompt = '(unaestheticXLv31:0.6),  negativeXL_D, noise, grit, dull, washed out, low contrast, blurry, hazy, malformed, warped, deformed, text, watermark, worst quality, low quality, illustration, 3d, 2d, painting, cartoons, sketch, bad anatomy, bad hands, multiple eyebrow, (cropped), extra limb, missing limbs, deformed hands, long neck, long body, (bad hands), signature, username, artist name, conjoined fingers, deformed fingers, ugly eyes, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, painting by bad-artist",deformed hands, long neck, long body, (bad hands), conjoined fingers, deformed fingers,'
+            print(f'载入lora: {prompt_remix}')
         else:
             prompt_remix = prompt_origin
 #            print(f'手气之前：{prompt_remix}')
@@ -123,10 +131,13 @@ def handle_image_card(image_info, img_key_list, prompt):
                     "value": {
                         "type": "reload",
                         "prompt": prompt_remix,
+                        "negative_prompt": negative_prompt,
+
                     }
                 }
             ]
         })
+        
         result = {"config": {"wide_screen_mode": True}, "elements": elements}
 #        print(f'手气之后：{prompt_remix}')
     return result
