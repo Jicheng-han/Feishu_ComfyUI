@@ -212,6 +212,7 @@ class StableDiffusionWebUI:
     def txt2img(self, gen_cfg: TextToImageConfig):
         gen_cfg.translate_to_english()
         print('模    块: stabledeffusion')
+ #       print(f'模    块: stabledeffusion 参数: {self.webui_api.txt2img(**gen_cfg.get_as_json())}')
         result = self.webui_api.txt2img(**gen_cfg.get_as_json())
         return result.__dict__
 

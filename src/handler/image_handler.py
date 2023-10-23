@@ -15,7 +15,7 @@ class ImageHandler:
 
     def img2txt(self, img) -> str:
         result = sd_webui.interrogate(img)
-#        print('模    块: image_handler - img2txt')
+        print('模    块: image_handler - img2txt')
         return result['info']
 
     # 根据指令生成不同的消息卡片

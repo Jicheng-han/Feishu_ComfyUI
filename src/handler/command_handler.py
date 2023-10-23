@@ -15,7 +15,16 @@ class CommandHandler:
     def handle_command(self, myevent: MyReceiveEvent):
         command = myevent.get_command()
         print('command_handler')
-
+        options = {}
+        options['sd_vae'] = 'vae-ft-mse-840000-ema-pruned.safetensors'
+        options_xl = {}
+        options_xl['sd_vae'] = 'sdxl_vae.safetensors'
+        options_Y = {}
+        options_Y['sd_vae'] = 'finalPruneVAE_v10.pt'
+        options_xl2 = {}
+        options_xl2['sd_vae'] = 'xlVAEC_c9.safetensors'
+        options_none = {}
+        options_none['sd_vae'] = 'None'
 
         if command == 'help':
             # message_sender.send_text_message(myevent, sd_webui.help())
@@ -61,113 +70,136 @@ class CommandHandler:
                 print(myevent)
                 sd_webui.set_model(model)
                 message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '1':
-            model = "1_3D真人_麦橘写实"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '2':
-            model = "2_3D真人_现实主义"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '3':
-            model = "3_亚洲一号_AWPortrait"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '4':
-            model = "4_亚洲二号_MoyouArtificial"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '5':
-            model = "5_万象熔炉_2.5D"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '6':
-            model = "6_YesMix_2D"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        # elif command == '7':
-        #     model = "7_hellojplassie_real"
+        # elif command == '0':
+        #     model = "BDicon_SDXL_三维图标大模型_v1.0"
         #     sd_webui.set_model(model)
         #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == '8':
-            model = "8_CuriousMerge_2.5D"
+        # elif command == '00':
+        #     model = "counterfeitxl_v10"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+
+        elif command == '1':
+            model = "1_排名第一模型_Crystal"
             sd_webui.set_model(model)
+            sd_webui.set_options(options_xl)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == '2':
+            model = "2_realvisxlV20_v20Bakedvae"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_none)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == '3':
+            model = "3_juggernautXL_version5"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl2)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == '4':
+            model = "4_sdvn7Nijistylexl_v1"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl2)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == '5':
+            model = "5_beautifulRealistic_v7"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == '6':
+            model = "6_majicmixRealistic_v7"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == '6':
+        #     model = "6_BDicon_SDXL_三维图标大模型_v1.0"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == '7':
+        #      model = "7_sdvn7Nijistylexl_v1"
+        #      sd_webui.set_model(model)
+        #      sd_webui.set_options(options_xl2)
+        #      message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == '8':
+            model = "8_counterfeitxl_v10.5D"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl2)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         # elif command == '9':
-        #     model = "9_colorful_v31_2D"
+        #     model = "9_墨幽人造人_v1040精简"
         #     sd_webui.set_model(model)
         #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == 'a':
-            model = "a_awpainting_v11_2D"
+            model = "a_墨幽人造人_v1060修复"
             sd_webui.set_model(model)
+            sd_webui.set_options(options)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-#        elif command == 'b':
-#            model = "b_beautifulRealistic_v60"
-#            sd_webui.set_model(model)
-#            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-#         elif command == 'c':
-#             model = "c_cetusMix_Whalefall2"
-#             sd_webui.set_model(model)
-#             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == 'b':
+            model = "b_starlightXLAnimated_v3"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'c':
+        #      model = "c_卡通二号_特化可爱风格"
+        #      sd_webui.set_model(model)
+        #      message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == 'd':
-            model = "d_dreamshaper_7"
+            model = "d_卡通3D_duchaitenAiartSDXL_v10"
             sd_webui.set_model(model)
+            sd_webui.set_options(options_xl2)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'e':
-            model = "e_deliberate_v2"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'f':
-            model = "f_fantasyWorld_v10"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'g':
-            model = "g_guofeng_国风3_v34"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'h':
-            model = "h_hellojplassie_real"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'e':
+        #     model = "e_deliberate_v2"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'f':
+        #     model = "f_fantasyWorld_v10"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'g':
+        #     model = "g_guofeng_国风3_v34"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'h':
+        #     model = "h_hellojplassie_real"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         # elif command == 'i':
         #     model = "i_cetusMix_Whalefall2"
         #     sd_webui.set_model(model)
         #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'j':
-            model = "j_建筑dvarchMultiPrompt"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'jj':
-            model = "jj_建筑architecturerealmix"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'm':
-            model = "m_meichidarkMIX38"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'j':
+        #     model = "j_建筑dvarchMultiPrompt"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'jj':
+        #     model = "jj_建筑architecturerealmix"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+
         # elif command == 'n':
         #     model = "5_2.5D_万象熔炉"
         #     sd_webui.set_model(model)
         #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        # elif command == 'p':
-        #     model = "p_photon_v1_3D"
+        # elif command == 'o':
+        #     model = "o_onlyrealistic_v30BakedVAE"
         #     sd_webui.set_model(model)
         #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == 's':
-            model = "s_shenhua_神话2"
+            model = "s_sdvn6Realxl_detailface"
             sd_webui.set_model(model)
+            sd_webui.set_options(options_xl2)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 't':
-            model = "t_tmndMixVI_2D"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        elif command == 'u':
-            model = "u_unreal_meina_v41"
-            sd_webui.set_model(model)
-            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 't':
+        #     model = "t_tmndMixVI_2D"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        # elif command == 'u':
+        #     model = "u_unreal_meina_v41"
+        #     sd_webui.set_model(model)
+        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == 'y':
-            model = "y_yuzu_v11"
+            model = "y_Yesmix_v30"
             sd_webui.set_model(model)
+            sd_webui.set_options(options_Y)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         # elif command == 'z':
         #     model = "z_建筑dvarchMultiPrompt"
