@@ -1,10 +1,11 @@
 import json
 from util.app_config import AppConfig
-from larksuiteoapi import Config
+#from larksuiteoapi import Config
 from feishu.message_sender import message_sender
 from util.logger import app_logger
 from service.stablediffusion import sd_webui
 from util.event_helper import MyReceiveEvent
+#from lark_oapi.api.application.v6.model.p2_application_bot_menu_v6 import P2ApplicationBotMenuV6
 
 
 
@@ -105,7 +106,7 @@ class CommandHandler:
             sd_webui.set_options(options)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         elif command == '6':
-            model = "6_majicmixRealistic_v7"
+            model = "6_majicmixRealistic"
             sd_webui.set_model(model)
             sd_webui.set_options(options)
             message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
@@ -158,10 +159,11 @@ class CommandHandler:
         #     model = "g_guofeng_国风3_v34"
         #     sd_webui.set_model(model)
         #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
-        # elif command == 'h':
-        #     model = "h_hellojplassie_real"
-        #     sd_webui.set_model(model)
-        #     message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
+        elif command == 'l':
+            model = "lzSDXL_v10"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_none)
+            message_sender.send_text_message(myevent, f'切换模型为: [{model}]')
         # elif command == 'i':
         #     model = "i_cetusMix_Whalefall2"
         #     sd_webui.set_model(model)

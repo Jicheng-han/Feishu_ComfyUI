@@ -72,15 +72,15 @@ def handle_image_card(image_info, img_key_list, prompt):
 
     for index, img_key in enumerate(img_key_list):
 # 调整lora   options = ['', a, b, c]
-        m1_a = '(close up:1.2), (portrait:1.2), '
-        m1_b = '<lora:add-detail-xl:0.8>,'
-        m1_c = 'masterpiece, best quality,  face front, smile, upper body, studio light, studio, side light, makeup portrait, face in center, '
+        m1_a = 'masterpiece, top quality, best quality, (close-up:1.2), (upper body:1.2), 1girl,'
+        m1_b = 'Beautiful Chinese Women,'
+        m1_c = 'masterpiece, top quality, best quality, '
         m1_d = 'mysterious, fantasy,'
         m1_e = 'masterpiece,best quality,realistic,1girl,'
         m1_f = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4), 1girl, '
-        m1_z = '(masterpiece,best quality, ultra realistic,32k,RAW photo,detail skin, 8k uhd, dslr,high quality, film grain:1.5),'
-        m1_halfbody = '(close up:1.2), (half-body portrait:1.2),'
-        m1_x = 'masterpiece, best quality, extremely delicate and beautiful, highres, original,'
+        m1_z = '(masterpiece,best quality, ultra realistic,32k,RAW photo,detail skin, 8k uhd, dslr,high quality, film grain:1.5), (close-up:1.2), (upper body:1.2), 1girl,'
+        m1_halfbody = '(close up:1.2),' # 已定版
+        m1_x = 'chinese woman,moyou,Beautiful Chinese Women,'
         # m1_options = [m1_a, m1_b, m1_c, m1_d]
         # random.shuffle(m1_options)
         elements.append(
@@ -119,19 +119,19 @@ def handle_image_card(image_info, img_key_list, prompt):
             prompt_remix = m1_halfbody + prompt_origin.replace("full", ',,,,,,half')
             print(f'载入lora: {prompt_remix}')
 
-        if image_info["model"] == "2_realvisxlV20_v20Bakedvae":
+        if image_info["model"] == "XLMoyouArtificial_v01":
+            prompt_remix = m1_b + prompt_origin
+            print(f'载入lora: {prompt_remix}')
+
+        if image_info["model"] == "xxmix9realisticsdxl_v10":
             prompt_remix = prompt_origin
-            negative_prompt = 'FastNegative,wizards staff, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, oil painting, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,'
             print(f'载入lora: {prompt_remix}')
 
         if image_info["model"] == "2_3D真人_女孩半身像":
             prompt_remix = prompt_origin
             negative_prompt = 'FastNegative,wizards staff, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, oil painting, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,'
             print(f'载入lora: {prompt_remix}')
-        if image_info["model"] == "3_juggernautXL_version5":
-            prompt_remix = prompt_origin
-            negative_prompt = 'FastNegative,wizards staff, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, oil painting, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,'
-            print(f'载入lora: {prompt_remix}')
+
 
         if image_info["model"] == "5_beautifulRealistic_v7":
             prompt_remix = '(masterpiece, top quality, best quality, ' + prompt_origin
@@ -139,8 +139,7 @@ def handle_image_card(image_info, img_key_list, prompt):
             print(f'载入lora: {prompt_remix}')
 
         if image_info["model"] == "5_亚洲一号_AWPortrait":
-            prompt_remix = '(masterpiece, top quality, best quality, ' + prompt_origin
-            negative_prompt = 'ng_deepnegative_v1_75t, (badhandv4:1.2), (worst quality:2), (low quality:2), (normal quality:2), lowres, bad anatomy, bad hands, ((monochrome)), ((grayscale)) watermark, moles, large breast, big breast  '
+            prompt_remix = m1_f + prompt_origin
             print(f'载入lora: {prompt_remix}')
 
         if image_info["model"] == "4_sdvn7Nijistylexl_v1":

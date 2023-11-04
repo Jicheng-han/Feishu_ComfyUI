@@ -1,7 +1,7 @@
 import json
 import attr
 from util.app_config import app_config
-from larksuiteoapi.service.im.v1.event import MessageReceiveEvent
+from larksuiteoapi.service.im.v1.event import MessageReceiveEvent #lark_oapi/api/im/v1/model/event_message.py
 
 
 class MyReceiveEvent:
