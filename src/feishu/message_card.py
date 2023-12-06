@@ -75,12 +75,12 @@ def handle_image_card(image_info, img_key_list, prompt):
         m1_a = 'masterpiece, top quality, best quality, (close-up:1.2), (upper body:1.2), 1girl,'
         m1_b = 'Beautiful Chinese Women,'
         m1_c = 'masterpiece, top quality, best quality, '
-        m1_d = 'mysterious, fantasy,'
-        m1_e = 'masterpiece,best quality,realistic,1girl,'
+        m1_d = '<lora:LCM-LoRA_sdxl:1>,'
+        m1_e = '<lora:LunaXL-极致网红脸SDXL_v1.0:3>,'
         m1_f = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4), 1girl, '
         m1_z = '(masterpiece,best quality, ultra realistic,32k,RAW photo,detail skin, 8k uhd, dslr,high quality, film grain:1.5), (close-up:1.2), (upper body:1.2), 1girl,'
         m1_halfbody = '(close up:1.2),' # 已定版
-        m1_x = 'chinese woman,moyou,Beautiful Chinese Women,'
+        m1_x = 'anime artwork pixar,3d style,toon,,masterpiece,best quality,good shine,OC rendering,best quality,4K,super detail,'
         # m1_options = [m1_a, m1_b, m1_c, m1_d]
         # random.shuffle(m1_options)
         elements.append(
@@ -101,74 +101,30 @@ def handle_image_card(image_info, img_key_list, prompt):
         print('模    块: message_card')
         print(f'当前模型: {image_info["model"]}')
 
+        prompt_origin = prompt.replace(m1_a, '').replace(m1_b, '').replace(m1_c, '').replace(m1_d, '').replace(m1_e, '').replace(m1_f, '').replace(m1_z, '').replace(m1_halfbody, '').replace(m1_e, '').replace(m1_x, '').replace(',,,,,,half',"full",)
 
-        prompt_origin = prompt.replace(m1_a, '').replace(m1_b, '').replace(m1_c, '').replace(m1_d, '').replace(m1_f, '').replace(m1_z, '').replace(m1_halfbody, '').replace(m1_e, '').replace(m1_x, '').replace(',,,,,,half',"full",)
-        negative_prompt = ""
-
-        if image_info["model"] == "copaxTimelessxlSDXL1_v5":
-            prompt_remix = prompt_origin
-            negative_prompt = '(unaestheticXLv31:0.6), (worst quality, low quality, illustration, 3d, 2d), open mouth, tooth,ugly face, old face, long neck,'
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "1_排名第一模型_Crystal":
-            prompt_remix = prompt_origin
-            negative_prompt = 'FastNegative, '
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "a_墨幽人造人_v1060修复":
+        if image_info["model"] == "a_moyou_v1060":
             prompt_remix = m1_halfbody + prompt_origin.replace("full", ',,,,,,half')
-            print(f'载入lora: {prompt_remix}')
+            # print(f'载入lora: {prompt_remix}')
+        elif image_info["model"] == "MR_3DQ _SDXL_V0.2":
+             prompt_remix = m1_x + prompt_origin
+             # print(f'载入lora: {prompt_remix}')
 
-        if image_info["model"] == "XLMoyouArtificial_v01":
-            prompt_remix = m1_b + prompt_origin
-            print(f'载入lora: {prompt_remix}')
+        elif image_info["model"] == "xxmix9realisticsdxl_v10":
+             prompt_remix = prompt_origin
+             # print(f'载入lora: {prompt_remix}')
 
-        if image_info["model"] == "xxmix9realisticsdxl_v10":
-            prompt_remix = prompt_origin
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "2_3D真人_女孩半身像":
-            prompt_remix = prompt_origin
-            negative_prompt = 'FastNegative,wizards staff, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, oil painting, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,'
-            print(f'载入lora: {prompt_remix}')
-
-
-        if image_info["model"] == "5_beautifulRealistic_v7":
-            prompt_remix = '(masterpiece, top quality, best quality, ' + prompt_origin
-            negative_prompt = 'badhandv4, ng_deepnegative_v1_75t,(worst_quality:2.0) (MajicNegative_V2:0.8), BadNegAnatomyV1-neg, bradhands, cartoon, cgi, render, illustration, painting, drawing, sketches,  '
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "5_亚洲一号_AWPortrait":
-            prompt_remix = m1_f + prompt_origin
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "4_sdvn7Nijistylexl_v1":
-            prompt_remix = '' + prompt_origin
-            negative_prompt = 'negativeXL_D, noise, grit, dull, washed out, low contrast, blurry, hazy, malformed, warped, deformed, text, watermark, worst quality, low quality, illustration, 3d, 2d, painting, cartoons, sketch, bad anatomy, bad hands, multiple eyebrow, (cropped), extra limb, missing limbs, deformed hands, long neck, long body, (bad hands), signature, username, artist name, conjoined fingers, deformed fingers, ugly eyes, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, painting by bad-artist",deformed hands, long neck, long body, (bad hands), conjoined fingers, deformed fingers,'
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "4_真人_麦橘写实V25":
-            prompt_remix = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4), 1girl, ' + prompt_origin
-            negative_prompt = 'badhandv4, ng_deepnegative_v1_75t, BadNegAnatomyV1-neg, (worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,'
-            print(f'载入lora: {prompt_remix}')
+        elif image_info["model"] == "1_sdxlUnstableDiffusers_v8HeavensWrathVAE":
+             prompt_remix = prompt_origin
+             # print(f'载入lora: {prompt_remix}')
+        elif image_info["model"] == "b_starlightXLAnimated_v3":
+             prompt_remix = prompt_origin
+             # print(f'载入lora: {prompt_remix}')
 
 
-        if image_info["model"] == "a_3D炫彩_LahMysterious_v40":
-            prompt_remix = prompt_origin
-            negative_prompt = 'FastNegative, '
-            print(f'载入lora: {prompt_remix}')
-
-        if image_info["model"] == "y_Yesmix_v30":
-            prompt_remix = '' + prompt_origin
-            negative_prompt = 'SimpleNegative_AnimeV1'
-
-        if image_info["model"] == "s_sdvn6Realxl_detailface":
-            prompt_remix = '' + prompt_origin
-            negative_prompt = 'FastNegative,(worst quality, low quality, illustration, 3d, 2d, painting, cartoons, sketch), tooth, open mouth,'
-            print(f'载入lora: {prompt_remix}')
         else:
-            prompt_remix = prompt_origin
-#            print(f'手气之前：{prompt_remix}')
+               prompt_remix = prompt_origin
+               # print(f'手气之前：{prompt_remix}')
         elements.append({
             "tag": "action",
 
@@ -183,7 +139,8 @@ def handle_image_card(image_info, img_key_list, prompt):
                     "value": {
                         "type": "reload",
                         "prompt": prompt_remix,
-                        "negative_prompt": negative_prompt,
+#                        "negative_prompt": negative_prompt,
+
 
                     }
                 }
@@ -191,7 +148,7 @@ def handle_image_card(image_info, img_key_list, prompt):
         })
         
         result = {"config": {"wide_screen_mode": True}, "elements": elements}
-        print(f'手气之后：{prompt_remix}')
+        print(f'手气之后：{prompt}')
     return result
 
 

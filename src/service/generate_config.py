@@ -21,10 +21,10 @@ class GenerateConfig:
 
         # def translate(text):
         #     return html.unescape(ts.translate_text(query_text=text, translator=translator, from_language='auto', to_language='en'))
-        print(f'\n模    块: generate_config')
-        print(f'原始输入: {self.prompt}')
+        print(f'\n模    块: generate_config : 原始输入')
+#        print(f'原始输入: {self.prompt}')
         if len(self.prompt) > 0:
-            self.prompt = self.prompt.replace('@_user_1','').replace('@_user_2','').replace('@_user_3','').replace('@_user_4','').replace('@_user_5','').replace('@_user_6','').replace('裸', 'sheer').replace('naked', 'sheer').replace('nude','revealing').replace('bare','sheer').replace('undressed','sheer').replace('exposed','sheer').replace('Stripped','sheer').replace('Unclothed','sheer').replace('Au naturel','sheer').replace('In the buff','sheer')
+            self.prompt = self.prompt.replace('@_user_1','').replace('@_user_2','').replace('@_user_3','').replace('@_user_4','').replace('@_user_5','').replace('@_user_6','').replace('pussy', 'sheer').replace('裸', 'sheer').replace('naked', 'sheer').replace('nude','revealing').replace('bare','sheer').replace('undressed','sheer').replace('exposed','sheer').replace('Stripped','sheer').replace('Unclothed','sheer').replace('Au naturel','sheer').replace('In the buff','sheer')
             if contains_chinese(self.prompt):
                 self.prompt = aliyun_translator.translate(self.prompt)
                 print(f'翻译输出: {self.prompt}\n')

@@ -152,7 +152,7 @@ class StableDiffusionWebUI:
     def queue(self):
         queue = self.webui_api.get_progress()
         modelx = self.webui_api.util_get_current_model()[0:self.webui_api.util_get_current_model().index(".")]
-        queue_msg = f'[当前模型:  {modelx}]\n[模型列表: /m  模型切换: /1]'
+        queue_msg = f'[当前模型:  {modelx}]\n'
 
         return queue_msg
 
@@ -197,9 +197,12 @@ class StableDiffusionWebUI:
             prompt = re.sub(pattern, '', prompt)
 
         # 将转换后的字典添加到原字典中
-        text_dict = {'prompt': prompt}
-#       text_dict = {'prompt': '<lora:Moxin_10:1>,' + prompt}
-
+        # print(f"当前模型:  {self.webui_api.util_get_current_model()}")
+        # if self.webui_api.util_get_current_model() == "b_starlightXLAnimated_v3" + ".safetensors":
+        #     text_dict = {'prompt': '<lora:LCM-LoRA_sdxl:1>,' + prompt.replace('<lora:LCM-LoRA_sdxl:1>,', '')}
+        # else:
+        #     text_dict = {'prompt': prompt}
+        text_dict = {'prompt':prompt}
         # 处理反词
         all_prompts = prompt.split('#', 1)
         if len(all_prompts) > 1:
@@ -212,7 +215,7 @@ class StableDiffusionWebUI:
     def txt2img(self, gen_cfg: TextToImageConfig):
         gen_cfg.translate_to_english()
         print('模    块: stabledeffusion')
- #       print(f'模    块: stabledeffusion 参数: {self.webui_api.txt2img(**gen_cfg.get_as_json())}')
+        # print(f'模    块: stabledeffusion 参数: {self.webui_api.txt2img(**gen_cfg.get_as_json())}')
         result = self.webui_api.txt2img(**gen_cfg.get_as_json())
         return result.__dict__
 
