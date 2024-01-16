@@ -52,17 +52,17 @@ class MenuHandler:
             sd_webui.set_model(model)
             sd_webui.set_options(options)
         elif event_key == "1_xxmix9realisticsdxl":
-            response_text = "切换模型：1_xxmix9realisticsdxl_v10"
+            response_text = "切换模型：LEOSAM_HelloWorld_Turbo+LCM_3"
             print(response_text)
-            model = "1_xxmix9realisticsdxl_v10"
+            model = "LEOSAM_HelloWorld_Turbo+LCM_3"
             sd_webui.set_model(model)
-            sd_webui.set_options(options_xl)
-        elif event_key == "1_xxmix9realisticsdxl":
-            response_text = "切换模型：1_xxmix9realisticsdxl_v10"
-            print(response_text)
-            model = "1_xxmix9realisticsdxl_v10"
-            sd_webui.set_model(model)
-            sd_webui.set_options(options_xl)
+            sd_webui.set_options(options_xl2)
+        # elif event_key == "1_xxmix9realisticsdxl":
+        #     response_text = "切换模型：1_xxmix9realisticsdxl_v10"
+        #     print(response_text)
+        #     model = "1_xxmix9realisticsdxl_v10"
+        #     sd_webui.set_model(model)
+        #     sd_webui.set_options(options_xl)
 
         elif event_key == "future":
             response_text = "切换模型：dreamshaperXL_turboDpmppSDEKarras"

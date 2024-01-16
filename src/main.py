@@ -37,7 +37,7 @@ async def handle_webhook_card(request):
     oapi_resp = handle_card(feishu_conf, oapi_request)
     # print(f'webhook_card.content_type: {oapi_resp.content_type}')
     # print(f'webhook_card.status_code: {oapi_resp.status_code}')
-    # print(f'request_body_v1: {oapi_resp}')
+    # print(f'oapi_request: {oapi_request}')
 
 
 async def webhook_card(request):

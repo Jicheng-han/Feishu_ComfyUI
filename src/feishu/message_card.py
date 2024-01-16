@@ -72,11 +72,11 @@ def handle_image_card(image_info, img_key_list, prompt):
 
     for index, img_key in enumerate(img_key_list):
 # 调整lora   options = ['', a, b, c]
-        m1_a = 'masterpiece, top quality, best quality, (close-up:1.2), (upper body:1.2), 1girl,'
+        m1_a = '((close up portrait:1)),masterpiece, top quality, best quality,(upper body:1.2), 1girl,'
         m1_b = 'Beautiful Chinese Women,'
         m1_c = 'masterpiece, top quality, best quality, '
         m1_d = '<lora:LCM-LoRA_sdxl:1>,'
-        m1_e = '<lora:LunaXL-极致网红脸SDXL_v1.0:3>,'
+        m1_e = ''
         m1_f = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4), 1girl, '
         m1_z = '(masterpiece,best quality, ultra realistic,32k,RAW photo,detail skin, 8k uhd, dslr,high quality, film grain:1.5), (close-up:1.2), (upper body:1.2), 1girl,'
         m1_halfbody = '(close up:1.2),' # 已定版
@@ -103,9 +103,17 @@ def handle_image_card(image_info, img_key_list, prompt):
 
         prompt_origin = prompt.replace(m1_a, '').replace(m1_b, '').replace(m1_c, '').replace(m1_d, '').replace(m1_e, '').replace(m1_f, '').replace(m1_z, '').replace(m1_halfbody, '').replace(m1_e, '').replace(m1_x, '').replace(',,,,,,half',"full",)
 
-        if image_info["model"] == "a_moyou_v1060":
+        if image_info["model"] == "moyou_v1080-none":
             prompt_remix = m1_halfbody + prompt_origin.replace("full", ',,,,,,half')
             # print(f'载入lora: {prompt_remix}')
+
+        elif image_info["model"] == "animagineXLV3_v30":
+            print ('FFFFFFFF')
+            prompt_remix = m1_c + prompt_origin
+            negative_prompt="nsfw, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name,"
+
+# print(f'载入lora: {prompt_remix}')
+
         elif image_info["model"] == "MR_3DQ _SDXL_V0.2":
              prompt_remix = m1_x + prompt_origin
              # print(f'载入lora: {prompt_remix}')
@@ -120,7 +128,9 @@ def handle_image_card(image_info, img_key_list, prompt):
         elif image_info["model"] == "b_starlightXLAnimated_v3":
              prompt_remix = prompt_origin
              # print(f'载入lora: {prompt_remix}')
-
+        elif image_info["model"] == "5_亚洲一号_AWPortrait":
+            prompt_remix = m1_a + prompt_origin
+            # print(f'载入lora: {prompt_remix}')
 
         else:
                prompt_remix = prompt_origin
@@ -133,13 +143,13 @@ def handle_image_card(image_info, img_key_list, prompt):
                     "tag": "button",
                     "text": {
                         "tag": "plain_text",
-                        "content": "试试手气"
+                        "content": "重新生成"
                     },
                     "type": "primary",
                     "value": {
                         "type": "reload",
                         "prompt": prompt_remix,
-#                        "negative_prompt": negative_prompt,
+              #          "negative_prompt": negative_prompt,
 
 
                     }
@@ -149,6 +159,7 @@ def handle_image_card(image_info, img_key_list, prompt):
         
         result = {"config": {"wide_screen_mode": True}, "elements": elements}
         print(f'手气之后：{prompt}')
+
     return result
 
 

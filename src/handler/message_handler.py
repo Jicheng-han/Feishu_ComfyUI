@@ -26,30 +26,95 @@ class MessageHandler:
         gen_cfg = TextToImageConfig()
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts))
         model = sd_webui.get_model()[0:sd_webui.get_model().index(".")]
-        models = ["tmndMix_tmndMixVIIBakedvae","RealitiesEdgeXLLCM_TURBOXL","","copaxTimelessxlTurbo_v10","turbovisionxlSuperFastXLBasedOnNew_tvxlV20Bakedvae"]
-        if model in models:
-            gen_cfg.width = 768
-            gen_cfg.height = 1024
-            gen_cfg.cfg_scale = 1.5
-            gen_cfg.steps = 5
-            gen_cfg.sampler_name="Euler a"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
 
-        elif(model == "sdxlTurboUnstable_v10TURBOEDITION"): #16-fix.safetensorssdxl-vae-fp
-            gen_cfg.width = 768
-            gen_cfg.height = 1024
-            gen_cfg.cfg_scale = 1.5
-            gen_cfg.steps = 5
-            gen_cfg.sampler_name="LCM"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+        # models = ["sdxlTURBOPLUSREDTEAMMODEL_","turbovisionxlSuperFastXLBasedOnNew_tvxlV20Bakedvae"]
+        #
+        # if model in models:
+        #     gen_cfg.width = 768
+        #     gen_cfg.height = 1024
+        #     gen_cfg.cfg_scale = 1.5
+        #     gen_cfg.steps = 8
+        #     gen_cfg.sampler_name="Euler a"
+        #     negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+
+        if(model == "LEOSAM_HelloWorld_Turbo+LCM_3"): #16-fix.safetensorssdxl-vae-fp
+            gen_cfg.width = 832
+            gen_cfg.height = 1248
+            gen_cfg.restore_faces= True
+            gen_cfg.cfg_scale = 2.5
+            gen_cfg.steps = 8
+            gen_cfg.sampler_name="Euler a"
+            gen_cfg.negative_prompt="(unaestheticXL_hk1:0.8),FastNegative,bad X,distorted,twisted,FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
 
         elif(model == "dreamshaperXL_turboDpmppSDEKarras"): #16-fix.safetensorssdxl-vae-fp
             gen_cfg.width = 900
             gen_cfg.height = 1200
-            gen_cfg.cfg_scale = 2
+            gen_cfg.cfg_scale = 2.5
             gen_cfg.steps = 5
             gen_cfg.sampler_name="DPM++ SDE Karras"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+            gen_cfg.negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+
+
+        elif(model == "b_starlightXLAnimated_v3"): #已定版
+            gen_cfg.width = 832
+            gen_cfg.height = 1216
+            gen_cfg.sampler_name="DPM++ 3M SDE Karras"
+            gen_cfg.cfg_scale = 3.6
+            # gen_cfg.cfg_scale = 1.5
+            # gen_cfg.steps = 5
+            # gen_cfg.sampler_name="LCM"
+            gen_cfg.negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+
+        elif(model == "realvisxlV30_v30Bakedvae"): #已定版
+            gen_cfg.width = 832
+            gen_cfg.height = 1216
+            gen_cfg.sampler_name="DPM++ 3M SDE Karras"
+            gen_cfg.cfg_scale = 6
+            # gen_cfg.cfg_scale = 1.5
+            gen_cfg.steps = 25
+            # gen_cfg.sampler_name="LCM"
+            gen_cfg.negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+
+
+        elif(model == "1_sdxlUnstableDiffusers_v8HeavensWrathVAE"): #已定版版
+            gen_cfg.width = 832
+            gen_cfg.height = 1216
+            # gen_cfg.cfg_scale = 1.5
+            # gen_cfg.steps = 5
+            # gen_cfg.sampler_name="LCM"
+            gen_cfg.steps = 40
+            gen_cfg.cfg_scale = 6.5
+            gen_cfg.sampler_name = "DPM++ 3M SDE Karras"
+            gen_cfg.negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+
+        elif(model == "SDXLAnimeBulldozer_v10"): #已定版版
+            gen_cfg.width = 832
+            gen_cfg.height = 1216
+            gen_cfg.sampler_name="DPM++ 3M SDE Karras"
+            gen_cfg.cfg_scale = 3.6
+            gen_cfg.steps = 50
+            gen_cfg.cfg_scale = 7
+            gen_cfg.denoising_strength = 0.75
+            gen_cfg.negative_prompt="unaestheticXLv13,negativeXL_D,bad anatomy,blurry,disembodied limb,worst quality,low quality,More than five fingers in one hand,More than 5 toes on one foot,hand with more than 5 fingers,hand with less than 4 fingers,ad anatomy,bad hands,mutated hands and fingers,extra legs,extra arms,interlocked fingers,duplicate,cropped,text,jpeg,artifacts,signature,watermark,username,blurry,artist name,trademark,title,muscular,sd character,multiple view,Reference sheet,long body,malformed limbs,multiple breasts,cloned face,malformed,mutated,bad anatomy,disfigured,bad proportions,duplicate,bad feet,artist name,extra limbs,ugly,fused anus,text font ui,missing limb,"
+
+        elif(model == "DaYao-dreamXL_v1.0"): #已定版版
+            gen_cfg.width = 832
+            gen_cfg.height = 1248
+            gen_cfg.steps = 40
+            gen_cfg.sampler_name = "DPM++ 2M Karras"
+            gen_cfg.negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
+
+        elif(model == "copaxTimelessxlSDXL1_v8"): #定版 80分
+            gen_cfg.width = 832
+            gen_cfg.height = 1216
+            gen_cfg.steps = 45
+            gen_cfg.negative_prompt = '(unaestheticXLv31:0.6), (worst quality, low quality, illustration, 3d, 2d), open mouth, tooth,ugly face, old face, long neck,'
+
+        elif(model == "2_XXMix_9realisticSDXL_test_v2"): #已定版 test2比1.0效果更好
+            gen_cfg.width = 832
+            gen_cfg.height = 1216
+            gen_cfg.sampler_name = "DPM++ 3M SDE Karras"
+            gen_cfg.negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,",
 
 
 
@@ -79,61 +144,7 @@ class MessageHandler:
             gen_cfg.steps = 30
             gen_cfg.hr_second_pass_steps = 30
             gen_cfg.sampler_name="Restart"
-            negative_prompt="nsfw, ng_deepnegative_v1_75t, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
-
-        elif(model == "b_starlightXLAnimated_v3"): #已定版
-            gen_cfg.width = 832
-            gen_cfg.height = 1216
-            gen_cfg.sampler_name="DPM++ 3M SDE Karras"
-            gen_cfg.cfg_scale = 3.6
-            # gen_cfg.cfg_scale = 1.5
-            # gen_cfg.steps = 5
-            # gen_cfg.sampler_name="LCM"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
-
-
-# illustrationArtZYSDXL_v10 更年轻
-        elif(model == "2_realvisxlV20_v20Bakedvae"):
-            gen_cfg.width = 832
-            gen_cfg.height = 1216
-            gen_cfg.sampler_name = "DPM++ SDE Karras"
-            negative_prompt = 'FastNegative,(worst quality, low quality, illustration, 3d, 2d, painting, cartoons, sketch), open mouth'
-
-        elif(model == "lzSDXL_v10"):
-            gen_cfg.width = 832
-            gen_cfg.height = 1216
-            gen_cfg.sampler_name = "DPM++ 3M SDE Karras"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
-
-        elif(model == "1_sdxlUnstableDiffusers_v8HeavensWrathVAE"): #已定版版
-            gen_cfg.width = 832
-            gen_cfg.height = 1216
-            # gen_cfg.cfg_scale = 1.5
-            # gen_cfg.steps = 5
-            # gen_cfg.sampler_name="LCM"
-            gen_cfg.steps = 40
-            gen_cfg.sampler_name = "DPM++ 3M SDE Karras"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
-
-        elif(model == "DaYao-dreamXL_v1.0"): #已定版版
-            gen_cfg.width = 832
-            gen_cfg.height = 1248
-            gen_cfg.steps = 40
-            gen_cfg.sampler_name = "DPM++ 2M Karras"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
-
-        elif(model == "copaxTimelessxlSDXL1_v8"): #定版 80分
-            gen_cfg.width = 832
-            gen_cfg.height = 1216
-            gen_cfg.steps = 45
-            negative_prompt = '(unaestheticXLv31:0.6), (worst quality, low quality, illustration, 3d, 2d), open mouth, tooth,ugly face, old face, long neck,'
-
-        elif(model == "2_XXMix_9realisticSDXL_test_v2"): #已定版 test2比1.0效果更好
-            gen_cfg.width = 832
-            gen_cfg.height = 1216
-            gen_cfg.sampler_name = "DPM++ 3M SDE Karras"
-            negative_prompt="FastNegative, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,",
-
+            gen_cfg.negative_prompt="nsfw, ng_deepnegative_v1_75t, blur, blurred background, disproportionate face, deformed eyes, poorly detailed eyes, (disfigured:1.2), (deformed:1.2), bad anatomy, brand, (logo:1.3), bad perspective, bad proportions, jpg artifacts, jpeg artifacts, extra leg, extra arm, missing arm, missing leg, extra finger, missing finger, broken finger, bad hands, deformed hand, bad finger, broken hand, broken finger, colored schlera, (four fingers:1.3), (six fingers:1.3), (3 fingers:1.3), (4 fingers:1.3), (6 fingers:1.3), (7 fingers:1.3), (seven fingers:1.3), (cloned finger:1.3), (cloned hand:1.3), cloned arm, (malformed:1.3), (three fingers:1.3), manga, drawing, painting, 3D render, render, manga face,"
 
     # elif(model == "2_realvisxlV20_v20Bakedvae"):
         #     gen_cfg.enable_hr = True
@@ -154,12 +165,13 @@ class MessageHandler:
         images_key = []
         for img_data in result['images']:
             images_key.append(upload_image(img_data))
+        # print(f"XXXXXXXXXX: {result['info'], images_key, prompts}")
         return handle_image_card(result['info'], images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
         message_sender.send_text_message(myevent, f"{sd_webui.queue()}")
         messageCard = self.handle_prompt(myevent.text)
-        print(f'模    块: message_handler - handle_message')
-        print('------------------------------------------------------')
+        # print(f'模    块: message_handler - handle_message')
+
 
         return message_sender.send_message_card(myevent, messageCard)
