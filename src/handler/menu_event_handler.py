@@ -1,3 +1,7 @@
+# review my code
+import sys
+import time
+sys.path.append("D:\\Feishu-Stablediffusion-master\\src\\")
 from typing import Dict
 from handler.command_handler import CommandHandler
 import json
@@ -10,11 +14,29 @@ from util.event_helper import MyReceiveEvent
 from lark_oapi.api.application.v6.model.p2_application_bot_menu_v6 import P2ApplicationBotMenuV6
 from larksuiteoapi.api.request import request
 from larksuiteoapi.card import handle_card, set_card_callback
-
+from feishu.feishu_conf import feishu_conf
+from service.stablediffusion import sd_webui
+from util.event_helper import MyReceiveEvent
+from lark_oapi.api.application.v6.model.p2_application_bot_menu_v6 import P2ApplicationBotMenuV6
+from handler.command_handler import CommandHandler
+from demo.demo_message import *
+from service.stablediffusion import sd_webui 
+ 
 
 class MenuHandler:
-    def handle_menu_event(event_key):
+    processed_requests = set()
 
+    @staticmethod
+    def handle_menu_event(user_id, event_key, event_type,timestamp):
+        # 如果已经处理过这个请求，直接返回
+        if (event_key, timestamp) in MenuHandler.processed_requests:
+            return
+        # 获取当前时间戳
+        current_timestamp = time.time()
+
+        # 如果时间差在2分钟之内
+
+        # 创建 MyReceiveEvent 对象
         options = {}
         options['sd_vae'] = 'vae-ft-mse-840000-ema-pruned.safetensors'
         options_xl = {}
@@ -25,50 +47,48 @@ class MenuHandler:
         options_xl2['sd_vae'] = 'sdxl-vae-fp16-fix.safetensors'
         options_none = {}
         options_none['sd_vae'] = 'None'
-        send_message_response = '切换完成'
-        if event_key == "b_starlightXLAnimated":
-            response_text = "切换模型：b_starlightXLAnimated_v3"
-            print(response_text)
-            model = "b_starlightXLAnimated_v3"
-            sd_webui.set_model(model)
-            sd_webui.set_options(options_xl)
-            response_text = "切换模型：b_starlightXLAnimated_v3"
-        elif event_key == "1_sdxlUnstableDiffusers":
-            response_text = "切换模型：1_sdxlUnstableDiffusers_v8HeavensWrathVAE"
-            print(response_text)
-            model = "1_sdxlUnstableDiffusers_v8HeavensWrathVAE"
+        response_text = event_key + " 已就绪，请输入提示词"
+        # response_text = f'[当前模型:  {event_key}]\n' + "模型切换完成,点击" + "\u2328" + "输入提示词"
+        event_key1 = "融合风格模型"
+        event_key2 = "现实世界模型"
+        event_key3 = "3D风格模型"
+        event_key4 = "二次元模型"
+        event_key5 = "中国风模型"
+        event_key6 = "新技术探索"
+
+        if event_key == event_key1:
+            model = "融合风格_sdxlUnstableDiffusers_v8"
             sd_webui.set_model(model)
             sd_webui.set_options(options_none)
-        elif event_key == "MR_3DQ _SDXL":
-            response_text = "切换模型：MR_3DQ _SDXL_V0.2"
-            print(response_text)
-            model = "MR_3DQ _SDXL_V0.2"
+
+        elif event_key == event_key2:
+            model = "现实世界_newrealityxl_20"
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl)
-        elif event_key == "a_moyou":
-            response_text = "切换模型：a_moyou_v1060"
-            print(response_text)
-            model = "a_moyou_v1060"
-            sd_webui.set_model(model)
-            sd_webui.set_options(options)
-        elif event_key == "1_xxmix9realisticsdxl":
-            response_text = "切换模型：LEOSAM_HelloWorld_Turbo+LCM_3"
-            print(response_text)
-            model = "LEOSAM_HelloWorld_Turbo+LCM_3"
-            sd_webui.set_model(model)
-            sd_webui.set_options(options_xl2)
-        # elif event_key == "1_xxmix9realisticsdxl":
-        #     response_text = "切换模型：1_xxmix9realisticsdxl_v10"
-        #     print(response_text)
-        #     model = "1_xxmix9realisticsdxl_v10"
-        #     sd_webui.set_model(model)
-        #     sd_webui.set_options(options_xl)
 
-        elif event_key == "future":
-            response_text = "切换模型：dreamshaperXL_turboDpmppSDEKarras"
-            print(response_text)
-            model = "dreamshaperXL_turboDpmppSDEKarras"
+        elif event_key == event_key3:
+            model = "3D风格_starlightXL_v3"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl)
+
+        elif event_key == event_key4:
+            model = "二次元_AnimeBulldozer_v10"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl)
+
+        elif event_key == event_key5:
+            model = "亚洲元素_LEOSAM_HelloWorld"
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl2)
 
-            return send_message_response
+        elif event_key == event_key6:
+            model = "新技术探索_dreamshaperXL"
+            sd_webui.set_model(model)
+            sd_webui.set_options(options_xl2)
+ 
+        if abs(current_timestamp - timestamp) <= 120:
+            if event_type == "application.bot.menu_v6" and event_key in (event_key1,event_key2,event_key3,event_key4,event_key5,event_key6):
+                menu_respon(user_id,response_text)
+
+         # 将请求添加到已处理请求的集合中
+        MenuHandler.processed_requests.add((event_key, timestamp))

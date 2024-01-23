@@ -152,7 +152,7 @@ class StableDiffusionWebUI:
     def queue(self):
         queue = self.webui_api.get_progress()
         modelx = self.webui_api.util_get_current_model()[0:self.webui_api.util_get_current_model().index(".")]
-        queue_msg = f'[当前模型:  {modelx}]\n'
+        queue_msg = f'图片：生成中  ......  \n模型：{modelx}\n'
 
         return queue_msg
 
