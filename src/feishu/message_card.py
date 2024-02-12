@@ -76,7 +76,7 @@ def handle_image_card(image_info, img_key_list, prompt):
         m1_b = 'Beautiful Chinese Women,'
         m1_c = 'masterpiece, top quality, best quality, '
         m1_d = '<lora:LCM-LoRA_sdxl:1>,'
-        m1_e = ''
+        m1_e = '<lora:add_detail:1>,Best quality, masterpiece, ultra high res, (photorealistic:1.4),'
         m1_f = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4), 1girl, '
         m1_z = '(masterpiece,best quality, ultra realistic,32k,RAW photo,detail skin, 8k uhd, dslr,high quality, film grain:1.5), (close-up:1.2), (upper body:1.2), 1girl,'
         m1_halfbody = '(close up:1.2),' # 已定版
@@ -107,11 +107,10 @@ def handle_image_card(image_info, img_key_list, prompt):
             prompt_remix = m1_halfbody + prompt_origin.replace("full", ',,,,,,half')
             # print(f'载入lora: {prompt_remix}')
 
-        elif image_info["model"] == "animagineXLV3_v30":
+        elif image_info["model"] == "kimchiMix_v32":
             print ('FFFFFFFF')
             prompt_remix = m1_c + prompt_origin
-            negative_prompt="nsfw, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name,"
-
+ 
 # print(f'载入lora: {prompt_remix}')
 
         elif image_info["model"] == "MR_3DQ _SDXL_V0.2":
@@ -125,9 +124,15 @@ def handle_image_card(image_info, img_key_list, prompt):
         elif image_info["model"] == "1_sdxlUnstableDiffusers_v8HeavensWrathVAE":
              prompt_remix = prompt_origin
              # print(f'载入lora: {prompt_remix}')
-        elif image_info["model"] == "b_starlightXLAnimated_v3":
-             prompt_remix = prompt_origin
-             # print(f'载入lora: {prompt_remix}')
+
+        elif image_info["model"] == "xxmix9realistic_v40":
+             prompt_remix = m1_e + prompt_origin
+             print(f'载入lora: {prompt_remix}')
+
+        elif image_info["model"] == "majicMIX realistic 麦橘写实_v7":
+             prompt_remix = m1_e + prompt_origin
+             print(f'载入lora: {prompt_remix}')
+
         elif image_info["model"] == "5_亚洲一号_AWPortrait":
             prompt_remix = m1_a + prompt_origin
             # print(f'载入lora: {prompt_remix}')

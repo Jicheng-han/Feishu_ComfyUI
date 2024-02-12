@@ -47,7 +47,7 @@ class MenuHandler:
         options_xl2['sd_vae'] = 'sdxl-vae-fp16-fix.safetensors'
         options_none = {}
         options_none['sd_vae'] = 'None'
-        response_text = event_key + " 已就绪，请输入提示词"
+        response_text = event_key + " 已就绪，请输入提示词， 出图时间<1分钟"
         # response_text = f'[当前模型:  {event_key}]\n' + "模型切换完成,点击" + "\u2328" + "输入提示词"
         event_key1 = "融合风格模型"
         event_key2 = "现实世界模型"
@@ -57,12 +57,12 @@ class MenuHandler:
         event_key6 = "新技术探索"
 
         if event_key == event_key1:
-            model = "融合风格_sdxlUnstableDiffusers_v8"
+            model = "sdxlUnstableDiffusers_v11Rundiffusion"
             sd_webui.set_model(model)
             sd_webui.set_options(options_none)
 
         elif event_key == event_key2:
-            model = "现实世界_newrealityxl_20"
+            model = "现实世界_newrealityxl_21"
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl)
 
@@ -72,17 +72,17 @@ class MenuHandler:
             sd_webui.set_options(options_xl)
 
         elif event_key == event_key4:
-            model = "二次元_AnimeBulldozer_v10"
+            model = "sdxl-动漫二次元_1"
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl)
 
         elif event_key == event_key5:
-            model = "亚洲元素_LEOSAM_HelloWorld"
+            model = "xxmix9realistic_v40"
             sd_webui.set_model(model)
-            sd_webui.set_options(options_xl2)
+            sd_webui.set_options(options)
 
         elif event_key == event_key6:
-            model = "新技术探索_dreamshaperXL"
+            model = "newrealityxlAllInOne_21"
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl2)
  

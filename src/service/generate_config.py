@@ -1,3 +1,4 @@
+import webuiapi
 from webuiapi import HiResUpscaler, ControlNetUnit
 from typing import List, Dict, Any
 from feishu.message_card import LIST_INFO_CARD, handle_list_info_card
@@ -24,13 +25,16 @@ class GenerateConfig:
         print(f'\n模    块: generate_config : 原始输入')
 #        print(f'原始输入: {self.prompt}')
         if len(self.prompt) > 0:
-            self.prompt = self.prompt.replace('@_user_1','').replace('@_user_2','').replace('@_user_3','').replace('@_user_4','').replace('@_user_5','').replace('@_user_6','').replace('pussy', 'sheer').replace('裸', 'sheer').replace('naked', 'sheer').replace('nude','revealing').replace('bare','sheer').replace('undressed','sheer').replace('exposed','sheer').replace('Stripped','sheer').replace('Unclothed','sheer').replace('Au naturel','sheer').replace('In the buff','sheer')
+            self.prompt = self.prompt.replace('@_user_1','').replace('@_user_2','').replace('@_user_3','').replace('@_user_4','').replace('@_user_5','').replace('@_user_6','').replace('pussy', 'sheer').replace('裸', 'sheer').replace('naked', 'sheer').replace('nude','revealing').replace('bare','sheer').replace('undressed','sheer').replace('exposed','sheer').replace('Stripped','sheer').replace('Unclothed','sheer').replace('Au naturel','sheer').replace('In the buff','sheer').replace('porn','sheer').replace('j8','sheer')
             if contains_chinese(self.prompt):
                 self.prompt = aliyun_translator.translate(self.prompt)
                 print(f'翻译输出: {self.prompt}\n')
         if len(self.negative_prompt) > 0 and contains_chinese(self.negative_prompt):
             self.negative_prompt = aliyun_translator.translate(self.negative_prompt)
 
+# api = webuiapi.WebUIApi()
+
+# ads = webuiapi.ADetailer(ad_model="face_yolov8n.pt")
 
 class TextToImageConfig(GenerateConfig):
     def __init__(
@@ -54,6 +58,7 @@ class TextToImageConfig(GenerateConfig):
             sampler_name="DPM++ 3M SDE Karras",  # use this instead of sampler_index   DPM++ 2M Karras
             batch_size=1,
             n_iter=1,
+            # adetailer=[ads],
             steps=40,
             cfg_scale=7.0,
             width=832,
