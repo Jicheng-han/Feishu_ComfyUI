@@ -10,7 +10,7 @@ import re
 
 
 class StableDiffusionWebUI:
-    def __init__(self, webui_host, webui_port=7860, webui_user=None, webui_password=None, use_https=False):
+    def __init__(self, webui_host, webui_port=80, webui_user=None, webui_password=None, use_https=False):
         self.webui_api = webuiapi.WebUIApi(host=webui_host, port=webui_port, use_https=use_https, steps=30)
         if webui_user is not None and webui_password is not None:
             self.webui_api.set_auth(webui_user, webui_password)

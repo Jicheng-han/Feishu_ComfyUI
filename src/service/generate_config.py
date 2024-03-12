@@ -32,9 +32,9 @@ class GenerateConfig:
         if len(self.negative_prompt) > 0 and contains_chinese(self.negative_prompt):
             self.negative_prompt = aliyun_translator.translate(self.negative_prompt)
 
-# api = webuiapi.WebUIApi()
+api = webuiapi.WebUIApi()
 
-# ads = webuiapi.ADetailer(ad_model="face_yolov8n.pt")
+ads = webuiapi.ADetailer(ad_model="face_yolov8n.pt")
 
 class TextToImageConfig(GenerateConfig):
     def __init__(
@@ -139,7 +139,7 @@ class ImageToImageConfig(GenerateConfig):
     def __init__(
             self,
             images=[],  # list of PIL Image
-            resize_mode=0,
+            resize_mode=2, #3"Just resize (latent upscale)"
             denoising_strength=0.75,
             image_cfg_scale=1.5,
             mask_image=None,  # PIL Image mask
@@ -149,25 +149,26 @@ class ImageToImageConfig(GenerateConfig):
             inpaint_full_res_padding=0,
             inpainting_mask_invert=0,
             initial_noise_multiplier=1,
-            prompt="<lora:Moxin_10:1>",
+            prompt="",
             styles=[],
             seed=-1,
             subseed=-1,
             subseed_strength=0,
             seed_resize_from_h=0,
             seed_resize_from_w=0,
-            sampler_name="DPM++ 2M Karras",  # use this instead of sampler_index
+            sampler_name="DPM++ 3M SDE Exponential",  # use this instead of sampler_index
             batch_size=1,
             n_iter=1,
-            steps=None,
-            cfg_scale=7.0,
-            width=512,
-            height=768,
-            restore_faces=True,
+            steps=32,
+            cfg_scale=3.5,
+            width=832,
+            height=1216,
+            restore_faces=False,
             tiling=False,
             do_not_save_samples=False,
             do_not_save_grid=False,
-            negative_prompt="NG_DeepNegative_V1_75T, worst quality, low quality, naked, nsfw, nipples, nude, lowres, bad anatomy, bad hands",
+            negative_prompt="FastNegative,blur,blurred background,disproportionate face,deformed eyes,poorly detailed eyes,(disfigured:1.2),(deformed:1.2),bad anatomy,brand,(logo:1.3),bad perspective,bad proportions,jpg artifacts,jpeg artifacts,extra leg,extra arm,missing arm,missing leg,extra finger,manga,drawing,painting,3D render,render,manga face,",
+        
             eta=1.0,
             s_churn=0,
             s_tmax=0,

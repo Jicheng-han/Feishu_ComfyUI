@@ -59,7 +59,7 @@ class MenuHandler:
         if event_key == event_key1:
             model = "sdxlUnstableDiffusers_v11Rundiffusion"
             sd_webui.set_model(model)
-            sd_webui.set_options(options_none)
+            sd_webui.set_options(options_xl)
 
         elif event_key == event_key2:
             model = "现实世界_newrealityxl_21"
@@ -77,14 +77,14 @@ class MenuHandler:
             sd_webui.set_options(options_xl)
 
         elif event_key == event_key5:
-            model = "xxmix9realistic_v40"
+            model = "leosamsHelloworldXL_hw50EulerALightning"
             sd_webui.set_model(model)
-            sd_webui.set_options(options)
+            sd_webui.set_options(options_xl)
 
         elif event_key == event_key6:
-            model = "newrealityxlAllInOne_21"
+            model = "wildcardxXLLIGHTNING_wildcardxXL"
             sd_webui.set_model(model)
-            sd_webui.set_options(options_xl2)
+            sd_webui.set_options(options_xl)
  
         if abs(current_timestamp - timestamp) <= 120:
             if event_type == "application.bot.menu_v6" and event_key in (event_key1,event_key2,event_key3,event_key4,event_key5,event_key6):
