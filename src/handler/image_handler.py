@@ -7,7 +7,6 @@ from service.generate_config import ImageToImageConfig
 from feishu.message_sender import message_sender
 from PIL import Image
 from io import BytesIO
-import translators as ts
 import webuiapi
 
 api = webuiapi.WebUIApi()

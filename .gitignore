@@ -6,3 +6,4 @@ config.yml
 .DS_Store
 .idea
 .vscode
+config.yml

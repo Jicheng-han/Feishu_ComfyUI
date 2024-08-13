@@ -74,8 +74,8 @@ def handle_image_card(image_info, img_key_list, prompt):
 # 调整lora   options = ['', a, b, c]
         m1_a = '((close up portrait:1)),masterpiece, top quality, best quality,(upper body:1.2), 1girl,'
         m1_b = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4),'
-        m1_c = 'Chinese, '
-        m1_d = '<lora:add_detail:1>,'
+        m1_c = '(score_9,score_8_up,score_7_up),source_anime, '
+        m1_d = '(score_9,score_8_up,score_7_up), '
         m1_e = '<lora:add_detail:1>,Best quality, masterpiece, ultra high res, (photorealistic:1.4),'
         m1_f = 'Best quality, masterpiece, ultra high res, (photorealistic:1.4), 1girl, '
         m1_z = '(masterpiece,best quality, ultra realistic,32k,RAW photo,detail skin, 8k uhd, dslr,high quality, film grain:1.5), (close-up:1.2), (upper body:1.2), 1girl,'
@@ -115,12 +115,16 @@ def handle_image_card(image_info, img_key_list, prompt):
  
 # print(f'载入lora: {prompt_remix}')
 
-        elif image_info["model"] == "leosamsHelloworldXL_hw50EulerALightning":
-             prompt_remix = m1_halfbody + prompt_origin.replace("full", ',,,,,,half')
+        elif image_info["model"] == "PVCStyleModelMovable_pony151":
+             prompt_remix = m1_c + prompt_origin 
+             #print(f'载入lora: {prompt_remix}')
+        
+        elif image_info["model"] == "moxiePony_v11":
+             prompt_remix = m1_d + prompt_origin 
              #print(f'载入lora: {prompt_remix}')
 
-        elif image_info["model"] == "xxmix9realisticsdxl_v10":
-             prompt_remix = prompt_origin
+        elif image_info["model"] == "AWPortrait_v14":
+             prompt_remix = m1_z + prompt_origin
              # print(f'载入lora: {prompt_remix}')
 
         elif image_info["model"] == "1_sdxlUnstableDiffusers_v8HeavensWrathVAE":

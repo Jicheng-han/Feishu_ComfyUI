@@ -54,7 +54,7 @@ class MenuHandler:
         event_key3 = "3D风格模型"
         event_key4 = "二次元模型"
         event_key5 = "中国风模型"
-        event_key6 = "新技术探索"
+        event_key6 = "手办风格模型"
 
         if event_key == event_key1:
             model = "sdxlUnstableDiffusers_v11Rundiffusion"
@@ -62,17 +62,17 @@ class MenuHandler:
             sd_webui.set_options(options_xl)
 
         elif event_key == event_key2:
-            model = "现实世界_newrealityxl_21"
+            model = "wildcardxXLLIGHTNING_wildcardxXL" 
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl)
 
         elif event_key == event_key3:
-            model = "3D风格_starlightXL_v3"
+            model = "moxieFusionXLFormerly_v17"
             sd_webui.set_model(model)
-            sd_webui.set_options(options_xl)
+            sd_webui.set_options(options_none)
 
         elif event_key == event_key4:
-            model = "sdxl-动漫二次元_1"
+            model = "sdxl-xuancai二次元"
             sd_webui.set_model(model)
             sd_webui.set_options(options_xl)
 
@@ -82,9 +82,9 @@ class MenuHandler:
             sd_webui.set_options(options_xl)
 
         elif event_key == event_key6:
-            model = "wildcardxXLLIGHTNING_wildcardxXL"
+            model = "PVCStyleModelMovable_pony151"
             sd_webui.set_model(model)
-            sd_webui.set_options(options_xl)
+            sd_webui.set_options(options_none)
  
         if abs(current_timestamp - timestamp) <= 120:
             if event_type == "application.bot.menu_v6" and event_key in (event_key1,event_key2,event_key3,event_key4,event_key5,event_key6):
