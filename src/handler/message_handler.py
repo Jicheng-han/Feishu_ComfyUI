@@ -93,89 +93,191 @@ class MessageHandler:
         print (f'PPPPPPPPrompt: {prompt_input}')
         
         comfy_json = """
+
+
         {
-            "3": {
-                "class_type": "KSampler",
-                "inputs": {
-                    "cfg": 8,
-                    "denoise": 1,
-                    "latent_image": [
-                        "5",
-                        0
-                    ],
-                    "model": [
-                        "4",
-                        0
-                    ],
-                    "negative": [
-                        "7",
-                        0
-                    ],
-                    "positive": [
-                        "6",
-                        0
-                    ],
-                    "sampler_name": "euler",
-                    "scheduler": "normal",
-                    "seed": 8566257,
-                    "steps": 20
-                }
-            },
-            "4": {
-                "class_type": "CheckpointLoaderSimple",
-                "inputs": {
-                    "ckpt_name": "anything-v5-PrtRE.safetensors"
-                }
-            },
             "5": {
-                "class_type": "EmptyLatentImage",
                 "inputs": {
-                    "batch_size": 1,
-                    "height": 512,
-                    "width": 512
+                "width": 1024,
+                "height": 1024,
+                "batch_size": 1
+                },
+                "class_type": "EmptyLatentImage",
+                "_meta": {
+                "title": "Empty Latent Image"
                 }
             },
             "6": {
-                "class_type": "CLIPTextEncode",
                 "inputs": {
-                    "clip": [
-                        "4",
-                        1
-                    ],
-                    "text": "masterpiece best quality girl"
-                }
-            },
-            "7": {
+                "text": [
+                    "28",
+                    0
+                ],
+                "speak_and_recognation": null,
+                "clip": [
+                    "11",
+                    0
+                ]
+                },
                 "class_type": "CLIPTextEncode",
-                "inputs": {
-                    "clip": [
-                        "4",
-                        1
-                    ],
-                    "text": "bad hands"
+                "_meta": {
+                "title": "CLIP Text Encode (Prompt)"
                 }
             },
             "8": {
-                "class_type": "VAEDecode",
                 "inputs": {
-                    "samples": [
-                        "3",
-                        0
-                    ],
-                    "vae": [
-                        "4",
-                        2
-                    ]
+                "samples": [
+                    "13",
+                    0
+                ],
+                "vae": [
+                    "10",
+                    0
+                ]
+                },
+                "class_type": "VAEDecode",
+                "_meta": {
+                "title": "VAE Decode"
                 }
             },
             "9": {
-                "class_type": "SaveImage",
                 "inputs": {
-                    "filename_prefix": "ComfyUI",
-                    "images": [
-                        "8",
-                        0
-                    ]
+                "filename_prefix": "MarkuryFLUX",
+                "images": [
+                    "8",
+                    0
+                ]
+                },
+                "class_type": "SaveImage",
+                "_meta": {
+                "title": "Save Image"
+                }
+            },
+            "10": {
+                "inputs": {
+                "vae_name": "ae.sft"
+                },
+                "class_type": "VAELoader",
+                "_meta": {
+                "title": "Load VAE"
+                }
+            },
+            "11": {
+                "inputs": {
+                "clip_name1": "t5xxl_fp16.safetensors",
+                "clip_name2": "clip_l.safetensors",
+                "type": "flux"
+                },
+                "class_type": "DualCLIPLoader",
+                "_meta": {
+                "title": "DualCLIPLoader"
+                }
+            },
+            "12": {
+                "inputs": {
+                "unet_name": "flux1-dev.safetensors",
+                "weight_dtype": "default"
+                },
+                "class_type": "UNETLoader",
+                "_meta": {
+                "title": "Load Diffusion Model"
+                }
+            },
+            "13": {
+                "inputs": {
+                "noise": [
+                    "25",
+                    0
+                ],
+                "guider": [
+                    "22",
+                    0
+                ],
+                "sampler": [
+                    "16",
+                    0
+                ],
+                "sigmas": [
+                    "17",
+                    0
+                ],
+                "latent_image": [
+                    "5",
+                    0
+                ]
+                },
+                "class_type": "SamplerCustomAdvanced",
+                "_meta": {
+                "title": "SamplerCustomAdvanced"
+                }
+            },
+            "16": {
+                "inputs": {
+                "sampler_name": "euler"
+                },
+                "class_type": "KSamplerSelect",
+                "_meta": {
+                "title": "KSamplerSelect"
+                }
+            },
+            "17": {
+                "inputs": {
+                "scheduler": "simple",
+                "steps": 25,
+                "denoise": 1,
+                "model": [
+                    "12",
+                    0
+                ]
+                },
+                "class_type": "BasicScheduler",
+                "_meta": {
+                "title": "BasicScheduler"
+                }
+            },
+            "22": {
+                "inputs": {
+                "model": [
+                    "12",
+                    0
+                ],
+                "conditioning": [
+                    "6",
+                    0
+                ]
+                },
+                "class_type": "BasicGuider",
+                "_meta": {
+                "title": "BasicGuider"
+                }
+            },
+            "25": {
+                "inputs": {
+                "noise_seed": 777350338741218
+                },
+                "class_type": "RandomNoise",
+                "_meta": {
+                "title": "RandomNoise"
+                }
+            },
+            "28": {
+                "inputs": {
+                "string": "Ethereal cyborg woman, bioluminescent jellyfish headdress. Steampunk goggles blend with translucent tentacles. Cracked porcelain skin meets iridescent scales. Mechanical implants and delicate tendrils intertwine. Human features with otherworldly glow. Dreamy aquatic hues contrast weathered metal. Reflective eyes capture unseen worlds. Soft bioluminescence meets harsh desert backdrop. Fusion of organic and synthetic, ancient and futuristic. Hyper-detailed textures, surreal atmosphere.",
+                "speak_and_recognation": null
+                },
+                "class_type": "String Literal",
+                "_meta": {
+                "title": "String Literal"
+                }
+            },
+            "60": {
+                "inputs": {
+                "image": "pasted/image (716).png",
+                "upload": "image"
+                },
+                "class_type": "LoadImage",
+                "_meta": {
+                "title": "Flux 效果展示"
                 }
             }
         }
@@ -225,10 +327,10 @@ class MessageHandler:
         #         print("Error: 'info' key not found in result or its value is None")
         # else:
         #     print("Error: result is None")
-        print(f"image_data: {image_data}")
+        # print(f"image_data: {image_data}")
         images_key = []
         if output_images is not None:
-            for img_data in output_images['9']:
+            for img_data in output_images['60']:
                 images_key.append(upload_image(img_data))
         else:
             print("Error: 'images' key not found in result")
