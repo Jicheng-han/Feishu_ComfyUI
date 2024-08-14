@@ -206,7 +206,8 @@ class MessageHandler:
                 if 'images' in node_output:
                     images_output = []
                     for image in node_output['images']:
-                        with open('/opt/ComfyUI/output/' + image['filename'], 'wb') as f:
+                        print(f"Imagename: {image['filename']}")
+                        with open('/opt/ComfyUI/output/' + image['filename'], 'rb') as f:
                             image_data = f.read()
                         # image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
                         images_output.append(image_data)
