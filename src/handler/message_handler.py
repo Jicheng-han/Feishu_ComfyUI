@@ -205,7 +205,7 @@ class MessageHandler:
                 if 'images' in node_output:
                     images_output = []
                     for image in node_output['images']:
-                        image_data = self.get_image(image['filename'], image['subfolder'], image['type']).decode('utf-8')
+                        image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
                         images_output.append(image_data)
                 output_images[node_id] = images_output
         # if result is not None:
@@ -221,7 +221,7 @@ class MessageHandler:
         #         print("Error: 'info' key not found in result or its value is None")
         # else:
         #     print("Error: result is None")
-
+        print(f"image_data: {image_data}")
         images_key = []
         if output_images is not None:
             for img_data in output_images['9']:
