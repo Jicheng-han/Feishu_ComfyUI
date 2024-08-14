@@ -195,6 +195,8 @@ class MessageHandler:
         print(f"Prompt ID: {prompt_id}")
         time.sleep(60)
         info = self.get_history(prompt_id)
+        outputs = info[prompt_id]['outputs']
+        print(f"Outputs: {outputs}")
         print(f"Info: {info}")    
         if result is not None:
             if 'images' in result and result['images'] is not None:
