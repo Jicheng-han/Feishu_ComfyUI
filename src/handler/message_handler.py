@@ -110,7 +110,7 @@ class MessageHandler:
             "6": {
               "inputs": {
                 "text": [
-                  "28",
+                  "61",
                   0
                 ],
                 "speak_and_recognation": null,
@@ -253,31 +253,24 @@ class MessageHandler:
             },
             "25": {
               "inputs": {
-                "noise_seed": 777350338741218
+                "noise_seed": 111230751805892
               },
               "class_type": "RandomNoise",
               "_meta": {
                 "title": "RandomNoise"
               }
             },
-            "28": {
+            "61": {
               "inputs": {
-                "string": "Ethereal cyborg woman, bioluminescent jellyfish headdress. Steampunk goggles blend with translucent tentacles. Cracked porcelain skin meets iridescent scales. Mechanical implants and delicate tendrils intertwine. Human features with otherworldly glow. Dreamy aquatic hues contrast weathered metal. Reflective eyes capture unseen worlds. Soft bioluminescence meets harsh desert backdrop. Fusion of organic and synthetic, ancient and futuristic. Hyper-detailed textures, surreal atmosphere.",
-                "speak_and_recognation": null
+                "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节，并精简成一段话,不超过100个单词:一个女孩",
+                "debug": "enable",
+                "url": "http://127.0.0.1:11434",
+                "model": "llava:7b",
+                "keep_alive": 60
               },
-              "class_type": "String Literal",
+              "class_type": "OllamaGenerate",
               "_meta": {
-                "title": "String Literal"
-              }
-            },
-            "60": {
-              "inputs": {
-                "image": "pasted/image (716).png",
-                "upload": "image"
-              },
-              "class_type": "LoadImage",
-              "_meta": {
-                "title": "Flux 效果展示"
+                "title": "Ollama Generate"
               }
             }
           }
@@ -286,7 +279,7 @@ class MessageHandler:
         comfy_prompt = json.loads(comfy_json, strict=False)
         #set the text prompt for our positive CLIPTextEncode
 
-        comfy_prompt["28"]["inputs"]["string"] =   prompt_input
+        comfy_prompt["61"]["inputs"]["prompt"] =   prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
