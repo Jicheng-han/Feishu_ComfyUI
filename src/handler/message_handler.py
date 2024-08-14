@@ -232,12 +232,11 @@ class MessageHandler:
                 images_key.append(upload_image(img_data))
         else:
             print("Error: 'images' key not found in result")
-        if 'info' in result:
-            return handle_image_card(result['info'], images_key, prompts)
-        else:
-            print("Error: 'info' key not found in result")
-        print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
-        return handle_image_card(result['info'], images_key, prompts)
+        
+        return handle_image_card("图片", images_key, prompts)
+
+        # print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
+        # return handle_image_card(result['info'], images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
         message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
