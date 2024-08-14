@@ -330,7 +330,7 @@ class MessageHandler:
         # print(f"image_data: {image_data}")
         images_key = []
         if output_images is not None:
-            for img_data in output_images['60']:
+            for img_data in output_images['9']:
                 images_key.append(upload_image(img_data))
         else:
             print("Error: 'images' key not found in result")
