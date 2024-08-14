@@ -22,12 +22,12 @@ im_service = ImV1Service(feishu_conf)
 
 
 def upload_image(img_data: Image):
-    # buffered = io.BytesIO(img_data)
-    # img_data.save(buffered, format="PNG")
     buffered = io.BytesIO(img_data)
-    img = Image.open(buffered)
-    buffered = io.BytesIO()
-    img.save(buffered, format="PNG")
+    img_data.save(buffered, format="PNG")
+    # buffered = io.BytesIO(img_data)
+    # img = Image.open(buffered)
+    # buffered = io.BytesIO()
+    # img.save(buffered, format="PNG")
     formData = FormData()
     formData.add_param('image_type', 'message')
     formData.add_param('image', buffered.getvalue())
