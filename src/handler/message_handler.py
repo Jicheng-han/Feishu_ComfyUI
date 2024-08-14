@@ -18,6 +18,7 @@ from feishu.message_card import handle_image_card
 from service.stablediffusion import sd_webui
 from util.event_helper import MyReceiveEvent
 import time
+from service.aliyun_translator import aliyun_translator
 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
@@ -94,8 +95,7 @@ class MessageHandler:
         
         comfy_json = """
 
-
-        {
+            {
             "5": {
                 "inputs": {
                 "width": 1024,
@@ -110,7 +110,7 @@ class MessageHandler:
             "6": {
                 "inputs": {
                 "text": [
-                    "28",
+                    "62",
                     0
                 ],
                 "speak_and_recognation": null,
@@ -253,21 +253,11 @@ class MessageHandler:
             },
             "25": {
                 "inputs": {
-                "noise_seed": 777350338741218
+                "noise_seed": 187180102399976
                 },
                 "class_type": "RandomNoise",
                 "_meta": {
                 "title": "RandomNoise"
-                }
-            },
-            "28": {
-                "inputs": {
-                "string": "Ethereal and beautiful",
-                "speak_and_recognation": null
-                },
-                "class_type": "String Literal",
-                "_meta": {
-                "title": "String Literal"
                 }
             },
             "60": {
@@ -279,14 +269,43 @@ class MessageHandler:
                 "_meta": {
                 "title": "Flux 效果展示"
                 }
+            },
+            "61": {
+                "inputs": {
+                "text": [
+                    "62",
+                    0
+                ],
+                "text2": " This is a photograph of three pandas eating steamed buns. The style of the artwork appears to be realistic with fine details, capturing the essence of the animals and their environment. The high-quality image showcases the exquisite craftsmanship of the artist, who has skillfully rendered the textures and colors in a lifelike manner. "
+                },
+                "class_type": "ShowText|pysssss",
+                "_meta": {
+                "title": "Show Text 🐍"
+                }
+            },
+            "62": {
+                "inputs": {
+                "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节,\n并精简成一段话,不超过50个单词:\n\n一张三只熊猫在吃烧烤的照片",
+                "debug": "enable",
+                "url": "http://127.0.0.1:11434",
+                "model": "llava:7b",
+                "keep_alive": 60,
+                "speak_and_recognation": null
+                },
+                "class_type": "OllamaGenerate",
+                "_meta": {
+                "title": "Ollama Generate"
+                }
             }
-        }
+            }
         """
 
         comfy_prompt = json.loads(comfy_json)
         #set the text prompt for our positive CLIPTextEncode
 
-        comfy_prompt["28"]["inputs"]["string"] = prompt_input
+
+
+        comfy_prompt["62"]["inputs"]["prompt"] = "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节,并精简成一段话,不超过50个单词:"+prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
