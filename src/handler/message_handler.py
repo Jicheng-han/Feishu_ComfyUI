@@ -68,9 +68,9 @@ class MessageHandler:
     def get_history(self,prompt_id):
         with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
             return json.loads(response.read())
-         
-    def get_images(self,ws, prompt):
-        prompt_id = prompt(prompt)['prompt_id']
+
+    def get_images(self, ws, prompt):
+        prompt_id = self.queue_prompt(prompt)['prompt_id']
         output_images = {}
         while True:
             out = ws.recv()
@@ -79,9 +79,9 @@ class MessageHandler:
                 if message['type'] == 'executing':
                     data = message['data']
                     if data['node'] is None and data['prompt_id'] == prompt_id:
-                        break #Execution is done
+                        break  # Execution is done
             else:
-                continue #previews are binary data
+                continue  # previews are binary data
 
         history = self.get_history(prompt_id)[prompt_id]
         for o in history['outputs']:
