@@ -197,6 +197,7 @@ class MessageHandler:
         info = self.get_history(prompt_id)
         history = info[prompt_id]['outputs']
         output_images = {}
+        print(f"Info: {info}")
         for o in history['outputs']:
             for node_id in history['outputs']:
                 node_output = history['outputs'][node_id]
@@ -207,7 +208,6 @@ class MessageHandler:
                         images_output.append(image_data)
                 output_images[node_id] = images_output
         print(f"output_images: {output_images}")
-        print(f"Info: {info}")    
         if result is not None:
             if 'images' in result and result['images'] is not None:
                 for img_data in result['images']:
