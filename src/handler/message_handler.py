@@ -69,7 +69,7 @@ class MessageHandler:
         with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
             return json.loads(response.read())
 
-    def get_images(self, ws, prompt):
+    def get_images( self,ws, prompt):
         prompt_id = self.queue_prompt(prompt)['prompt_id']
         output_images = {}
         while True:
@@ -209,8 +209,7 @@ class MessageHandler:
         print(f"result_image: {result_image}")
         result_history = self.get_history(result['prompt_id'])
         print(f"result_history: {result_history}")
-        result_images = self.get_images(result['prompt_id'])
-        print(f"result_images: {result_images}")
+     
         
         # result_history = self.get_history(result['prompt_id'])
         # print(f"result_historyzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result_history}")
