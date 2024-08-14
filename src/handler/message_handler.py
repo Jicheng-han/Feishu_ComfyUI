@@ -286,7 +286,7 @@ class MessageHandler:
         comfy_prompt = json.loads(comfy_json)
         #set the text prompt for our positive CLIPTextEncode
 
-        comfy_prompt["28"]["inputs"]["text"] = prompt_input
+        comfy_prompt["28"]["inputs"]["string"] = prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
