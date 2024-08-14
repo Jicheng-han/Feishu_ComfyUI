@@ -17,6 +17,7 @@ from service.generate_config import TextToImageConfig
 from feishu.message_card import handle_image_card
 from service.stablediffusion import sd_webui
 from util.event_helper import MyReceiveEvent
+import time
 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
@@ -192,6 +193,7 @@ class MessageHandler:
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
         print(f"Prompt ID: {prompt_id}")
+        time.sleep(60)
         info = self.get_history(prompt_id)
         print(f"Info: {info}")    
         if result is not None:
