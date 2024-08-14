@@ -195,7 +195,7 @@ class MessageHandler:
         print(f"Prompt ID: {prompt_id}")
         time.sleep(20)
         info = self.get_history(prompt_id)
-        history = info[prompt_id]['outputs']
+        history = info[prompt_id]
         output_images = {}
         print(f"Info: {info}")
         for o in history['outputs']:
