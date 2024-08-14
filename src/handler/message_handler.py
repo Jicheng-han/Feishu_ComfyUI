@@ -188,7 +188,7 @@ class MessageHandler:
         #set the seed for our KSampler node
         comfy_prompt["3"]["inputs"]["seed"] = random.randint(0, 1000000000000000)            
 
-        result = self.queue_prompt(comfy_prompt)['prompt_id']
+        result = self.queue_prompt(comfy_prompt)
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
         info = self.get_history(prompt_id)[prompt_id]
