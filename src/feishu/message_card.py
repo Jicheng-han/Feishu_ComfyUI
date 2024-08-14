@@ -146,27 +146,27 @@ def handle_image_card(image_info, img_key_list, prompt):
         else:
                prompt_remix = prompt_origin
                # print(f'手气之前：{prompt_remix}')
-        elements.append({
-            "tag": "action",
+        # elements.append({
+        #     "tag": "action",
 
-            "actions": [
-                {
-                    "tag": "button",
-                    "text": {
-                        "tag": "plain_text",
-                        "content": "重新生成"
-                    },
-                    "type": "primary",
-                    "value": {
-                        "type": "reload",
-                        "prompt": prompt_remix,
-              #          "negative_prompt": negative_prompt,
+        #     "actions": [
+        #         {
+        #             "tag": "button",
+        #             "text": {
+        #                 "tag": "plain_text",
+        #                 "content": "重新生成"
+        #             },
+        #             "type": "primary",
+        #             "value": {
+        #                 "type": "reload",
+        #                 "prompt": prompt_remix,
+        #       #          "negative_prompt": negative_prompt,
 
 
-                    }
-                }
-            ]
-        })
+        #             }
+        #         }
+        #     ]
+        # })
         
         result = {"config": {"wide_screen_mode": True}, "elements": elements}
         # print(f'手气之后：{prompt}')
