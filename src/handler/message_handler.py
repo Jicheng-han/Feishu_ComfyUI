@@ -303,10 +303,10 @@ class MessageHandler:
         comfy_prompt = json.loads(comfy_json)
         #set the text prompt for our positive CLIPTextEncode
 
-        pre_prompt= "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节,并精简成一段话,不超过50个单词:"  + prompt_input
+        # pre_prompt= "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节,并精简成一段话,不超过50个单词:"  + prompt_input
 
 
-        comfy_prompt["61"]["inputs"]["text2"] = pre_prompt
+        comfy_prompt["61"]["inputs"]["text2"] =  prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
