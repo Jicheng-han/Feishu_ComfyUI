@@ -18,10 +18,6 @@ from feishu.message_card import handle_image_card
 from service.stablediffusion import sd_webui
 from util.event_helper import MyReceiveEvent
 
-api = webuiapi.WebUIApi()
-
-ads = webuiapi.ADetailer(ad_model="face_yolov8n.pt")
-
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
 # TOKEN is stored in the file `./PASSWORD`, or you can obtain it from the command line window when ComfyUI starts.
@@ -45,14 +41,6 @@ class MessageHandler:
 #        print(f'当前VAE: {sd_webui.get_sd_vae}')
         return message_sender.update_message_card(token, messageCard)
 
-    # def queue_prompt(self,comfy_prompt):
-    #     p = {"prompt": comfy_prompt}
-    #     data = json.dumps(p).encode('utf-8')
-    #     # print(f"oooooxxxxxxxxxxxxxx:{data}")
-    #     req =  request.Request("http://127.0.0.1:8188/prompt", data=data)
-    #     s = request.urlopen(req) 
-    #     print(f"request:{s}")
-    #     request.urlopen(req)
     def queue_prompt(self,comfy_prompt):
         p = {"prompt": comfy_prompt, "client_id": client_id}
         data = json.dumps(p).encode('utf-8')
@@ -191,9 +179,6 @@ class MessageHandler:
         }
         """
 
-    
-       
-         
         comfy_prompt = json.loads(comfy_json)
         #set the text prompt for our positive CLIPTextEncode
 
@@ -205,9 +190,8 @@ class MessageHandler:
 
         result = self.queue_prompt(comfy_prompt)
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
-        # result_history = self.get_history(result['prompt_id'])
-        # print(f"result_historyzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result_history}")
-         # result = sd_webui.txt2img(gen_cfg)
+        info = self.get_history(result['prompt_id'])
+        print(f"Info: {info}")    
         if result is not None:
             if 'images' in result and result['images'] is not None:
                 for img_data in result['images']:
