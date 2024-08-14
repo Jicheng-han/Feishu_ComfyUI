@@ -233,7 +233,7 @@ class MessageHandler:
         else:
             print("Error: 'images' key not found in result")
         
-        return handle_image_card({'model': 'abcd','infotexts': None}, images_key, prompts)
+        return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
         # print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
         # return handle_image_card(result['info'], images_key, prompts)
