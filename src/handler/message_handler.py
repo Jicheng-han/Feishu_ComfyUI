@@ -95,216 +95,198 @@ class MessageHandler:
         
         comfy_json = """
 
-
-{
-  "5": {
-    "inputs": {
-      "width": 1024,
-      "height": 1024,
-      "batch_size": 1
-    },
-    "class_type": "EmptyLatentImage",
-    "_meta": {
-      "title": "Empty Latent Image"
-    }
-  },
-  "6": {
-    "inputs": {
-      "text": [
-        "62",
-        0
-      ],
-      "speak_and_recognation": null,
-      "clip": [
-        "11",
-        0
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Prompt)"
-    }
-  },
-  "8": {
-    "inputs": {
-      "samples": [
-        "13",
-        0
-      ],
-      "vae": [
-        "10",
-        0
-      ]
-    },
-    "class_type": "VAEDecode",
-    "_meta": {
-      "title": "VAE Decode"
-    }
-  },
-  "9": {
-    "inputs": {
-      "filename_prefix": "MarkuryFLUX",
-      "images": [
-        "8",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "Save Image"
-    }
-  },
-  "10": {
-    "inputs": {
-      "vae_name": "ae.sft"
-    },
-    "class_type": "VAELoader",
-    "_meta": {
-      "title": "Load VAE"
-    }
-  },
-  "11": {
-    "inputs": {
-      "clip_name1": "t5xxl_fp16.safetensors",
-      "clip_name2": "clip_l.safetensors",
-      "type": "flux"
-    },
-    "class_type": "DualCLIPLoader",
-    "_meta": {
-      "title": "DualCLIPLoader"
-    }
-  },
-  "12": {
-    "inputs": {
-      "unet_name": "flux1-dev.safetensors",
-      "weight_dtype": "default"
-    },
-    "class_type": "UNETLoader",
-    "_meta": {
-      "title": "Load Diffusion Model"
-    }
-  },
-  "13": {
-    "inputs": {
-      "noise": [
-        "25",
-        0
-      ],
-      "guider": [
-        "22",
-        0
-      ],
-      "sampler": [
-        "16",
-        0
-      ],
-      "sigmas": [
-        "17",
-        0
-      ],
-      "latent_image": [
-        "5",
-        0
-      ]
-    },
-    "class_type": "SamplerCustomAdvanced",
-    "_meta": {
-      "title": "SamplerCustomAdvanced"
-    }
-  },
-  "16": {
-    "inputs": {
-      "sampler_name": "euler"
-    },
-    "class_type": "KSamplerSelect",
-    "_meta": {
-      "title": "KSamplerSelect"
-    }
-  },
-  "17": {
-    "inputs": {
-      "scheduler": "simple",
-      "steps": 25,
-      "denoise": 1,
-      "model": [
-        "12",
-        0
-      ]
-    },
-    "class_type": "BasicScheduler",
-    "_meta": {
-      "title": "BasicScheduler"
-    }
-  },
-  "22": {
-    "inputs": {
-      "model": [
-        "12",
-        0
-      ],
-      "conditioning": [
-        "6",
-        0
-      ]
-    },
-    "class_type": "BasicGuider",
-    "_meta": {
-      "title": "BasicGuider"
-    }
-  },
-  "25": {
-    "inputs": {
-      "noise_seed": 187180102399976
-    },
-    "class_type": "RandomNoise",
-    "_meta": {
-      "title": "RandomNoise"
-    }
-  },
-  "60": {
-    "inputs": {
-      "image": "pasted/image (716).png",
-      "upload": "image"
-    },
-    "class_type": "LoadImage",
-    "_meta": {
-      "title": "Flux 效果展示"
-    }
-  },
-  "61": {
-    "inputs": {
-      "text": [
-        "62",
-        0
-      ],
-      "text2": " This is a photograph of three pandas eating steamed buns. The style of the artwork appears to be realistic with fine details, capturing the essence of the animals and their environment. The high-quality image showcases the exquisite craftsmanship of the artist, who has skillfully rendered the textures and colors in a lifelike manner. "
-    },
-    "class_type": "ShowText|pysssss",
-    "_meta": {
-      "title": "Show Text"
-    }
-  },
-  "62": {
-    "inputs": {
-      "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节,\n并精简成一段话,不超过50个单词:\n\n一张三只熊猫在吃烧烤的照片",
-      "debug": "enable",
-      "url": "http://127.0.0.1:11434",
-      "model": "llava:7b",
-      "keep_alive": 60,
-      "speak_and_recognation": null
-    },
-    "class_type": "OllamaGenerate",
-    "_meta": {
-      "title": "Ollama Generate"
-    }
-  }
-}
+          {
+            "5": {
+              "inputs": {
+                "width": 1024,
+                "height": 1024,
+                "batch_size": 1
+              },
+              "class_type": "EmptyLatentImage",
+              "_meta": {
+                "title": "Empty Latent Image"
+              }
+            },
+            "6": {
+              "inputs": {
+                "text": [
+                  "28",
+                  0
+                ],
+                "speak_and_recognation": null,
+                "clip": [
+                  "11",
+                  0
+                ]
+              },
+              "class_type": "CLIPTextEncode",
+              "_meta": {
+                "title": "CLIP Text Encode (Prompt)"
+              }
+            },
+            "8": {
+              "inputs": {
+                "samples": [
+                  "13",
+                  0
+                ],
+                "vae": [
+                  "10",
+                  0
+                ]
+              },
+              "class_type": "VAEDecode",
+              "_meta": {
+                "title": "VAE Decode"
+              }
+            },
+            "9": {
+              "inputs": {
+                "filename_prefix": "MarkuryFLUX",
+                "images": [
+                  "8",
+                  0
+                ]
+              },
+              "class_type": "SaveImage",
+              "_meta": {
+                "title": "Save Image"
+              }
+            },
+            "10": {
+              "inputs": {
+                "vae_name": "ae.sft"
+              },
+              "class_type": "VAELoader",
+              "_meta": {
+                "title": "Load VAE"
+              }
+            },
+            "11": {
+              "inputs": {
+                "clip_name1": "t5xxl_fp16.safetensors",
+                "clip_name2": "clip_l.safetensors",
+                "type": "flux"
+              },
+              "class_type": "DualCLIPLoader",
+              "_meta": {
+                "title": "DualCLIPLoader"
+              }
+            },
+            "12": {
+              "inputs": {
+                "unet_name": "flux1-dev.safetensors",
+                "weight_dtype": "default"
+              },
+              "class_type": "UNETLoader",
+              "_meta": {
+                "title": "Load Diffusion Model"
+              }
+            },
+            "13": {
+              "inputs": {
+                "noise": [
+                  "25",
+                  0
+                ],
+                "guider": [
+                  "22",
+                  0
+                ],
+                "sampler": [
+                  "16",
+                  0
+                ],
+                "sigmas": [
+                  "17",
+                  0
+                ],
+                "latent_image": [
+                  "5",
+                  0
+                ]
+              },
+              "class_type": "SamplerCustomAdvanced",
+              "_meta": {
+                "title": "SamplerCustomAdvanced"
+              }
+            },
+            "16": {
+              "inputs": {
+                "sampler_name": "euler"
+              },
+              "class_type": "KSamplerSelect",
+              "_meta": {
+                "title": "KSamplerSelect"
+              }
+            },
+            "17": {
+              "inputs": {
+                "scheduler": "simple",
+                "steps": 25,
+                "denoise": 1,
+                "model": [
+                  "12",
+                  0
+                ]
+              },
+              "class_type": "BasicScheduler",
+              "_meta": {
+                "title": "BasicScheduler"
+              }
+            },
+            "22": {
+              "inputs": {
+                "model": [
+                  "12",
+                  0
+                ],
+                "conditioning": [
+                  "6",
+                  0
+                ]
+              },
+              "class_type": "BasicGuider",
+              "_meta": {
+                "title": "BasicGuider"
+              }
+            },
+            "25": {
+              "inputs": {
+                "noise_seed": 777350338741218
+              },
+              "class_type": "RandomNoise",
+              "_meta": {
+                "title": "RandomNoise"
+              }
+            },
+            "28": {
+              "inputs": {
+                "string": "Ethereal cyborg woman, bioluminescent jellyfish headdress. Steampunk goggles blend with translucent tentacles. Cracked porcelain skin meets iridescent scales. Mechanical implants and delicate tendrils intertwine. Human features with otherworldly glow. Dreamy aquatic hues contrast weathered metal. Reflective eyes capture unseen worlds. Soft bioluminescence meets harsh desert backdrop. Fusion of organic and synthetic, ancient and futuristic. Hyper-detailed textures, surreal atmosphere.",
+                "speak_and_recognation": null
+              },
+              "class_type": "String Literal",
+              "_meta": {
+                "title": "String Literal"
+              }
+            },
+            "60": {
+              "inputs": {
+                "image": "pasted/image (716).png",
+                "upload": "image"
+              },
+              "class_type": "LoadImage",
+              "_meta": {
+                "title": "Flux 效果展示"
+              }
+            }
+          }
         """
 
         comfy_prompt = json.loads(comfy_json, strict=False)
         #set the text prompt for our positive CLIPTextEncode
 
-        comfy_prompt["62"]["inputs"]["prompt"] = "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节,并精简成一段话,不超过50个单词:" + prompt_input
+        comfy_prompt["28"]["inputs"]["string"] =   prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
