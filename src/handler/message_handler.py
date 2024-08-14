@@ -281,7 +281,7 @@ class MessageHandler:
     },
     "class_type": "ShowText|pysssss",
     "_meta": {
-      "title": "Show Text 🐍"
+      "title": "Show Text"
     }
   },
   "62": {
