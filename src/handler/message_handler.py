@@ -65,32 +65,42 @@ class MessageHandler:
         with urllib.request.urlopen("http://{}/view?{}&token={}".format(server_address, url_values, TOKEN)) as response:
             return response.read()
 
-    def get_history(self,prompt_id):
+    def get_history(prompt_id):
         with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
             return json.loads(response.read())
-
-
-    def get_images(self, prompt_id):
-        history = self.get_history(prompt_id)[prompt_id]
+         
+    def get_images(self,ws, prompt):
+        prompt_id = prompt(prompt)['prompt_id']
         output_images = {}
-        for node_id in history['outputs']:
-            node_output = history['outputs'][node_id]
-            if 'images' in node_output:
-                images_output = []
-                for image in node_output['images']:
-                    image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
-                    images_output.append(image_data)
+        while True:
+            out = ws.recv()
+            if isinstance(out, str):
+                message = json.loads(out)
+                if message['type'] == 'executing':
+                    data = message['data']
+                    if data['node'] is None and data['prompt_id'] == prompt_id:
+                        break #Execution is done
+            else:
+                continue #previews are binary data
+
+        history = self.get_history(prompt_id)[prompt_id]
+        for o in history['outputs']:
+            for node_id in history['outputs']:
+                node_output = history['outputs'][node_id]
+                if 'images' in node_output:
+                    images_output = []
+                    for image in node_output['images']:
+                        image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
+                        images_output.append(image_data)
                 output_images[node_id] = images_output
+
         return output_images
-
-  
     # 根据指令生成不同的消息卡片
-
     def handle_prompt(self, prompts):
         gen_cfg = TextToImageConfig()
-        gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts))
+        gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
         prompt_input = gen_cfg.prompt
-        print(f'Prompt: {prompt_input}')
+        print (f'PPPPPPPPrompt: {prompt_input}')
         
         comfy_json = """
         {
@@ -183,30 +193,47 @@ class MessageHandler:
 
     
        
+         
         comfy_prompt = json.loads(comfy_json)
-        comfy_prompt["6"]["inputs"]["text"] = prompt_input
-        print(f'Comfy_prompt: {comfy_prompt}')
+        #set the text prompt for our positive CLIPTextEncode
 
+        comfy_prompt["6"]["inputs"]["text"] = prompt_input
+        print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
+
+        #set the seed for our KSampler node
         comfy_prompt["3"]["inputs"]["seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
-        print(f"Result_queue_prompt: {result}")
+        print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
+        # result_history = self.get_history(result['prompt_id'])
+        # print(f"result_historyzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result_history}")
+         # result = sd_webui.txt2img(gen_cfg)
+        if result is not None:
+            if 'images' in result and result['images'] is not None:
+                for img_data in result['images']:
+                    images_key.append(upload_image(img_data))
+            else:
+                print("Error: 'images' key not found in result or its value is None")
 
-        result_images = self.get_images(result['prompt_id'])
-        print(f"result_images: {result_images}")
+            if 'info' in result and result['info'] is not None:
+                return handle_image_card(result['info'], images_key, prompts)
+            else:
+                print("Error: 'info' key not found in result or its value is None")
+        else:
+            print("Error: result is None")
 
-        result_history = self.get_history(result['prompt_id'])
-        print(f"result_history: {result_history}")
-
-        # 处理图像上传
         images_key = []
-        for node_id, images in result_images.items():
-            for img_data in images:
+        if 'images' in result:
+            for img_data in result['images']:
                 images_key.append(upload_image(img_data))
-
-        # 假设 handle_image_card 函数需要这些参数
-        return handle_image_card(result_history, images_key, prompts)
-
+        else:
+            print("Error: 'images' key not found in result")
+        if 'info' in result:
+            return handle_image_card(result['info'], images_key, prompts)
+        else:
+            print("Error: 'info' key not found in result")
+        print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
+        return handle_image_card(result['info'], images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
         message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
