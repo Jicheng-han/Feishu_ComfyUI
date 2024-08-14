@@ -262,7 +262,7 @@ class MessageHandler:
             },
             "28": {
                 "inputs": {
-                "string": "Ethereal cyborg woman, bioluminescent jellyfish headdress. Steampunk goggles blend with translucent tentacles. Cracked porcelain skin meets iridescent scales. Mechanical implants and delicate tendrils intertwine. Human features with otherworldly glow. Dreamy aquatic hues contrast weathered metal. Reflective eyes capture unseen worlds. Soft bioluminescence meets harsh desert backdrop. Fusion of organic and synthetic, ancient and futuristic. Hyper-detailed textures, surreal atmosphere.",
+                "string": "Ethereal and beautiful",
                 "speak_and_recognation": null
                 },
                 "class_type": "String Literal",
@@ -286,11 +286,11 @@ class MessageHandler:
         comfy_prompt = json.loads(comfy_json)
         #set the text prompt for our positive CLIPTextEncode
 
-        comfy_prompt["6"]["inputs"]["text"] = prompt_input
+        comfy_prompt["28"]["inputs"]["text"] = prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
-        comfy_prompt["3"]["inputs"]["seed"] = random.randint(0, 1000000000000000)            
+        comfy_prompt["25"]["inputs"]["seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
