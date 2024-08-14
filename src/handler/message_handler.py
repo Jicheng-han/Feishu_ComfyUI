@@ -2,6 +2,11 @@
 import webuiapi
 import json
 import random
+import websocket #NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
+import uuid
+import json
+import urllib.request
+import urllib.parse
 
 #from larksuiteoapi import Config
 from urllib import request, parse
@@ -16,6 +21,16 @@ from util.event_helper import MyReceiveEvent
 api = webuiapi.WebUIApi()
 
 ads = webuiapi.ADetailer(ad_model="face_yolov8n.pt")
+
+server_address = "127.0.0.1:8188"
+client_id = str(uuid.uuid4())
+# TOKEN is stored in the file `./PASSWORD`, or you can obtain it from the command line window when ComfyUI starts.
+# It will appear like this:
+# For direct API calls, token=$2b$12$qUfJfV942nrMiX77QRVgIuDk1.oyXBP7FYrXVEBqouTk.uP/hiqAK
+TOKEN = "$2b$12$FoR7ezNDPAPYaG2kit0aLuV9YsmSefGZyTx6rV3QcE1K6qUH5qeAm"
+# If you get errors like: HTTP Error 400: Bad Request, please check the server's console for more detailed error message.
+# Sometimes it's related to the model file's filename.
+
 class MessageHandler:
     def __init__(self):
         pass
@@ -30,182 +45,176 @@ class MessageHandler:
 #        print(f'当前VAE: {sd_webui.get_sd_vae}')
         return message_sender.update_message_card(token, messageCard)
 
+    # def queue_prompt(self,comfy_prompt):
+    #     p = {"prompt": comfy_prompt}
+    #     data = json.dumps(p).encode('utf-8')
+    #     # print(f"oooooxxxxxxxxxxxxxx:{data}")
+    #     req =  request.Request("http://127.0.0.1:8188/prompt", data=data)
+    #     s = request.urlopen(req) 
+    #     print(f"request:{s}")
+    #     request.urlopen(req)
     def queue_prompt(self,comfy_prompt):
-        p = {"prompt": comfy_prompt}
+        p = {"prompt": comfy_prompt, "client_id": client_id}
         data = json.dumps(p).encode('utf-8')
-        # print(f"oooooxxxxxxxxxxxxxx:{data}")
-        req =  request.Request("http://10.131.5.50:8188/prompt", data=data)
-        s = request.urlopen(req) 
-        print(f"request:{s}")
-        request.urlopen(req)
+        req =  urllib.request.Request("http://{}/prompt?token={}".format(server_address, TOKEN), data=data)
+        return json.loads(urllib.request.urlopen(req).read())
+    
+    def get_image(self,filename, subfolder, folder_type):
+        data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
+        url_values = urllib.parse.urlencode(data)
+        with urllib.request.urlopen("http://{}/view?{}&token={}".format(server_address, url_values, TOKEN)) as response:
+            return response.read()
 
+    def get_history(prompt_id):
+        with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
+            return json.loads(response.read())
+         
+    def get_images(self,ws, prompt):
+        prompt_id = prompt(prompt)['prompt_id']
+        output_images = {}
+        while True:
+            out = ws.recv()
+            if isinstance(out, str):
+                message = json.loads(out)
+                if message['type'] == 'executing':
+                    data = message['data']
+                    if data['node'] is None and data['prompt_id'] == prompt_id:
+                        break #Execution is done
+            else:
+                continue #previews are binary data
 
+        history = self.get_history(prompt_id)[prompt_id]
+        for o in history['outputs']:
+            for node_id in history['outputs']:
+                node_output = history['outputs'][node_id]
+                if 'images' in node_output:
+                    images_output = []
+                    for image in node_output['images']:
+                        image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
+                        images_output.append(image_data)
+                output_images[node_id] = images_output
+
+        return output_images
     # 根据指令生成不同的消息卡片
     def handle_prompt(self, prompts):
         gen_cfg = TextToImageConfig()
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
-        prompt = gen_cfg.prompt
-        print (f'PPPPPPPPrompt: {prompt}')
+        prompt_input = gen_cfg.prompt
+        print (f'PPPPPPPPrompt: {prompt_input}')
         
         comfy_json = """
         {
-        "3": {
-            "inputs": {
-            "seed": 230911048911329,
-            "steps": 10,
-            "cfg": 1.5,
-            "sampler_name": "dpmpp_2m",
-            "scheduler": "karras",
-            "denoise": 0.8,
-            "model": [
-                "11",
-                0
-            ],
-            "positive": [
-                "6",
-                0
-            ],
-            "negative": [
-                "7",
-                0
-            ],
-            "latent_image": [
-                "5",
-                0
-            ]
+            "3": {
+                "class_type": "KSampler",
+                "inputs": {
+                    "cfg": 8,
+                    "denoise": 1,
+                    "latent_image": [
+                        "5",
+                        0
+                    ],
+                    "model": [
+                        "4",
+                        0
+                    ],
+                    "negative": [
+                        "7",
+                        0
+                    ],
+                    "positive": [
+                        "6",
+                        0
+                    ],
+                    "sampler_name": "euler",
+                    "scheduler": "normal",
+                    "seed": 8566257,
+                    "steps": 20
+                }
             },
-            "class_type": "KSampler",
-            "_meta": {
-            "title": "K采样器"
-            }
-        },
-        "4": {
-            "inputs": {
-            "ckpt_name": "playground-v2.5-1024px-aesthetic.fp16.safetensors"
+            "4": {
+                "class_type": "CheckpointLoaderSimple",
+                "inputs": {
+                    "ckpt_name": "anything-v5-PrtRE.safetensors"
+                }
             },
-            "class_type": "CheckpointLoaderSimple",
-            "_meta": {
-            "title": "Checkpoint加载器(简易)"
-            }
-        },
-        "5": {
-            "inputs": {
-            "width": 832,
-            "height": 1216,
-            "batch_size": 1
+            "5": {
+                "class_type": "EmptyLatentImage",
+                "inputs": {
+                    "batch_size": 1,
+                    "height": 512,
+                    "width": 512
+                }
             },
-            "class_type": "EmptyLatentImage",
-            "_meta": {
-            "title": "空Latent"
-            }
-        },
-        "6": {
-            "inputs": {
-            "text": "",
-            "clip": [
-                "4",
-                1
-            ]
+            "6": {
+                "class_type": "CLIPTextEncode",
+                "inputs": {
+                    "clip": [
+                        "4",
+                        1
+                    ],
+                    "text": "masterpiece best quality girl"
+                }
             },
-            "class_type": "CLIPTextEncode",
-            "_meta": {
-            "title": "CLIP文本编码器"
-            }
-        },
-        "7": {
-            "inputs": {
-            "text": "worst quality, low quality",
-            "clip": [
-                "4",
-                1
-            ]
+            "7": {
+                "class_type": "CLIPTextEncode",
+                "inputs": {
+                    "clip": [
+                        "4",
+                        1
+                    ],
+                    "text": "bad hands"
+                }
             },
-            "class_type": "CLIPTextEncode",
-            "_meta": {
-            "title": "CLIP文本编码器"
-            }
-        },
-        "8": {
-            "inputs": {
-            "samples": [
-                "3",
-                0
-            ],
-            "vae": [
-                "4",
-                2
-            ]
+            "8": {
+                "class_type": "VAEDecode",
+                "inputs": {
+                    "samples": [
+                        "3",
+                        0
+                    ],
+                    "vae": [
+                        "4",
+                        2
+                    ]
+                }
             },
-            "class_type": "VAEDecode",
-            "_meta": {
-            "title": "VAE解码"
+            "9": {
+                "class_type": "SaveImage",
+                "inputs": {
+                    "filename_prefix": "ComfyUI",
+                    "images": [
+                        "8",
+                        0
+                    ]
+                }
             }
-        },
-        "11": {
-            "inputs": {
-            "sampling": "edm_playground_v2.5",
-            "sigma_max": 120,
-            "sigma_min": 0.002,
-            "model": [
-                "4",
-                0
-            ]
-            },
-            "class_type": "ModelSamplingContinuousEDM",
-            "_meta": {
-            "title": "模型连续采样算法EDM"
-            }
-        },
-        "12": {
-            "inputs": {
-            "images": [
-                "8",
-                0
-            ]
-            },
-            "class_type": "PreviewImage",
-            "_meta": {
-            "title": "预览图像"
-            }
-        },
-        "57": {
-            "inputs": {
-            "image": "20240215-115530.jpg",
-            "upload": "image"
-            },
-            "class_type": "LoadImage",
-            "_meta": {
-            "title": "加载图像"
-            }
-        },
-        "58": {
-            "inputs": {
-            "image": "pasted/image (1).png",
-            "upload": "image"
-            },
-            "class_type": "LoadImage",
-            "_meta": {
-            "title": "加载图像"
-            }
-        }
         }
         """
- 
+
+    
        
          
         comfy_prompt = json.loads(comfy_json)
         #set the text prompt for our positive CLIPTextEncode
 
-        comfy_prompt["6"]["inputs"]["text"] = prompt
+        comfy_prompt["6"]["inputs"]["text"] = prompt_input
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         #set the seed for our KSampler node
-        comfy_prompt["3"]["inputs"]["seed"] = random.randint(0, 1000000000000000)        
- 
-
+        comfy_prompt["3"]["inputs"]["seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
-        # result = sd_webui.txt2img(gen_cfg)
+        print(f"Result_queue_prompt: {result}")
+        result_image = self.get_images(result['prompt_id'])
+        print(f"result_image: {result_image}")
+        result_history = self.get_history(result['prompt_id'])
+        print(f"result_history: {result_history}")
+        result_images = self.get_images(result['prompt_id'])
+        print(f"result_images: {result_images}")
+        
+        # result_history = self.get_history(result['prompt_id'])
+        # print(f"result_historyzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result_history}")
+         # result = sd_webui.txt2img(gen_cfg)
         if result is not None:
             if 'images' in result and result['images'] is not None:
                 for img_data in result['images']:
@@ -230,7 +239,7 @@ class MessageHandler:
             return handle_image_card(result['info'], images_key, prompts)
         else:
             print("Error: 'info' key not found in result")
-        # print(f"XXXXXXXXXX: {result['info'], images_key, prompts}")
+        print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
         return handle_image_card(result['info'], images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
@@ -238,7 +247,5 @@ class MessageHandler:
 
         print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
         messageCard = self.handle_prompt(myevent.text)
-
-
 
         return message_sender.send_message_card(myevent, messageCard)
