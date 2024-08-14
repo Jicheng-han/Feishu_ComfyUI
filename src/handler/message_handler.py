@@ -193,10 +193,20 @@ class MessageHandler:
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
         print(f"Prompt ID: {prompt_id}")
-        time.sleep(60)
+        time.sleep(20)
         info = self.get_history(prompt_id)
-        outputs = info[prompt_id]['outputs']
-        print(f"Outputs: {outputs}")
+        history = info[prompt_id]['outputs']
+        output_images = {}
+        for o in history['outputs']:
+            for node_id in history['outputs']:
+                node_output = history['outputs'][node_id]
+                if 'images' in node_output:
+                    images_output = []
+                    for image in node_output['images']:
+                        image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
+                        images_output.append(image_data)
+                output_images[node_id] = images_output
+        print(f"output_images: {output_images}")
         print(f"Info: {info}")    
         if result is not None:
             if 'images' in result and result['images'] is not None:
