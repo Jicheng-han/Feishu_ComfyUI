@@ -52,7 +52,8 @@ class MessageHandler:
         data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
         url_values = urllib.parse.urlencode(data)
         with urllib.request.urlopen("http://{}/?{}&token={}".format(server_address, url_values, TOKEN)) as response:
-            return response.read()
+            print(f'reponse========:{response.read().decode("utf-8")}')
+            return response.read().decode("utf-8")
 
     def get_history(self,prompt_id):
         with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
@@ -205,9 +206,9 @@ class MessageHandler:
                 if 'images' in node_output:
                     images_output = []
                     for image in node_output['images']:
-                        with open(image['subfolder'] + '/' + image['filename'], 'wb') as f:
-                            image_data = f.read()
-                        # image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
+                        # with open(image['subfolder'] + '/' + image['filename'], 'wb') as f:
+                        #     image_data = f.read()
+                        image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
                         images_output.append(image_data)
                 output_images[node_id] = images_output
         # if result is not None:
