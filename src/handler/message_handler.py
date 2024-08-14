@@ -205,7 +205,7 @@ class MessageHandler:
                 if 'images' in node_output:
                     images_output = []
                     for image in node_output['images']:
-                        image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
+                        image_data = self.get_image(image['filename'], image['subfolder'], image['type']).decode('utf-8')
                         images_output.append(image_data)
                 output_images[node_id] = images_output
         # if result is not None:
