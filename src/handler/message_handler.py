@@ -65,7 +65,7 @@ class MessageHandler:
         with urllib.request.urlopen("http://{}/view?{}&token={}".format(server_address, url_values, TOKEN)) as response:
             return response.read()
 
-    def get_history(prompt_id):
+    def get_history(self,prompt_id):
         with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
             return json.loads(response.read())
          
