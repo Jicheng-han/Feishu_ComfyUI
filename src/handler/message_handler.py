@@ -58,7 +58,7 @@ class MessageHandler:
             return json.loads(response.read())
          
     def get_images(self,ws, prompt):
-        prompt_id = prompt(prompt)['prompt_id']
+        prompt_id = self.queue_prompt(prompt)['prompt_id']
         output_images = {}
         while True:
             out = ws.recv()
@@ -188,7 +188,7 @@ class MessageHandler:
         #set the seed for our KSampler node
         comfy_prompt["3"]["inputs"]["seed"] = random.randint(0, 1000000000000000)            
 
-        result = self.queue_prompt(comfy_prompt)
+        result = self.queue_prompt(comfy_prompt)['prompt_id']
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
         info = self.get_history(prompt_id)[prompt_id]
