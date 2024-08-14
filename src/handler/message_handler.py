@@ -190,8 +190,8 @@ class MessageHandler:
 
         result = self.queue_prompt(comfy_prompt)
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
-        print(f"Prompt_id: {result['prompt_id']}")
-        info = self.get_history(result['prompt_id'])
+        prompt_id = result['prompt_id']
+        info = self.get_history(result[prompt_id])[prompt_id]
         print(f"Info: {info}")    
         if result is not None:
             if 'images' in result and result['images'] is not None:
