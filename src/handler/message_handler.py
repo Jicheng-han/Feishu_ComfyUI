@@ -51,7 +51,7 @@ class MessageHandler:
     def get_image(self,filename, subfolder, folder_type):
         data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
         url_values = urllib.parse.urlencode(data)
-        with urllib.request.urlopen("http://{}/view?{}&token={}".format(server_address, url_values, TOKEN)) as response:
+        with urllib.request.urlopen("http://{}/?{}&token={}".format(server_address, url_values, TOKEN)) as response:
             return response.read()
 
     def get_history(self,prompt_id):
