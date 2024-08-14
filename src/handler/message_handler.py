@@ -197,6 +197,7 @@ class MessageHandler:
         info = self.get_history(prompt_id)
         history = info[prompt_id]
         output_images = {}
+        image_data = None
         print(f"Info: {info}")
         for o in history['outputs']:
             for node_id in history['outputs']:
@@ -207,24 +208,23 @@ class MessageHandler:
                         image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
                         images_output.append(image_data)
                 output_images[node_id] = images_output
-        print(f"output_images: {output_images}")
-        if result is not None:
-            if 'images' in result and result['images'] is not None:
-                for img_data in result['images']:
-                    images_key.append(upload_image(img_data))
-            else:
-                print("Error: 'images' key not found in result or its value is None")
+        # if result is not None:
+        #     if 'images' in result and result['images'] is not None:
+        #         for img_data in result['images']:
+        #             images_key.append(upload_image(img_data))
+        #     else:
+        #         print("Error: 'images' key not found in result or its value is None")
 
-            if 'info' in result and result['info'] is not None:
-                return handle_image_card(result['info'], images_key, prompts)
-            else:
-                print("Error: 'info' key not found in result or its value is None")
-        else:
-            print("Error: result is None")
+        #     if 'info' in result and result['info'] is not None:
+        #         return handle_image_card(result['info'], images_key, prompts)
+        #     else:
+        #         print("Error: 'info' key not found in result or its value is None")
+        # else:
+        #     print("Error: result is None")
 
         images_key = []
-        if 'images' in result:
-            for img_data in result['images']:
+        if output_images is not None:
+            for img_data in output_images['9']:
                 images_key.append(upload_image(img_data))
         else:
             print("Error: 'images' key not found in result")
