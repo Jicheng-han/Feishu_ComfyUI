@@ -107,7 +107,7 @@ class MessageHandler:
         gen_cfg = TextToImageConfig()
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
         prompt_input = gen_cfg.prompt
-        print (f'PPPPPPPPrompt: {prompt_input}')
+        # print (f'PPPPPPPPrompt: {prompt_input}')
 
 
         comfy_json = """
@@ -298,15 +298,15 @@ class MessageHandler:
         comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
         # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
 
-        print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
+        # print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         # set the seed for our KSampler node
         comfy_prompt["25"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
-        print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
+        # print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
-        print(f"Prompt ID: {prompt_id}")
+        # print(f"Prompt ID: {prompt_id}")
         # 先倒头就睡0.5秒，确保任务提交到队列
         time.sleep(0.5)
 
@@ -336,7 +336,7 @@ class MessageHandler:
         history = info[prompt_id]
         output_images = {}
         image_data = None
-        print(f"Info: {info}")
+        # print(f"Info: {info}")
         for o in history['outputs']:
             for node_id in history['outputs']:
                 node_output = history['outputs'][node_id]
