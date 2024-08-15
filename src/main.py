@@ -48,18 +48,19 @@ async def handle_webhook_card(request):
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
  
 
-async def webhook_event(request):
+async def webhook_event(request, processed_requests):
     print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
-    oapi_resp = handle_event(feishu_conf, oapi_request)
+
 
     # Parse the request body as a JSON object
     data_dict = json.loads(oapi_request.body)
     print(f"webhook_event_oapi_request.body: {oapi_request.body}")
     # Extract the event_type and event_key values
+    event_id = data_dict.get("header", {}).get("event_id")
     event_type = data_dict.get("header", {}).get("event_type")
  
  
@@ -71,7 +72,10 @@ async def webhook_event(request):
     event_type = data_dict.get("header", {}).get("event_type")
     event_key = data_dict.get("event", {}).get("event_key")
     timestamp = data_dict.get("event", {}).get("timestamp")
-    
+    if (event_id, timestamp) in processed_requests:
+        return
+    else:
+        oapi_resp = handle_event(feishu_conf, oapi_request)
     #
     # print(f"event_type: {event_type}")
     # print(f"event_key: {event_key}")
@@ -85,9 +89,11 @@ async def webhook_event(request):
     else:
         MenuHandler.menu_response =  MenuHandler.handle_menu_event(user_id,event_key,event_type,timestamp)
     
-
+    print (f'event_id:{event_id}')
     print (user_id)
     print (event_key)
+    processed_requests.add((event_id, timestamp))
+    print (processed_requests)
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
     #
@@ -95,10 +101,11 @@ async def webhook_event(request):
 
 
 def app_main():
+    processed_requests = set()
     app = web.Application()
     app.add_routes([web.get('/', ping),
                     web.route('*','/webhook/card', webhook_card),
-                    web.route('*', '/webhook/event', webhook_event)])
+                    web.route('*', '/webhook/event', webhook_event(processed_requests))])
     web.run_app(app, host="0.0.0.0", port=app_config.HTTP_PORT)
     print('模    块: main.py - app_main')
 
