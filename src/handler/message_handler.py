@@ -101,9 +101,9 @@ class MessageHandler:
         print (f'PPPPPPPPrompt: {prompt_input}')
 
         workflowResult = get_workflow_by_name("高级文生图")
-        comfy_json = workflowResult.data
+         
 
-        comfy_prompt = json.loads(comfy_json, strict=False)
+        comfy_prompt = json.loads(workflowResult.data, strict=False)
 
         #set the text prompt for our positive CLIPTextEncode
         pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words.:" + prompt_input
