@@ -295,8 +295,8 @@ class MessageHandler:
 
         comfy_prompt = json.loads(comfy_json, strict=False)
         pre_prompt = "Translate into English:" + prompt_input
-        # comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
-        comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
+        comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
+        # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
 
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
