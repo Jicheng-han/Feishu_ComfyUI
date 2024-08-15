@@ -42,17 +42,17 @@ class MessageHandler:
         print(f'模    块: message_handler - handle_update_message_card')
 #        print(f'当前VAE: {sd_webui.get_sd_vae}')
         return message_sender.update_message_card(token, messageCard)
-    def update_prompt(self,data, new_prompt):
+    def update_prompt(self, data, new_prompt):
       for key, value in data.items():
-          if isinstance(value, dict) and 'inputs' in value:
-              inputs = value['inputs']
-              if 'prompt' in inputs:
-                  if isinstance(inputs['prompt'], list):
-                      # 如果 prompt 是一个列表，我们假设第一个元素是实际的 prompt
-                      inputs['prompt'][0] = new_prompt
-                  else:
-                      inputs['prompt'] = new_prompt
-                  return json.dumps(data, ensure_ascii=False, indent=2)
+        if isinstance(value, dict) and 'inputs' in value:
+          inputs = value['inputs']
+          if 'prompt' in inputs:
+            if isinstance(inputs['prompt'], list):
+              # 如果 prompt 是一个列表，我们假设第一个元素是实际的 prompt
+              inputs['prompt'][0] = new_prompt
+            else:
+              inputs['prompt'] = new_prompt
+      return json.dumps(data, ensure_ascii=False, indent=2)
 
       return "未找到包含 'prompt' 的 'inputs' 字典"
     def queue_prompt(self,comfy_prompt):
@@ -295,8 +295,8 @@ class MessageHandler:
 
         comfy_prompt = json.loads(comfy_json, strict=False)
         pre_prompt = "Translate into English:" + prompt_input
-        comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
-        # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
+        # comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
+        comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
 
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
