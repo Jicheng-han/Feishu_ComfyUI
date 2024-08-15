@@ -44,6 +44,7 @@ async def handle_webhook_card(request):
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
     oapi_resp = handle_card(feishu_conf, oapi_request)
+    print(f" handle_webhook_card_oapi_request.: {oapi_request.body}")
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
  
 
@@ -57,7 +58,7 @@ async def webhook_event(request):
 
     # Parse the request body as a JSON object
     data_dict = json.loads(oapi_request.body)
-    print(f"oapi_request.body: {oapi_request.body}")
+    print(f"webhook_event_oapi_request.body: {oapi_request.body}")
     # Extract the event_type and event_key values
     event_type = data_dict.get("header", {}).get("event_type")
  
