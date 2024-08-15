@@ -1,7 +1,7 @@
 import webuiapi
 import json
 import random
-import websocket #NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
+# import websocket #NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
 import uuid
 import json
 import urllib.request
@@ -102,8 +102,10 @@ class MessageHandler:
         workflowResult = get_workflow_by_name("高级文生图")
         pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words:" + prompt_input
 
+        print (f'wwwwwwwwwwwwwwworkflowResult: {workflowResult}')
         workflowJson = json.dumps(workflowResult.data)
 
+        print (f'wwwwwwwwwwwwwwworkflowJson: {workflowJson}')
         comfy_prompt = update_prompt(json.loads(workflowJson), pre_prompt)
 
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
