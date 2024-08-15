@@ -20,8 +20,8 @@ from util.event_helper import MyReceiveEvent
 import time
 from service.aliyun_translator import aliyun_translator
 
-from src.enum.workflows import get_workflow_by_name
-from src.handler.prompt_handler import update_prompt
+from enum.workflows import get_workflow_by_name
+from handler.prompt_handler import update_prompt
 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
@@ -104,6 +104,7 @@ class MessageHandler:
         comfy_json = workflowResult.data
 
         comfy_prompt = json.loads(comfy_json, strict=False)
+
         #set the text prompt for our positive CLIPTextEncode
         pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words.:" + prompt_input
         update_prompt(comfy_prompt, pre_prompt)
