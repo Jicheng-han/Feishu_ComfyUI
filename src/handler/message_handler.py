@@ -59,7 +59,11 @@ class MessageHandler:
     def get_history(self,prompt_id):
         with urllib.request.urlopen("http://{}/history/{}?token={}".format(server_address, prompt_id, TOKEN)) as response:
             return json.loads(response.read())
-         
+
+    def get_queue(self):
+        req = urllib.request.Request("http://{}/queue".format(server_address))
+        return json.loads(urllib.request.urlopen(req).read().decode("utf-8"))
+
     def get_images(self,ws, prompt):
         prompt_id = self.queue_prompt(prompt)['prompt_id']
         output_images = {}
@@ -282,14 +286,38 @@ class MessageHandler:
         comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
-        #set the seed for our KSampler node
+        # set the seed for our KSampler node
         comfy_prompt["25"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
         print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
         print(f"Prompt ID: {prompt_id}")
-        time.sleep(30)
+        # 先倒头就睡0.5秒，确保任务提交到队列
+        time.sleep(0.5)
+
+        while True:
+            queue = self.get_queue()
+            prompt_finish_flag = True
+            if len(queue["queue_running"]) == 0:
+                break
+
+            for item in queue["queue_running"]:
+                if len(item) > 0 and item[1] == prompt_id:
+                    prompt_finish_flag = False
+                    continue
+
+            for item in queue["queue_pending"]:
+                if len(item) > 0 and item[1] == prompt_id:
+                    prompt_finish_flag = False
+                    continue
+
+            if not prompt_finish_flag:
+                print("Prompt not finished yet. Sleeping for 2 seconds.")
+                time.sleep(2)
+            else:
+                break
+
         info = self.get_history(prompt_id)
         history = info[prompt_id]
         output_images = {}
