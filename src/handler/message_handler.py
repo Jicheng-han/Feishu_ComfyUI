@@ -1,4 +1,4 @@
-import webuiapi
+import os
 import json
 import random
 # import websocket #NOTE: websocket-client (https://github.com/websocket-client/websocket-client)
@@ -18,10 +18,8 @@ from service.stablediffusion import sd_webui
 from util.event_helper import MyReceiveEvent
 import time
 from service.aliyun_translator import aliyun_translator
-
-from handler.workflows_handler import get_workflow_by_name
-from handler.prompt_handler import update_prompt
-
+from enum import Enum
+ 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
 # TOKEN is stored in the file `./PASSWORD`, or you can obtain it from the command line window when ComfyUI starts.
@@ -44,7 +42,19 @@ class MessageHandler:
         print(f'模    块: message_handler - handle_update_message_card')
 #        print(f'当前VAE: {sd_webui.get_sd_vae}')
         return message_sender.update_message_card(token, messageCard)
+    def update_prompt(data, new_prompt):
+      for key, value in data.items():
+          if isinstance(value, dict) and 'inputs' in value:
+              inputs = value['inputs']
+              if 'prompt' in inputs:
+                  if isinstance(inputs['prompt'], list):
+                      # 如果 prompt 是一个列表，我们假设第一个元素是实际的 prompt
+                      inputs['prompt'][0] = new_prompt
+                  else:
+                      inputs['prompt'] = new_prompt
+                  return json.dumps(data, ensure_ascii=False, indent=2)
 
+      return "未找到包含 'prompt' 的 'inputs' 字典"
     def queue_prompt(self,comfy_prompt):
         p = {"prompt": comfy_prompt, "client_id": client_id}
         data = json.dumps(p).encode('utf-8')
@@ -193,4 +203,62 @@ class MessageHandler:
 
         return message_sender.send_message_card(myevent, messageCard)
 
- 
+class WorkFlow:
+    def __init__(self, display_name, file_path):
+        self.display_name = display_name
+        self.file_path = file_path
+        self.data = self.load_json()
+
+    def load_json(self):
+        with open(self.file_path, 'r', encoding='utf-8') as file:
+            return json.load(file)
+
+def create_workflow_enum(directory):
+    workflows = {}
+    for filename in os.listdir(directory):
+        if filename.endswith('.json'):
+            name = os.path.splitext(filename)[0]
+            file_path = os.path.join(directory, filename)
+            workflows[name.upper()] = (name, file_path)
+
+    class WorkFlows(Enum):
+        def __new__(cls, display_name, file_path):
+            obj = object.__new__(cls)
+            obj._value_ = display_name
+            obj.display_name = display_name
+            obj.file_path = file_path
+            obj.data = WorkFlow.load_json(obj)
+            return obj
+
+        @classmethod
+        def load_json(cls, obj):
+            with open(obj.file_path, 'r', encoding='utf-8') as file:
+                return json.load(file)
+
+    return WorkFlows('WorkFlows', workflows)
+
+# 获取当前文件所在目录
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 构造 workflow 目录的路径
+workflow_dir = os.path.join(current_dir, 'workflow')
+
+# 确保 workflow 目录存在
+if not os.path.exists(workflow_dir):
+    raise FileNotFoundError(f"Workflow directory not found: {workflow_dir}")
+
+# 创建 WorkFlows 枚举
+WorkFlows = create_workflow_enum(workflow_dir)
+
+# 打印所有工作流
+def print_all_workflows():
+    for wf in WorkFlows:
+        print(f"{wf.display_name}: {wf.file_path}")
+        # 如果需要，你也可以打印 JSON 数据
+        # print(f"Data: {wf.data}")
+
+# 根据名称获取工作流
+def get_workflow_by_name(name):
+    for wf in WorkFlows:
+        if wf.display_name == name:
+            return wf
+    return None
