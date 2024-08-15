@@ -109,14 +109,193 @@ class MessageHandler:
         prompt_input = gen_cfg.prompt
         print (f'PPPPPPPPrompt: {prompt_input}')
 
-        workflowResult = get_workflow_by_name("高级文生图")
-        pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words:" + prompt_input
 
-        print (f'wwwwwwwwwwwwwwworkflowResult: {workflowResult}')
-        workflowJson = json.dumps(workflowResult.data)
+        comfy_json = """
 
-        print (f'wwwwwwwwwwwwwwworkflowJson: {workflowJson}')
-        comfy_prompt = self.update_prompt(json.loads(workflowJson), pre_prompt)
+          {
+            "5": {
+              "inputs": {
+                "width": 1024,
+                "height": 1024,
+                "batch_size": 1
+              },
+              "class_type": "EmptyLatentImage",
+              "_meta": {
+                "title": "Empty Latent Image"
+              }
+            },
+            "6": {
+              "inputs": {
+                "text": [
+                  "61",
+                  0
+                ],
+                "speak_and_recognation": null,
+                "clip": [
+                  "11",
+                  0
+                ]
+              },
+              "class_type": "CLIPTextEncode",
+              "_meta": {
+                "title": "CLIP Text Encode (Prompt)"
+              }
+            },
+            "8": {
+              "inputs": {
+                "samples": [
+                  "13",
+                  0
+                ],
+                "vae": [
+                  "10",
+                  0
+                ]
+              },
+              "class_type": "VAEDecode",
+              "_meta": {
+                "title": "VAE Decode"
+              }
+            },
+            "9": {
+              "inputs": {
+                "filename_prefix": "MarkuryFLUX",
+                "images": [
+                  "8",
+                  0
+                ]
+              },
+              "class_type": "SaveImage",
+              "_meta": {
+                "title": "Save Image"
+              }
+            },
+            "10": {
+              "inputs": {
+                "vae_name": "ae.sft"
+              },
+              "class_type": "VAELoader",
+              "_meta": {
+                "title": "Load VAE"
+              }
+            },
+            "11": {
+              "inputs": {
+                "clip_name1": "t5xxl_fp16.safetensors",
+                "clip_name2": "clip_l.safetensors",
+                "type": "flux"
+              },
+              "class_type": "DualCLIPLoader",
+              "_meta": {
+                "title": "DualCLIPLoader"
+              }
+            },
+            "12": {
+              "inputs": {
+                "unet_name": "flux1-dev.safetensors",
+                "weight_dtype": "default"
+              },
+              "class_type": "UNETLoader",
+              "_meta": {
+                "title": "Load Diffusion Model"
+              }
+            },
+            "13": {
+              "inputs": {
+                "noise": [
+                  "25",
+                  0
+                ],
+                "guider": [
+                  "22",
+                  0
+                ],
+                "sampler": [
+                  "16",
+                  0
+                ],
+                "sigmas": [
+                  "17",
+                  0
+                ],
+                "latent_image": [
+                  "5",
+                  0
+                ]
+              },
+              "class_type": "SamplerCustomAdvanced",
+              "_meta": {
+                "title": "SamplerCustomAdvanced"
+              }
+            },
+            "16": {
+              "inputs": {
+                "sampler_name": "euler"
+              },
+              "class_type": "KSamplerSelect",
+              "_meta": {
+                "title": "KSamplerSelect"
+              }
+            },
+            "17": {
+              "inputs": {
+                "scheduler": "simple",
+                "steps": 25,
+                "denoise": 1,
+                "model": [
+                  "12",
+                  0
+                ]
+              },
+              "class_type": "BasicScheduler",
+              "_meta": {
+                "title": "BasicScheduler"
+              }
+            },
+            "22": {
+              "inputs": {
+                "model": [
+                  "12",
+                  0
+                ],
+                "conditioning": [
+                  "6",
+                  0
+                ]
+              },
+              "class_type": "BasicGuider",
+              "_meta": {
+                "title": "BasicGuider"
+              }
+            },
+            "25": {
+              "inputs": {
+                "noise_seed": 111230751805892
+              },
+              "class_type": "RandomNoise",
+              "_meta": {
+                "title": "RandomNoise"
+              }
+            },
+            "61": {
+              "inputs": {
+                "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节，并精简成一段话,不超过100个单词:一个女孩",
+                "debug": "enable",
+                "url": "http://127.0.0.1:11434",
+                "model": "llama3:8b",
+                "keep_alive": 60
+              },
+              "class_type": "OllamaGenerate",
+              "_meta": {
+                "title": "Ollama Generate"
+              }
+            }
+          }
+        """
+
+        comfy_prompt = json.loads(comfy_json, strict=False)
+        pre_prompt = "Translate into English:" + prompt_input
+        comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
 
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
@@ -202,63 +381,4 @@ class MessageHandler:
         messageCard = self.handle_prompt(myevent.text)
 
         return message_sender.send_message_card(myevent, messageCard)
-
-class WorkFlow:
-    def __init__(self, display_name, file_path):
-        self.display_name = display_name
-        self.file_path = file_path
-        self.data = self.load_json()
-
-    def load_json(self):
-        with open(self.file_path, 'r', encoding='utf-8') as file:
-            return json.load(file)
-
-def create_workflow_enum(directory):
-    workflows = {}
-    for filename in os.listdir(directory):
-        if filename.endswith('.json'):
-            name = os.path.splitext(filename)[0]
-            file_path = os.path.join(directory, filename)
-            workflows[name.upper()] = (name, file_path)
-
-    class WorkFlows(Enum):
-        def __new__(cls, display_name, file_path):
-            obj = object.__new__(cls)
-            obj._value_ = display_name
-            obj.display_name = display_name
-            obj.file_path = file_path
-            obj.data = WorkFlow.load_json(obj)
-            return obj
-
-        @classmethod
-        def load_json(cls, obj):
-            with open(obj.file_path, 'r', encoding='utf-8') as file:
-                return json.load(file)
-
-    return WorkFlows('WorkFlows', workflows)
-
-# 获取当前文件所在目录
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# 构造 workflow 目录的路径
-workflow_dir = os.path.join(current_dir, 'workflow')
-
-# 确保 workflow 目录存在
-if not os.path.exists(workflow_dir):
-    raise FileNotFoundError(f"Workflow directory not found: {workflow_dir}")
-
-# 创建 WorkFlows 枚举
-WorkFlows = create_workflow_enum(workflow_dir)
-
-# 打印所有工作流
-def print_all_workflows():
-    for wf in WorkFlows:
-        print(f"{wf.display_name}: {wf.file_path}")
-        # 如果需要，你也可以打印 JSON 数据
-        # print(f"Data: {wf.data}")
-
-# 根据名称获取工作流
-def get_workflow_by_name(name):
-    for wf in WorkFlows:
-        if wf.display_name == name:
-            return wf
-    return None
+ 
