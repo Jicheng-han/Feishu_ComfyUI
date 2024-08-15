@@ -19,7 +19,8 @@ from util.event_helper import MyReceiveEvent
 import time
 from service.aliyun_translator import aliyun_translator
 
-from handler.workflow import get_workflow_by_name, update_prompt
+from handler.workflows_handler import get_workflow_by_name
+from handler.prompt_handler import update_prompt
 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
