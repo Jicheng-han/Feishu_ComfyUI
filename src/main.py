@@ -72,18 +72,11 @@ async def webhook_event(request):
     event_type = data_dict.get("header", {}).get("event_type")
     event_key = data_dict.get("event", {}).get("event_key")
     timestamp = data_dict.get("event", {}).get("timestamp")
-    if (event_id, timestamp) in processed_requests:
-        return
-    else:
-        oapi_resp = handle_event(feishu_conf, oapi_request)
+    # if (event_id, timestamp) in processed_requests:
+    #     return
+    # else:
+    oapi_resp = handle_event(feishu_conf, oapi_request)
     #
-    # print(f"event_type: {event_type}")
-    # print(f"event_key: {event_key}")
-    # if event_key == "5e3702a84e847582be8db7fb73283c02":
-    #     response_text = "菜单项：5e3702a84e847582be8db7fb73283c02"
-    #     print (response_text)
-
-    # menu_response =  MenuHandler.handle_menu_event(uuid = data_dict.get("event", {}).get("union_id"),user_id = data_dict.get("event", {}).get("user_id"),event_key = data_dict.get("event", {}).get("event_key"))
     if event_key is None:
         print("Warning: event_key is None")
     else:
