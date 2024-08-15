@@ -42,7 +42,7 @@ class MessageHandler:
         print(f'模    块: message_handler - handle_update_message_card')
 #        print(f'当前VAE: {sd_webui.get_sd_vae}')
         return message_sender.update_message_card(token, messageCard)
-    def update_prompt(data, new_prompt):
+    def update_prompt(self,data, new_prompt):
       for key, value in data.items():
           if isinstance(value, dict) and 'inputs' in value:
               inputs = value['inputs']
@@ -116,7 +116,7 @@ class MessageHandler:
         workflowJson = json.dumps(workflowResult.data)
 
         print (f'wwwwwwwwwwwwwwworkflowJson: {workflowJson}')
-        comfy_prompt = update_prompt(json.loads(workflowJson), pre_prompt)
+        comfy_prompt = self.update_prompt(json.loads(workflowJson), pre_prompt)
 
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
