@@ -1,4 +1,3 @@
-
 import webuiapi
 import json
 import random
@@ -51,7 +50,7 @@ class MessageHandler:
         data = json.dumps(p).encode('utf-8')
         req =  urllib.request.Request("http://{}/prompt?token={}".format(server_address, TOKEN), data=data)
         return json.loads(urllib.request.urlopen(req).read())
-    
+
     def get_image(self,filename, subfolder, folder_type):
         data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
         url_values = urllib.parse.urlencode(data)
@@ -178,7 +177,7 @@ class MessageHandler:
                 images_key.append(upload_image(img_data))
         else:
             print("Error: 'images' key not found in result")
-        
+
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
         # print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
@@ -192,5 +191,4 @@ class MessageHandler:
 
         return message_sender.send_message_card(myevent, messageCard)
 
-if __name__ == '__main__':
-    MessageHandler.handle_prompt("一个女孩")
+ 
