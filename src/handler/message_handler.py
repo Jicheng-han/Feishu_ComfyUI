@@ -20,8 +20,8 @@ from util.event_helper import MyReceiveEvent
 import time
 from service.aliyun_translator import aliyun_translator
 
-from src.enum.workflows import get_workflow_by_name
-from src.handler.prompt_handler import update_prompt
+from workflows_handler import get_workflow_by_name
+from prompt_handler import update_prompt
 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
@@ -101,13 +101,12 @@ class MessageHandler:
         print (f'PPPPPPPPrompt: {prompt_input}')
 
         workflowResult = get_workflow_by_name("高级文生图")
-        comfy_json = workflowResult.data
+        pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words:" + prompt_input
 
-        comfy_prompt = json.loads(comfy_json, strict=False)
-        #set the text prompt for our positive CLIPTextEncode
-        pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words.:" + prompt_input
-        update_prompt(comfy_prompt, pre_prompt)
-        #comfy_prompt["61"]["inputs"]["prompt"] = pre_prompt
+        workflowJson = json.dumps(workflowResult.data)
+
+        comfy_prompt = update_prompt(json.loads(workflowJson), pre_prompt)
+
         print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
 
         # set the seed for our KSampler node
@@ -192,3 +191,6 @@ class MessageHandler:
         messageCard = self.handle_prompt(myevent.text)
 
         return message_sender.send_message_card(myevent, messageCard)
+
+if __name__ == '__main__':
+    MessageHandler.handle_prompt("一个女孩")

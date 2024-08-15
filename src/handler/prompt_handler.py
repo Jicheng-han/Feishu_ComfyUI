@@ -19,5 +19,7 @@ json_data = {'5': {'inputs': {'width': 1024, 'height': 1024, 'batch_size': 1}, '
 
 if __name__ == '__main__':
     # 调用函数并打印结果
-    result = update_prompt(json_data, '一条狗')
+    pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph of no more than 100 words:" + "一个女孩"
+
+    result = update_prompt(json_data, pre_prompt)
     print(result)

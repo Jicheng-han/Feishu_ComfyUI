@@ -73,5 +73,8 @@ if __name__ == "__main__":
         print(f"\n找到工作流: {result.display_name}")
         print(f"文件路径: {result.file_path}")
         print(f"JSON 数据: {result.data}")
+        print(f"JSON 数据类型: {type(result.data)}")
+        print(f"JSON 数据类型: {json.dumps(result.data)}")
+
     else:
         print(f"\n未找到名为 '{test_name}' 的工作流")
