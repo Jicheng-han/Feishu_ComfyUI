@@ -33,15 +33,15 @@ class MessageHandler:
     def __init__(self):
         pass
 
-    def handle_update_message_card(self, token, openId, prompt):
-        messageCard = self.handle_prompt(prompt)
-        if messageCard is None:
-            print("handle_prompt returned None")
-            return None
-        messageCard["open_ids"] = [openId]
-        print(f'模    块: message_handler - handle_update_message_card')
-#        print(f'当前VAE: {sd_webui.get_sd_vae}')
-        return message_sender.update_message_card(token, messageCard)
+    # def handle_update_message_card(self, token, openId, prompt):
+#         messageCard = self.handle_prompt(prompt)
+#         if messageCard is None:
+#             print("handle_prompt returned None")
+#             return None
+#         messageCard["open_ids"] = [openId]
+#         print(f'模    块: message_handler - handle_update_message_card')
+# #        print(f'当前VAE: {sd_webui.get_sd_vae}')
+#         return message_sender.update_message_card(token, messageCard)
     def update_prompt(self, data, new_prompt):
       for key, value in data.items():
         if isinstance(value, dict) and 'inputs' in value:
@@ -308,29 +308,30 @@ class MessageHandler:
         prompt_id = result['prompt_id']
         # print(f"Prompt ID: {prompt_id}")
         # 先倒头就睡0.5秒，确保任务提交到队列
-        time.sleep(30)
+        time.sleep(0.5)
 
-        # while True:
-        #     queue = self.get_queue()
-        #     prompt_finish_flag = True
-        #     if len(queue["queue_running"]) == 0:
-        #         break
+        while True:
+            queue = self.get_queue()
+            prompt_finish_flag = True
+            if len(queue["queue_running"]) == 0:
+                break
 
-        #     for item in queue["queue_running"]:
-        #         if len(item) > 0 and item[1] == prompt_id:
-        #             prompt_finish_flag = False
-        #             continue
+            for item in queue["queue_running"]:
+                if len(item) > 0 and item[1] == prompt_id:
+                    prompt_finish_flag = False
+                    continue
 
-        #     for item in queue["queue_pending"]:
-        #         if len(item) > 0 and item[1] == prompt_id:
-        #             prompt_finish_flag = False
-        #             continue
+            for item in queue["queue_pending"]:
+                if len(item) > 0 and item[1] == prompt_id:
+                    prompt_finish_flag = False
+                    continue
 
-        #     if not prompt_finish_flag:
-        #         print("Prompt not finished yet. Sleeping for 2 seconds.")
-        #         time.sleep(2)
-        #     else:
-        #         break
+            if not prompt_finish_flag:
+                print("Prompt not finished yet. Sleeping for 2 seconds.")
+                time.sleep(2)
+                message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
+            else:
+                break
 
         info = self.get_history(prompt_id)
         history = info[prompt_id]
