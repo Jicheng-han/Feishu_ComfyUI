@@ -308,7 +308,7 @@ class MessageHandler:
         prompt_id = result['prompt_id']
         # print(f"Prompt ID: {prompt_id}")
         # 先倒头就睡0.5秒，确保任务提交到队列
-        time.sleep(0.5)
+        time.sleep(2.5)
 
         while True:
             queue = self.get_queue()
