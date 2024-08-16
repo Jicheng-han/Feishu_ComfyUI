@@ -58,7 +58,7 @@ async def webhook_event(request):
     # event_id = oapi_request.header.get("event_id")
     # Parse the request body as a JSON object
     data_dict = json.loads(oapi_request.body)
-    print(f"webhook_event_oapi_request.body: {oapi_request.header}")
+    print(f"webhook_event_oapi_request.body: {json.loads(oapi_request.header)}")
     # Extract the event_type and event_key values
     event_id = data_dict.get("header", {}).get("event_id")
     event_type = data_dict.get("header", {}).get("event_type")
