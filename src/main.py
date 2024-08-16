@@ -52,7 +52,7 @@ async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
     oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.header)
+        uri=request.path, body=data, header=OapiHeader(request.headers)
     )
 
     # event_id = oapi_request.header.get("event_id")
