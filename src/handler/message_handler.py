@@ -294,7 +294,7 @@ class MessageHandler:
         """
 
         comfy_prompt = json.loads(comfy_json, strict=False)
-        pre_prompt = "Please expand on the following prompt in English, with a focus on enhancing details such as style, camera angles, artistic techniques, and information about the artist:""" + prompt_input + ""
+        pre_prompt = "Expand the following content in English, including detailed descriptions, artistic style, masterful works, high quality, and intricate details, and condense it into a single paragraph:""" + prompt_input + ""
         comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
         # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
 
