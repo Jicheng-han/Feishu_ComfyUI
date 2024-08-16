@@ -44,10 +44,9 @@ async def handle_webhook_card(request):
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
     oapi_resp = handle_card(feishu_conf, oapi_request)
-    print(f" handle_webhook_card_oapi_request.: {oapi_request.body}")
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
  
-processed_requests = set()
+# processed_requests = set()
 async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
@@ -57,36 +56,35 @@ async def webhook_event(request):
 
     # event_id = oapi_request.header.get("event_id")
     # Parse the request body as a JSON object
-    data_dict = json.loads(oapi_request.body)
-    print(f"webhook_event_oapi_request.body: {json.dumps(oapi_request.header)}")
-    # Extract the event_type and event_key values
-    event_id = data_dict.get("header", {}).get("event_id")
-    event_type = data_dict.get("header", {}).get("event_type")
+    # data_dict = json.loads(oapi_request.body)
+     # Extract the event_type and event_key values
+    # event_id = data_dict.get("header", {}).get("event_id")
+    # event_type = data_dict.get("header", {}).get("event_type")
  
  
-    event = data_dict.get("event", {})
-    operator = event.get("operator") if event else None
-    operator_id = operator.get("operator_id") if operator else None
-    user_id = operator_id.get("user_id") if operator_id else None
+    # event = data_dict.get("event", {})
+    # operator = event.get("operator") if event else None
+    # operator_id = operator.get("operator_id") if operator else None
+    # user_id = operator_id.get("user_id") if operator_id else None
     
-    event_type = data_dict.get("header", {}).get("event_type")
-    event_key = data_dict.get("event", {}).get("event_key")
-    timestamp = data_dict.get("event", {}).get("timestamp")
+    # event_type = data_dict.get("header", {}).get("event_type")
+    # event_key = data_dict.get("event", {}).get("event_key")
+    # timestamp = data_dict.get("event", {}).get("timestamp")
     # if (event_id, timestamp) in processed_requests:
     #     return
     # else:
     oapi_resp = handle_event(feishu_conf, oapi_request)
     #
-    if event_key is None:
-        print("Warning: event_key is None")
-    else:
-        MenuHandler.menu_response =  MenuHandler.handle_menu_event(user_id,event_key,event_type,timestamp)
+    # if event_key is None:
+    #     print("Warning: event_key is None")
+    # else:
+    #     MenuHandler.menu_response =  MenuHandler.handle_menu_event(user_id,event_key,event_type,timestamp)
     
-    print (f'event_id:{event_id}')
-    print (user_id)
-    print (event_key)
-    processed_requests.add((event_id, timestamp))
-    print (processed_requests)
+    # print (f'event_id:{event_id}')
+    # print (user_id)
+    # print (event_key)
+    # processed_requests.add((event_id, timestamp))
+    # print (processed_requests)
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
     #
