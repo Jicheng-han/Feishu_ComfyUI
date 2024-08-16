@@ -52,13 +52,13 @@ async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
     oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.headers)
+        uri=request.path, body=data, header=OapiHeader(request.header)
     )
 
     # event_id = oapi_request.header.get("event_id")
     # Parse the request body as a JSON object
     data_dict = json.loads(oapi_request.body)
-    print(f"webhook_event_oapi_request.body: {oapi_request.headers}")
+    print(f"webhook_event_oapi_request.body: {oapi_request.header}")
     # Extract the event_type and event_key values
     event_id = data_dict.get("header", {}).get("event_id")
     event_type = data_dict.get("header", {}).get("event_type")
