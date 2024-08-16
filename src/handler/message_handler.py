@@ -108,8 +108,6 @@ class MessageHandler:
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
         prompt_input = gen_cfg.prompt
         # print (f'PPPPPPPPrompt: {prompt_input}')
-
-
         comfy_json = """
 
           {
@@ -181,7 +179,7 @@ class MessageHandler:
             },
             "11": {
               "inputs": {
-                "clip_name1": "t5xxl_fp16.safetensors",
+                "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
                 "clip_name2": "clip_l.safetensors",
                 "type": "flux"
               },
@@ -292,14 +290,11 @@ class MessageHandler:
             }
           }
         """
-
         comfy_prompt = json.loads(comfy_json, strict=False)
         pre_prompt = "Directly translate into English, output the translated content directly, without the translation process:""" + prompt_input + ""
         comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
         # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
-
         # print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
-
         # set the seed for our KSampler node
         comfy_prompt["25"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
 
@@ -349,20 +344,8 @@ class MessageHandler:
                         # image_data = self.get_image(image['filename'], image['subfolder'], image['type'])
                         images_output.append(image_data)
                 output_images[node_id] = images_output
-        # if result is not None:
-        #     if 'images' in result and result['images'] is not None:
-        #         for img_data in result['images']:
-        #             images_key.append(upload_image(img_data))
-        #     else:
-        #         print("Error: 'images' key not found in result or its value is None")
 
-        #     if 'info' in result and result['info'] is not None:
-        #         return handle_image_card(result['info'], images_key, prompts)
-        #     else:
-        #         print("Error: 'info' key not found in result or its value is None")
-        # else:
-        #     print("Error: result is None")
-        # print(f"image_data: {image_data}")
+
         images_key = []
         if output_images is not None:
             for img_data in output_images['9']:
@@ -371,9 +354,6 @@ class MessageHandler:
             print("Error: 'images' key not found in result")
 
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
-
-        # print(f"XXXX_images_key_XXXXXX: {result['info'], images_key, prompts}")
-        # return handle_image_card(result['info'], images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
         message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
