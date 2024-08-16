@@ -329,7 +329,6 @@ class MessageHandler:
             if not prompt_finish_flag:
                 print("Prompt not finished yet. Sleeping for 2 seconds.")
                 time.sleep(2)
-                message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
             else:
                 break
 
