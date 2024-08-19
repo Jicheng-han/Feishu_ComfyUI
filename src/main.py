@@ -4,7 +4,7 @@ sys.path.append("D:\\Feishu-Stablediffusion-master\\src\\")
 from larksuiteoapi.card import handle_card, set_card_callback
 from larksuiteoapi.event import handle_event, set_event_callback
 from larksuiteoapi.model import OapiHeader, OapiRequest
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask.helpers import make_response
 from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
 from larksuiteoapi.model.oapi_response import OapiResponse
@@ -56,7 +56,12 @@ async def webhook_event(request):
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
-
+    event_data = request.json
+    # 打印接收到的事件数据
+    print("Received event data:", event_data)
+    
+    # 处理事件数据的业务逻辑
+    # 例如，可以根据 event_data 中的 event_id 或 uuid 做幂等处理
 
     # event_id = oapi_request.header.get("event_id")
     # Parse the request body as a JSON object
@@ -89,8 +94,9 @@ async def webhook_event(request):
     # print (event_key)
     # processed_requests.add((event_id, timestamp))
     # print (processed_requests)
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
-
+    # return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    # 返回 HTTP 200 状态码
+    return jsonify({"message": "OK"}), 200
     #
     # return web.Response(headers={'Content-Type': oapi_resp.content_type}, text="", status=oapi_resp.status_code)
 
