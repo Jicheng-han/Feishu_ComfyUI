@@ -53,6 +53,7 @@ async def webhook_event(request):
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
+    print(f"oapi_request.body: {oapi_request.body}")
 
     # event_id = oapi_request.header.get("event_id")
     # Parse the request body as a JSON object
