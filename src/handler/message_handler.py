@@ -113,7 +113,7 @@ class MessageHandler:
           {
             "5": {
               "inputs": {
-                "width": 1024,
+                "width": 576,
                 "height": 1024,
                 "batch_size": 1
               },
@@ -280,7 +280,7 @@ class MessageHandler:
                 "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节，并精简成一段话,不超过100个单词:一个女孩",
                 "debug": "enable",
                 "url": "http://127.0.0.1:11434",
-                "model": "llama3:8b",
+                "model": "phi3:14b",
                 "keep_alive": 60
               },
               "class_type": "OllamaGenerate",
