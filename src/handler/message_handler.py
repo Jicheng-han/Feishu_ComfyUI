@@ -113,7 +113,7 @@ class MessageHandler:
           {
             "5": {
               "inputs": {
-                "width": 576,
+                "width": 768,
                 "height": 1024,
                 "batch_size": 1
               },
