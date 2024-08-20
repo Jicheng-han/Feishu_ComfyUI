@@ -21,13 +21,17 @@ from feishu.message_sender import MessageSender
 import queue
 import threading
 
-
+MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
+set_card_callback(feishu_conf, action_im_message)
 app = Flask("feishu_sd_bot")
 
 # 参考 https://github.com/larksuite/oapi-sdk-python/blob/main/README.zh.md
 @app.route("/", methods=["GET", "POST"])
 def ping():
-    return "pong", 200
+    resp = make_response()
+    resp.data = "pong"
+    resp.status_code = 200
+    return resp
 
 @app.route("/webhook/card", methods=["POST"])
 def webhook_card():
