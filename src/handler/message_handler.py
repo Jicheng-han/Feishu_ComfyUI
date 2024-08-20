@@ -92,7 +92,7 @@ class MessageHandler:
 
         return output_images
     # 根据指令生成不同的消息卡片
-async def handle_prompt(self, prompts):
+    async def handle_prompt(self, prompts):
         gen_cfg = TextToImageConfig()
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
         prompt_input = gen_cfg.prompt
