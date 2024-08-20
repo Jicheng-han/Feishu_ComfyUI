@@ -47,7 +47,15 @@ async def handle_webhook_card(request):
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def webhook_event(request):
-    return await handle_webhook_event(request)
+    event_data = await request.json()
+    print("Received event data:", event_data)
+    
+    # 处理事件数据的业务逻辑
+    # 例如，可以根据 event_data 中的 event_id 或 uuid 做幂等处理
+
+    oapi_resp = handle_event(feishu_conf, oapi_request)
+    print("Event handled, sending response")
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def handle_webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
