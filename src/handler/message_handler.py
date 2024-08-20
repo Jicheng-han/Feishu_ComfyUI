@@ -238,7 +238,7 @@ class MessageHandler:
             "17": {
               "inputs": {
                 "scheduler": "simple",
-                "steps": 25,
+                "steps": 10,
                 "denoise": 1,
                 "model": [
                   "12",
