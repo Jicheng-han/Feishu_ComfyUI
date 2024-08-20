@@ -97,7 +97,7 @@ class MessageHandler:
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
         prompt_input = gen_cfg.prompt
         # print (f'PPPPPPPPrompt: {prompt_input}')
-        comfy_json = """
+        await comfy_json = """
 
           {
             "5": {
