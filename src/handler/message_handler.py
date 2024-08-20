@@ -110,184 +110,185 @@ class MessageHandler:
         # print (f'PPPPPPPPrompt: {prompt_input}')
         comfy_json = """
 
-        {
-          "5": {
-            "inputs": {
-              "width": 768,
-              "height": 1024,
-              "batch_size": 1
+          {
+            "5": {
+              "inputs": {
+                "width": 768,
+                "height": 1024,
+                "batch_size": 1
+              },
+              "class_type": "EmptyLatentImage",
+              "_meta": {
+                "title": "Empty Latent Image"
+              }
             },
-            "class_type": "EmptyLatentImage",
-            "_meta": {
-              "title": "Empty Latent Image"
-            }
-          },
-          "6": {
-            "inputs": {
-              "text": [
-                "61",
-                0
-              ],
-              "speak_and_recognation": null,
-              "clip": [
-                "11",
-                0
-              ]
+            "6": {
+              "inputs": {
+                "text": [
+                  "61",
+                  0
+                ],
+                "speak_and_recognation": null,
+                "clip": [
+                  "11",
+                  0
+                ]
+              },
+              "class_type": "CLIPTextEncode",
+              "_meta": {
+                "title": "CLIP Text Encode (Prompt)"
+              }
             },
-            "class_type": "CLIPTextEncode",
-            "_meta": {
-              "title": "CLIP Text Encode (Prompt)"
-            }
-          },
-          "8": {
-            "inputs": {
-              "samples": [
-                "13",
-                0
-              ],
-              "vae": [
-                "10",
-                0
-              ]
+            "8": {
+              "inputs": {
+                "samples": [
+                  "13",
+                  0
+                ],
+                "vae": [
+                  "10",
+                  0
+                ]
+              },
+              "class_type": "VAEDecode",
+              "_meta": {
+                "title": "VAE Decode"
+              }
             },
-            "class_type": "VAEDecode",
-            "_meta": {
-              "title": "VAE Decode"
-            }
-          },
-          "9": {
-            "inputs": {
-              "filename_prefix": "MarkuryFLUX",
-              "images": [
-                "8",
-                0
-              ]
+            "9": {
+              "inputs": {
+                "filename_prefix": "MarkuryFLUX",
+                "images": [
+                  "8",
+                  0
+                ]
+              },
+              "class_type": "SaveImage",
+              "_meta": {
+                "title": "Save Image"
+              }
             },
-            "class_type": "SaveImage",
-            "_meta": {
-              "title": "Save Image"
-            }
-          },
-          "10": {
-            "inputs": {
-              "vae_name": "ae.sft"
+            "10": {
+              "inputs": {
+                "vae_name": "ae.sft"
+              },
+              "class_type": "VAELoader",
+              "_meta": {
+                "title": "Load VAE"
+              }
             },
-            "class_type": "VAELoader",
-            "_meta": {
-              "title": "Load VAE"
-            }
-          },
-          "11": {
-            "inputs": {
-              "clip_name1": "t5xxl_fp16.safetensors",
-              "clip_name2": "clip_l.safetensors",
-              "type": "flux"
+            "11": {
+              "inputs": {
+                "clip_name1": "t5xxl_fp16.safetensors",
+                "clip_name2": "clip_l.safetensors",
+                "type": "flux"
+              },
+              "class_type": "DualCLIPLoader",
+              "_meta": {
+                "title": "DualCLIPLoader"
+              }
             },
-            "class_type": "DualCLIPLoader",
-            "_meta": {
-              "title": "DualCLIPLoader"
-            }
-          },
-          "12": {
-            "inputs": {
-              "unet_name": "flux1-dev.safetensors",
-              "weight_dtype": "default"
+            "12": {
+              "inputs": {
+                "unet_name": "flux1-dev.safetensors",
+                "weight_dtype": "default"
+              },
+              "class_type": "UNETLoader",
+              "_meta": {
+                "title": "Load Diffusion Model"
+              }
             },
-            "class_type": "UNETLoader",
-            "_meta": {
-              "title": "Load Diffusion Model"
-            }
-          },
-          "13": {
-            "inputs": {
-              "noise": [
-                "25",
-                0
-              ],
-              "guider": [
-                "22",
-                0
-              ],
-              "sampler": [
-                "16",
-                0
-              ],
-              "sigmas": [
-                "17",
-                0
-              ],
-              "latent_image": [
-                "5",
-                0
-              ]
+            "13": {
+              "inputs": {
+                "noise": [
+                  "25",
+                  0
+                ],
+                "guider": [
+                  "22",
+                  0
+                ],
+                "sampler": [
+                  "16",
+                  0
+                ],
+                "sigmas": [
+                  "17",
+                  0
+                ],
+                "latent_image": [
+                  "5",
+                  0
+                ]
+              },
+              "class_type": "SamplerCustomAdvanced",
+              "_meta": {
+                "title": "SamplerCustomAdvanced"
+              }
             },
-            "class_type": "SamplerCustomAdvanced",
-            "_meta": {
-              "title": "SamplerCustomAdvanced"
-            }
-          },
-          "16": {
-            "inputs": {
-              "sampler_name": "euler"
+            "16": {
+              "inputs": {
+                "sampler_name": "euler"
+              },
+              "class_type": "KSamplerSelect",
+              "_meta": {
+                "title": "KSamplerSelect"
+              }
             },
-            "class_type": "KSamplerSelect",
-            "_meta": {
-              "title": "KSamplerSelect"
-            }
-          },
-          "17": {
-            "inputs": {
-              "scheduler": "simple",
-              "steps": 25,
-              "denoise": 1,
-              "model": [
-                "12",
-                0
-              ]
+            "17": {
+              "inputs": {
+                "scheduler": "simple",
+                "steps": 25,
+                "denoise": 1,
+                "model": [
+                  "12",
+                  0
+                ]
+              },
+              "class_type": "BasicScheduler",
+              "_meta": {
+                "title": "BasicScheduler"
+              }
             },
-            "class_type": "BasicScheduler",
-            "_meta": {
-              "title": "BasicScheduler"
-            }
-          },
-          "22": {
-            "inputs": {
-              "model": [
-                "12",
-                0
-              ],
-              "conditioning": [
-                "6",
-                0
-              ]
+            "22": {
+              "inputs": {
+                "model": [
+                  "12",
+                  0
+                ],
+                "conditioning": [
+                  "6",
+                  0
+                ]
+              },
+              "class_type": "BasicGuider",
+              "_meta": {
+                "title": "BasicGuider"
+              }
             },
-            "class_type": "BasicGuider",
-            "_meta": {
-              "title": "BasicGuider"
-            }
-          },
-          "25": {
-            "inputs": {
-              "noise_seed": 555382522210328
+            "25": {
+              "inputs": {
+                "noise_seed": 111230751805892
+              },
+              "class_type": "RandomNoise",
+              "_meta": {
+                "title": "RandomNoise"
+              }
             },
-            "class_type": "RandomNoise",
-            "_meta": {
-              "title": "RandomNoise"
-            }
-          },
-          "61": {
-            "inputs": {
-              "prompt": "1 girl",
-              "main": "none",
-              "lighting": "none",
-              "speak_and_recognation": true
-            },
-            "class_type": "easy prompt",
-            "_meta": {
-              "title": "Prompt"
+            "61": {
+              "inputs": {
+                "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节，并精简成一段话,不超过100个单词:一个女孩",
+                "debug": "enable",
+                "url": "http://127.0.0.1:11434",
+                "model": "phi3:14b",
+                "keep_alive": 60
+              },
+              "class_type": "OllamaGenerate",
+              "_meta": {
+                "title": "Ollama Generate"
+              }
             }
           }
-        }
         """
         comfy_prompt = json.loads(comfy_json, strict=False)
         pre_prompt = "Directly translate into English, output the translated content directly, without the translation process:""" + prompt_input + ""
@@ -355,7 +356,7 @@ class MessageHandler:
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
-        # message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
+        message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
 
         print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
         messageCard = self.handle_prompt(myevent.text)
