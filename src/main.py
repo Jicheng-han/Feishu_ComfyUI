@@ -9,8 +9,10 @@ from message_router import route_im_message
 from message_action import action_im_message
 from feishu.feishu_conf import feishu_conf
 from util.app_config import app_config
+from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
 
 # 注册事件处理器
+MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
 set_card_callback(feishu_conf, action_im_message)
 
 async def ping(request):
