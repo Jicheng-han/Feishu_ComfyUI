@@ -6,7 +6,7 @@ import uuid
 import json
 import urllib.request
 import urllib.parse
-
+import asyncio
 #from larksuiteoapi import Config
 from urllib import request, parse
 
@@ -22,26 +22,15 @@ from enum import Enum
 
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
-# TOKEN is stored in the file `./PASSWORD`, or you can obtain it from the command line window when ComfyUI starts.
-# It will appear like this:
-# For direct API calls, token=$2b$12$qUfJfV942nrMiX77QRVgIuDk1.oyXBP7FYrXVEBqouTk.uP/hiqAK
+
 TOKEN = "$2b$12$FoR7ezNDPAPYaG2kit0aLuV9YsmSefGZyTx6rV3QcE1K6qUH5qeAm"
-# If you get errors like: HTTP Error 400: Bad Request, please check the server's console for more detailed error message.
-# Sometimes it's related to the model file's filename.
+
 
 class MessageHandler:
     def __init__(self):
         pass
 
-    # def handle_update_message_card(self, token, openId, prompt):
-#         messageCard = self.handle_prompt(prompt)
-#         if messageCard is None:
-#             print("handle_prompt returned None")
-#             return None
-#         messageCard["open_ids"] = [openId]
-#         print(f'模    块: message_handler - handle_update_message_card')
-# #        print(f'当前VAE: {sd_webui.get_sd_vae}')
-#         return message_sender.update_message_card(token, messageCard)
+
     def update_prompt(self, data, new_prompt):
       for key, value in data.items():
         if isinstance(value, dict) and 'inputs' in value:
@@ -293,17 +282,14 @@ class MessageHandler:
         comfy_prompt = json.loads(comfy_json, strict=False)
         pre_prompt = "Directly translate into English, output the translated content directly, without the translation process:""" + prompt_input + ""
         comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
-        # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
-        # print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
-        # set the seed for our KSampler node
+
         comfy_prompt["25"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
-        # print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
+
         prompt_id = result['prompt_id']
-        # print(f"Prompt ID: {prompt_id}")
-        # 先倒头就睡0.5秒，确保任务提交到队列
-        time.sleep(0.5)
+
+        asyncio.sleep()(0.5)
 
         while True:
             queue = self.get_queue()
@@ -323,7 +309,7 @@ class MessageHandler:
 
             if not prompt_finish_flag:
                 print("Prompt not finished yet. Sleeping for 2 seconds.")
-                time.sleep(1)
+                asyncio.sleep(1)
             else:
                 break
 
@@ -356,7 +342,7 @@ class MessageHandler:
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
-        message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
+        # message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
 
         print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
         messageCard = self.handle_prompt(myevent.text)
