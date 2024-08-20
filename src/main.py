@@ -31,8 +31,11 @@ app = Flask("feishu_sd_bot")
 async def ping(request):
     return web.Response(text="pong", status=200)
 
+
+
 async def webhook_card(request):
-    return await handle_webhook_card(request)
+    asyncio.create_task(handle_webhook_card(request))
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def handle_webhook_card(request):
     print('模    块: main.py - webhook_card: 试试手气')
@@ -46,44 +49,68 @@ async def handle_webhook_card(request):
     print(f"handle_webhook_card_data_dict: {data_dict}")
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
+# processed_requests = set()
 async def webhook_event(request):
-    data = await request.read()
-    oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.headers)
-    )
-    event_data = await request.json()
-    print("Received event data:", event_data)
-    
-    # 处理事件数据的业务逻辑
-    # 例如，可以根据 event_data 中的 event_id 或 uuid 做幂等处理
-
-    oapi_resp = handle_event(feishu_conf, oapi_request)
-    print("Event handled, sending response")
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
-
-async def handle_webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
-    event_data = await request.json()
+    event_data = request.json
     # 打印接收到的事件数据
     print("Received event data:", event_data)
-    
+
     # 处理事件数据的业务逻辑
     # 例如，可以根据 event_data 中的 event_id 或 uuid 做幂等处理
 
+    # event_id = oapi_request.header.get("event_id")
+    # Parse the request body as a JSON object
+    # data_dict = json.loads(oapi_request.body)
+     # Extract the event_type and event_key values
+    # event_id = data_dict.get("header", {}).get("event_id")
+    # event_type = data_dict.get("header", {}).get("event_type")
+
+
+    # event = data_dict.get("event", {})
+    # operator = event.get("operator") if event else None
+    # operator_id = operator.get("operator_id") if operator else None
+    # user_id = operator_id.get("user_id") if operator_id else None
+
+    # event_type = data_dict.get("header", {}).get("event_type")
+    # event_key = data_dict.get("event", {}).get("event_key")
+    # timestamp = data_dict.get("event", {}).get("timestamp")
+    # if (event_id, timestamp) in processed_requests:
+    #     return
+    # else:
     oapi_resp = handle_event(feishu_conf, oapi_request)
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    #
+    # if event_key is None:
+    #     print("Warning: event_key is None")
+    # else:
+    #     MenuHandler.menu_response =  MenuHandler.handle_menu_event(user_id,event_key,event_type,timestamp)
+
+    # print (f'event_id:{event_id}')
+    # print (user_id)
+    # print (event_key)
+    # processed_requests.add((event_id, timestamp))
+    # print (processed_requests)
+    # return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    # 返回 HTTP 200 状态码
+    return jsonify({"message": "OK"}), 200
+    #
+    # return web.Response(headers={'Content-Type': oapi_resp.content_type}, text="", status=oapi_resp.status_code)
+
 
 def app_main():
+
     app = web.Application()
     app.add_routes([web.get('/', ping),
                     web.route('*','/webhook/card', webhook_card),
                     web.route('*', '/webhook/event', webhook_event)])
     web.run_app(app, host="0.0.0.0", port=app_config.HTTP_PORT)
     print('模    块: main.py - app_main')
+
+
 
 if __name__ == "__main__":
     app_main()
