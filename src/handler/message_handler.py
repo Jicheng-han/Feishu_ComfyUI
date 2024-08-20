@@ -31,7 +31,7 @@ class MessageHandler:
         pass
 
 
-    def update_prompt(self, data, new_prompt):
+    async def update_prompt(self, data, new_prompt):
       for key, value in data.items():
         if isinstance(value, dict) and 'inputs' in value:
           inputs = value['inputs']
@@ -97,7 +97,7 @@ class MessageHandler:
         gen_cfg.update_from_json(sd_webui.parse_prompts_args(prompts)) #处理prompt串
         prompt_input = gen_cfg.prompt
         # print (f'PPPPPPPPrompt: {prompt_input}')
-        await comfy_json = """
+        comfy_json = """
 
           {
             "5": {
@@ -335,16 +335,13 @@ class MessageHandler:
         images_key = []
         if output_images is not None:
             for img_data in output_images['9']:
-                images_key.append(upload_image(img_data))
+                images_key.append(await upload_image(img_data))
         else:
             print("Error: 'images' key not found in result")
 
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
-    def handle_message(self, myevent: MyReceiveEvent):
-        # message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
-
-        print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
-        messageCard = self.handle_prompt(myevent.text)
-
-        return message_sender.send_message_card(myevent, messageCard)
+    async def handle_message(self, myevent: MyReceiveEvent):
+        print(f'模    块: messageCard:正在处理')
+        messageCard = await self.handle_prompt(myevent.text)
+        return await message_sender.send_message_card(myevent, messageCard)
