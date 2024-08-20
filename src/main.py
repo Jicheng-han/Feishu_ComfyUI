@@ -53,7 +53,7 @@ async def webhook_event(request):
     # 处理事件数据的业务逻辑
     # 例如，可以根据 event_data 中的 event_id 或 uuid 做幂等处理
 
-    oapi_resp = handle_event(feishu_conf, oapi_request)
+    oapi_resp = handle_event(feishu_conf, OapiRequest)
     print("Event handled, sending response")
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
