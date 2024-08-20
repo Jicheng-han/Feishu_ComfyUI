@@ -1,6 +1,5 @@
 from time import sleep
 import sys
-sys.path.append("D:\\Feishu-Stablediffusion-master\\src\\")
 from larksuiteoapi.card import handle_card, set_card_callback
 from larksuiteoapi.event import handle_event, set_event_callback
 from larksuiteoapi.model import OapiHeader, OapiRequest
@@ -16,10 +15,6 @@ from threading import Thread
 import asyncio
 from aiohttp import web
 import json
-from handler.menu_event_handler import MenuHandler
-from feishu.message_sender import MessageSender
-import queue
-import threading
 
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
 set_card_callback(feishu_conf, action_im_message)
@@ -27,32 +22,28 @@ app = Flask("feishu_sd_bot")
 
 # 参考 https://github.com/larksuite/oapi-sdk-python/blob/main/README.zh.md
 @app.route("/", methods=["GET", "POST"])
-def ping():
-    resp = make_response()
-    resp.data = "pong"
-    resp.status_code = 200
-    return resp
 
-@app.route("/webhook/card", methods=["POST"])
-def webhook_card():
+async def ping(request):
+    return web.Response(text="pong", status=200)
+
+async def webhook_card(request):
     asyncio.create_task(handle_webhook_card(request))
-    return jsonify({}), 200
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def handle_webhook_card(request):
     print('模    块: main.py - webhook_card: 试试手气')
-    data = await request.get_data()
+    data = await request.read()
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
     oapi_resp = handle_card(feishu_conf, oapi_request)
-    data_dict = json.loads(oapi_request.body)
-    print(f"handle_webhook_card_oapi_request.body: {oapi_request.body}")
-    print(f"handle_webhook_card_data_dict: {data_dict}")
+    print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
-@app.route("/webhook/event", methods=["POST"])
-def webhook_event():
+# processed_requests = set()
+async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
-    data = request.get_data()
+    data = await request.read()
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
@@ -60,16 +51,22 @@ def webhook_event():
     # 打印接收到的事件数据
     print("Received event data:", event_data)
 
-    # 处理事件数据的业务逻辑
-    # 例如，可以根据 event_data 中的 event_id 或 uuid 做幂等处理
 
     oapi_resp = handle_event(feishu_conf, oapi_request)
+    print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
     return jsonify({"message": "OK"}), 200
 
+
 def app_main():
-    app.run(host="0.0.0.0", port=app_config.HTTP_PORT)
+
+    app = web.Application()
+    app.add_routes([web.get('/', ping),
+                    web.route('*','/webhook/card', webhook_card),
+                    web.route('*', '/webhook/event', webhook_event)])
+    web.run_app(app, host="0.0.0.0", port=app_config.HTTP_PORT)
     print('模    块: main.py - app_main')
 
+
+
 if __name__ == "__main__":
-    with app.app_context():
-        app_main()
+    app_main()
