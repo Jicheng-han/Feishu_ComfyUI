@@ -361,4 +361,4 @@ class MessageHandler:
         print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
         messageCard = self.handle_prompt(myevent.text)
 
-        return message_sender.send_message_card(myevent, messageCard)
+        # return message_sender.send_message_card(myevent, messageCard)
