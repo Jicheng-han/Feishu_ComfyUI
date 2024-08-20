@@ -32,8 +32,7 @@ async def ping(request):
     return web.Response(text="pong", status=200)
 
 async def webhook_card(request):
-    asyncio.create_task(handle_webhook_card(request))
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    return await handle_webhook_card(request)
 
 async def handle_webhook_card(request):
     print('模    块: main.py - webhook_card: 试试手气')
@@ -48,8 +47,7 @@ async def handle_webhook_card(request):
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def webhook_event(request):
-    asyncio.create_task(handle_webhook_event(request))
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    return await handle_webhook_event(request)
 
 async def handle_webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
