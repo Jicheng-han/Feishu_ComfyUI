@@ -21,8 +21,7 @@ from feishu.message_sender import MessageSender
 import queue
 import threading
 
-MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
-set_card_callback(feishu_conf, action_im_message)
+
 app = Flask("feishu_sd_bot")
 
 # 参考 https://github.com/larksuite/oapi-sdk-python/blob/main/README.zh.md
