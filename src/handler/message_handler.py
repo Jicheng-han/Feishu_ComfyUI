@@ -356,7 +356,7 @@ class MessageHandler:
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
-        message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
+        # message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
 
         print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
         messageCard = self.handle_prompt(myevent.text)
