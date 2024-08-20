@@ -24,6 +24,7 @@ import threading
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
 set_card_callback(feishu_conf, action_im_message)
 app = Flask("feishu_sd_bot")
+ 
 
 # 参考 https://github.com/larksuite/oapi-sdk-python/blob/main/README.zh.md
 @app.route("/", methods=["GET", "POST"])
@@ -113,4 +114,4 @@ def app_main():
 
 
 if __name__ == "__main__":
-    app_main()
+    app.run(debug=False)
