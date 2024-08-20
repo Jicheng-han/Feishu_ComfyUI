@@ -303,29 +303,29 @@ class MessageHandler:
         prompt_id = result['prompt_id']
         # print(f"Prompt ID: {prompt_id}")
         # 先倒头就睡0.5秒，确保任务提交到队列
-        time.sleep(20)
+        time.sleep(0.5)
 
-        # while True:
-        #     queue = self.get_queue()
-        #     prompt_finish_flag = True
-        #     if len(queue["queue_running"]) == 0:
-        #         break
+        while True:
+            queue = self.get_queue()
+            prompt_finish_flag = True
+            if len(queue["queue_running"]) == 0:
+                break
 
-        #     for item in queue["queue_running"]:
-        #         if len(item) > 0 and item[1] == prompt_id:
-        #             prompt_finish_flag = False
-        #             continue
+            for item in queue["queue_running"]:
+                if len(item) > 0 and item[1] == prompt_id:
+                    prompt_finish_flag = False
+                    continue
 
-        #     for item in queue["queue_pending"]:
-        #         if len(item) > 0 and item[1] == prompt_id:
-        #             prompt_finish_flag = False
-        #             continue
+            for item in queue["queue_pending"]:
+                if len(item) > 0 and item[1] == prompt_id:
+                    prompt_finish_flag = False
+                    continue
 
-        #     if not prompt_finish_flag:
-        #         print("Prompt not finished yet. Sleeping for 2 seconds.")
-        #         time.sleep(0.1)
-        #     else:
-        #         break
+            if not prompt_finish_flag:
+                print("Prompt not finished yet. Sleeping for 2 seconds.")
+                time.sleep(1)
+            else:
+                break
 
         info = self.get_history(prompt_id)
         history = info[prompt_id]
