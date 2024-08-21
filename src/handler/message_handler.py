@@ -34,6 +34,7 @@ class MessageHandler:
         pass
 
     def handle_update_message_card(self, token, openId, prompt):
+        prompt = prompt + "retry_update_prompt"
         messageCard = self.handle_prompt(prompt)
         if messageCard is None:
             print("handle_prompt returned None")
@@ -291,8 +292,11 @@ class MessageHandler:
           }
         """
         comfy_prompt = json.loads(comfy_json, strict=False)
-        pre_prompt = "Directly translate into English, output the translated content directly, without the translation process:""" + prompt_input + ""
-        comfy_prompt["61"]["inputs"]["prompt"] =   pre_prompt
+        if "retry_update_prompt" in prompt_input:
+          pre_prompt = "You are a highly imaginative AI art assistant, skilled in describing various scenes to be used as prompts for stable diffusion. I will provide you with a description in English, and I'd like you to pay special attention to the style of the image I describe. You need to describe the image according to the style I provide, keeping the main content of the scene as close to my description as possible. For secondary elements like backgrounds, you can use your imagination to enrich the overall scene. It's crucial to use very detailed language, building upon the original meaning with intricate artistic techniques to describe the image. Focus on expressing emotions, rendering artistic atmosphere, describing artistic scenes, constructing artistic details, creating artistic themes, describing colors and using professional color applications, choosing perspectives worthy of high-end commercial shots, varying viewpoints freely, and incorporating composition changes inspired by fashion magazine covers. The text must be written in complete paragraphs without titles, section breaks, or numbering. Finally, please output the prompt in professional English:" + prompt_input.replace("retry_update_prompt","")
+        else:
+          pre_prompt = "Directly translate into English, output the translated content directly, without the translation process:" + prompt_input
+        comfy_prompt["61"]["inputs"]["prompt"] = pre_prompt
         # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
         # print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
         # set the seed for our KSampler node
