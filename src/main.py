@@ -40,7 +40,7 @@ async def webhook_event(request):
     )
     event_data = await request.json()
     # 打印接收到的事件数据
-    print("Received event data:", event_data)
+    # print("Received event data:", event_data)
 
     oapi_resp = handle_event(feishu_conf, oapi_request)
     print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
