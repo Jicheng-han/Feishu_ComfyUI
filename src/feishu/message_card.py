@@ -75,6 +75,27 @@ def handle_image_card(image_info, img_key_list, prompt):
         # m1_temple = m1_options.pop()
         # m1_options.insert(0, prompt)
         handle_infotexts(image_info)
+        elements.append({
+            "tag": "action",
+
+            "actions": [
+                {
+                    "tag": "button",
+                    "text": {
+                        "tag": "plain_text",
+                        "content": "重新生成"
+                    },
+                    "type": "primary",
+                    "value": {
+                        "type": "reload",
+                        "prompt": prompt,
+              #          "negative_prompt": negative_prompt,
+
+
+                    }
+                }
+            ]
+        })
  
         
         result = {"config": {"wide_screen_mode": True}, "elements": elements}
