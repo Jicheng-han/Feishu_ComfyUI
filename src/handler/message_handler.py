@@ -111,196 +111,218 @@ class MessageHandler:
         # print (f'PPPPPPPPrompt: {prompt_input}')
         comfy_json = """
 
-          {
-            "5": {
-              "inputs": {
-                "width": 768,
-                "height": 1024,
-                "batch_size": 1
-              },
-              "class_type": "EmptyLatentImage",
-              "_meta": {
-                "title": "Empty Latent Image"
-              }
+        {
+          "225": {
+            "inputs": {
+              "width": 832,
+              "height": 1216,
+              "batch_size": 1
             },
-            "6": {
-              "inputs": {
-                "text": [
-                  "61",
-                  0
-                ],
-                "speak_and_recognation": null,
-                "clip": [
-                  "11",
-                  0
-                ]
-              },
-              "class_type": "CLIPTextEncode",
-              "_meta": {
-                "title": "CLIP Text Encode (Prompt)"
-              }
+            "class_type": "EmptyLatentImage",
+            "_meta": {
+              "title": "Empty Latent Image"
+            }
+          },
+          "226": {
+            "inputs": {
+              "text": [
+                "250",
+                0
+              ],
+              "speak_and_recognation": null,
+              "clip": [
+                "230",
+                0
+              ]
             },
-            "8": {
-              "inputs": {
-                "samples": [
-                  "13",
-                  0
-                ],
-                "vae": [
-                  "10",
-                  0
-                ]
-              },
-              "class_type": "VAEDecode",
-              "_meta": {
-                "title": "VAE Decode"
-              }
+            "class_type": "CLIPTextEncode",
+            "_meta": {
+              "title": "CLIP Text Encode (Prompt)"
+            }
+          },
+          "227": {
+            "inputs": {
+              "samples": [
+                "232",
+                0
+              ],
+              "vae": [
+                "229",
+                0
+              ]
             },
-            "9": {
-              "inputs": {
-                "filename_prefix": "MarkuryFLUX",
-                "images": [
-                  "8",
-                  0
-                ]
-              },
-              "class_type": "SaveImage",
-              "_meta": {
-                "title": "Save Image"
-              }
+            "class_type": "VAEDecode",
+            "_meta": {
+              "title": "VAE Decode"
+            }
+          },
+          "229": {
+            "inputs": {
+              "vae_name": "ae.sft"
             },
-            "10": {
-              "inputs": {
-                "vae_name": "ae.sft"
-              },
-              "class_type": "VAELoader",
-              "_meta": {
-                "title": "Load VAE"
-              }
+            "class_type": "VAELoader",
+            "_meta": {
+              "title": "Load VAE"
+            }
+          },
+          "230": {
+            "inputs": {
+              "clip_name1": "t5xxl_fp16.safetensors",
+              "clip_name2": "clip_l.safetensors",
+              "type": "flux"
             },
-            "11": {
-              "inputs": {
-                "clip_name1": "t5xxl_fp16.safetensors",
-                "clip_name2": "clip_l.safetensors",
-                "type": "flux"
-              },
-              "class_type": "DualCLIPLoader",
-              "_meta": {
-                "title": "DualCLIPLoader"
-              }
+            "class_type": "DualCLIPLoader",
+            "_meta": {
+              "title": "DualCLIPLoader"
+            }
+          },
+          "231": {
+            "inputs": {
+              "unet_name": "flux1-dev.safetensors",
+              "weight_dtype": "default"
             },
-            "12": {
-              "inputs": {
-                "unet_name": "flux1-dev.safetensors",
-                "weight_dtype": "default"
-              },
-              "class_type": "UNETLoader",
-              "_meta": {
-                "title": "Load Diffusion Model"
-              }
+            "class_type": "UNETLoader",
+            "_meta": {
+              "title": "Load Diffusion Model"
+            }
+          },
+          "232": {
+            "inputs": {
+              "noise": [
+                "236",
+                0
+              ],
+              "guider": [
+                "235",
+                0
+              ],
+              "sampler": [
+                "233",
+                0
+              ],
+              "sigmas": [
+                "234",
+                0
+              ],
+              "latent_image": [
+                "225",
+                0
+              ]
             },
-            "13": {
-              "inputs": {
-                "noise": [
-                  "25",
-                  0
-                ],
-                "guider": [
-                  "22",
-                  0
-                ],
-                "sampler": [
-                  "16",
-                  0
-                ],
-                "sigmas": [
-                  "17",
-                  0
-                ],
-                "latent_image": [
-                  "5",
-                  0
-                ]
-              },
-              "class_type": "SamplerCustomAdvanced",
-              "_meta": {
-                "title": "SamplerCustomAdvanced"
-              }
+            "class_type": "SamplerCustomAdvanced",
+            "_meta": {
+              "title": "SamplerCustomAdvanced"
+            }
+          },
+          "233": {
+            "inputs": {
+              "sampler_name": "euler"
             },
-            "16": {
-              "inputs": {
-                "sampler_name": "euler"
-              },
-              "class_type": "KSamplerSelect",
-              "_meta": {
-                "title": "KSamplerSelect"
-              }
+            "class_type": "KSamplerSelect",
+            "_meta": {
+              "title": "KSamplerSelect"
+            }
+          },
+          "234": {
+            "inputs": {
+              "scheduler": "simple",
+              "steps": 25,
+              "denoise": 1,
+              "model": [
+                "231",
+                0
+              ]
             },
-            "17": {
-              "inputs": {
-                "scheduler": "simple",
-                "steps": 25,
-                "denoise": 1,
-                "model": [
-                  "12",
-                  0
-                ]
-              },
-              "class_type": "BasicScheduler",
-              "_meta": {
-                "title": "BasicScheduler"
-              }
+            "class_type": "BasicScheduler",
+            "_meta": {
+              "title": "BasicScheduler"
+            }
+          },
+          "235": {
+            "inputs": {
+              "model": [
+                "231",
+                0
+              ],
+              "conditioning": [
+                "226",
+                0
+              ]
             },
-            "22": {
-              "inputs": {
-                "model": [
-                  "12",
-                  0
-                ],
-                "conditioning": [
-                  "6",
-                  0
-                ]
-              },
-              "class_type": "BasicGuider",
-              "_meta": {
-                "title": "BasicGuider"
-              }
+            "class_type": "BasicGuider",
+            "_meta": {
+              "title": "BasicGuider"
+            }
+          },
+          "236": {
+            "inputs": {
+              "noise_seed": 80602891815753
             },
-            "25": {
-              "inputs": {
-                "noise_seed": 111230751805892
-              },
-              "class_type": "RandomNoise",
-              "_meta": {
-                "title": "RandomNoise"
-              }
+            "class_type": "RandomNoise",
+            "_meta": {
+              "title": "RandomNoise"
+            }
+          },
+          "250": {
+            "inputs": {
+              "prompt": [
+                "251",
+                0
+              ],
+              "debug": true,
+              "url": "http://127.0.0.1:11434",
+              "model": "phi3:14b",
+              "system": "",
+              "seed": 231576411,
+              "top_k": 40,
+              "top_p": 0.9,
+              "temperature": 0.8,
+              "num_predict": -1,
+              "tfs_z": 1,
+              "keep_alive": 0,
+              "keep_context": false,
+              "speak_and_recognation": true
             },
-            "61": {
-              "inputs": {
-                "prompt": "用英文扩写下面的内容,包括细节描写,艺术风格,大师作品,高质量和细节，并精简成一段话,不超过100个单词:一个女孩",
-                "debug": "enable",
-                "url": "http://127.0.0.1:11434",
-                "model": "phi3:14b",
-                "keep_alive": 60
-              },
-              "class_type": "OllamaGenerate",
-              "_meta": {
-                "title": "Ollama Generate"
-              }
+            "class_type": "OllamaGenerateAdvance",
+            "_meta": {
+              "title": "Ollama Generate Advance"
+            }
+          },
+          "251": {
+            "inputs": {
+              "text": "You prompt text here",
+              "speak_and_recognation": null
+            },
+            "class_type": "TextInput_",
+            "_meta": {
+              "title": "提示词输入"
+            }
+          },
+          "257": {
+            "inputs": {
+              "filename_prefix": "ComfyUI",
+              "images": [
+                "227",
+                0
+              ]
+            },
+            "class_type": "SaveImage",
+            "_meta": {
+              "title": "Save Image"
             }
           }
+        }
         """
         comfy_prompt = json.loads(comfy_json, strict=False)
         if "retry_update_prompt" in prompt_input:
           pre_prompt = "You are a highly imaginative AI art assistant, skilled in describing various scenes to be used as prompts for stable diffusion. I will provide you  a description, and I'd like you to pay special attention to the style of the image I describe. You need to describe the image according to the style I provide, keeping the main content of the scene as close to my description as possible. For secondary elements like backgrounds, you can use your imagination to enrich the overall scene. It's crucial to use very detailed language, building upon the original meaning with intricate artistic techniques to describe the image. Focus on expressing emotions, rendering artistic atmosphere, describing artistic scenes, constructing artistic details, creating artistic themes, describing colors and using professional color applications, choosing perspectives worthy of high-end commercial shots, varying viewpoints freely, and incorporating composition changes inspired by fashion magazine covers. The text must be written in complete paragraphs without titles, section breaks, or numbering. Finally, please output the prompt in professional English:" + prompt_input.replace("retry_update_prompt","")
         else:
           pre_prompt = "Directly translate into English, output the translated content directly, without the translation process:" + prompt_input
-        comfy_prompt["61"]["inputs"]["prompt"] = pre_prompt
+        comfy_prompt["251"]["inputs"]["text"] = pre_prompt
         # comfy_prompt = self.update_prompt(comfy_prompt, pre_prompt)
         # print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
         # set the seed for our KSampler node
-        comfy_prompt["25"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
+        comfy_prompt["236"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
 
         result = self.queue_prompt(comfy_prompt)
         # print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
