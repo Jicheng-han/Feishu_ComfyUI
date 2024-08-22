@@ -15,23 +15,29 @@ from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
 set_card_callback(feishu_conf, action_im_message)
 
-async def ping(request):
-    return web.Response(text="pong", status=200)
-
-async def webhook_card(request):
-    # 立即返回 200 状态码
-    asyncio.create_task(handle_webhook_card(request))
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
-
 async def handle_webhook_card(request):
     print('模    块: main.py - webhook_card: 试试手气')
-    data = await request.read()
-    oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.headers)
-    )
-    oapi_resp = handle_card(feishu_conf, oapi_request)
-    print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    
+    # Immediately respond with 200 OK
+    response = web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    await response.prepare(request)
+    await response.write_eof()
+
+    # Continue processing the request asynchronously
+    asyncio.create_task(process_request(request))
+
+    return response
+
+async def process_request(request):
+    try:
+        data = await request.read()
+        oapi_request = OapiRequest(
+            uri=request.path, body=data, header=OapiHeader(request.headers)
+        )
+        oapi_resp = handle_card(feishu_conf, oapi_request)
+        print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
+    except Exception as e:
+        print(f"Error processing request: {e}")
 
 async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
