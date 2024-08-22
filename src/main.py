@@ -13,8 +13,7 @@ from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
 import asyncio
 import logging
 from aiohttp import web
-
-# 设置日志
+ 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -26,22 +25,22 @@ async def ping(request):
     return web.Response(text="pong", status=200)
 
 async def webhook_card(request):
-    # 立即返回 200 状态码
-    response = web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
-    await response.prepare(request)
-    await response.write_eof()
-
-    # 创建一个异步任务来处理请求数据
-    asyncio.create_task(handle_webhook_card(request))
-
-    return response
-
-async def handle_webhook_card(request):
-    logger.info('模块: main.py - webhook_card: 试试手气')
+    # 在返回响应之前读取请求数据
     try:
         data = await request.read()
+        # 创建一个异步任务来处理请求数据
+        asyncio.create_task(handle_webhook_card(request.path, request.headers, data))
+    except Exception as e:
+        logger.error(f"Error reading request: {e}", exc_info=True)
+
+    # 立即返回 200 状态码
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+
+async def handle_webhook_card(path, headers, data):
+    logger.info('模块: main.py - webhook_card: 试试手气')
+    try:
         oapi_request = OapiRequest(
-            uri=request.path, body=data, header=OapiHeader(request.headers)
+            uri=path, body=data, header=OapiHeader(headers)
         )
         # 使用 asyncio.to_thread 来处理同步函数
         oapi_resp = await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
