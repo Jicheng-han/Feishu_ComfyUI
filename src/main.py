@@ -30,7 +30,8 @@ async def handle_webhook_card(request):
     )
     oapi_resp = handle_card(feishu_conf, oapi_request)
     print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    # return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+    return web.json_response({"message": "OK"})
 
 async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
