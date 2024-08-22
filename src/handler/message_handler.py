@@ -383,9 +383,19 @@ class MessageHandler:
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
     def handle_message(self, myevent: MyReceiveEvent):
-        message_sender.send_text_message(myevent,"ComfyUI正在处理您的请求，请稍等")
+        # 获取当前队列状态
+        queue = self.get_queue()
+        queue_length = len(queue["queue_running"]) + len(queue["queue_pending"])
+        
+        # 根据队列长度构建提示信息
+        if queue_length == 0:
+            queue_info = "您的请求已经开始处理。"
+        else:
+            queue_info = f"已加入队列，您前面还有 {queue_length} 个任务，"
 
-        # print(f'模    块: messageCard:{self.handle_prompt(myevent.text)}') 
+        message_sender.send_text_message(myevent, f"{queue_info}请稍等...")
+
+        # 处理请求
         messageCard = self.handle_prompt(myevent.text)
 
         return message_sender.send_message_card(myevent, messageCard)
