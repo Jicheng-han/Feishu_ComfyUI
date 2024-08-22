@@ -47,7 +47,7 @@ async def handle_webhook_card(path, headers, data):
         pass
 
 async def webhook_event(request):
-    print('模    块: main.py - webhook_event: 直接输入')
+    # print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
@@ -57,7 +57,7 @@ async def webhook_event(request):
     # print("Received event data:", event_data)
 
     oapi_resp = handle_event(feishu_conf, oapi_request)
-    print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
+    # print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
     return web.json_response({"message": "OK"})
 
 def app_main():
