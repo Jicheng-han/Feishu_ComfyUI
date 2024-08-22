@@ -19,29 +19,19 @@ async def ping(request):
     return web.Response(text="pong", status=200)
 
 async def webhook_card(request):
-    # 立即返回 200 状态码
-    response = web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
-    await response.prepare(request)
-    await response.write_eof()
-
-    # 创建一个异步任务来处理请求数据
-    asyncio.create_task(handle_webhook_card(request))
-
-    return response
+    await handle_webhook_card(request)
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def handle_webhook_card(request):
     print('模    块: main.py - webhook_card: 试试手气')
-    
-    # Continue processing the request asynchronously
-    try:
-        data = await request.read()
-        oapi_request = OapiRequest(
-            uri=request.path, body=data, header=OapiHeader(request.headers)
-        )
-        oapi_resp = handle_card(feishu_conf, oapi_request)
-        print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
-    except Exception as e:
-        print(f"Error processing request: {e}")
+    data = await request.read()
+    oapi_request = OapiRequest(
+        uri=request.path, body=data, header=OapiHeader(request.headers)
+    )
+    oapi_resp = handle_card(feishu_conf, oapi_request)
+    print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
+
 async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
     data = await request.read()
