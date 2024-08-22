@@ -386,14 +386,8 @@ class MessageHandler:
         # 获取当前队列状态
         queue = self.get_queue()
         queue_length = len(queue["queue_running"]) + len(queue["queue_pending"])
-        
-        # 根据队列长度构建提示信息
-        if queue_length == 0:
-            queue_info = "您的请求已经开始处理。"
-        else:
-            queue_info = f"已加入队列，您前面还有 {queue_length} 个任务，"
 
-        message_sender.send_text_message(myevent, f"{queue_info}请稍等...")
+        message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等...")
 
         # 处理请求
         messageCard = self.handle_prompt(myevent.text)
