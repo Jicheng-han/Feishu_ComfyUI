@@ -43,6 +43,7 @@ class MessageHandler:
       print(f'模    块: message_handler - handle_update_message_card')
       await asyncio.sleep(0)  # Return 200 status code before continuing execution
       return message_sender.update_message_card(token, messageCard)
+    
     def update_prompt(self, data, new_prompt):
       for key, value in data.items():
         if isinstance(value, dict) and 'inputs' in value:
@@ -348,7 +349,7 @@ class MessageHandler:
                     continue
 
             if not prompt_finish_flag:
-                # print("Prompt not finished yet. Sleeping for 2 seconds.")
+                print("Prompt not finished yet. Sleeping for 2 seconds.")
                 time.sleep(2)
             else:
                 break
