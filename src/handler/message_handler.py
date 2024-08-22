@@ -349,7 +349,7 @@ class MessageHandler:
                     continue
 
             if not prompt_finish_flag:
-                print("Prompt not finished yet. Sleeping for 2 seconds.")
+                # print("Prompt not finished yet. Sleeping for 2 seconds.")
                 time.sleep(2)
             else:
                 break
