@@ -10,7 +10,6 @@ from message_action import action_im_message
 from feishu.feishu_conf import feishu_conf
 from util.app_config import app_config
 from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
-import logging
 
 # 注册事件处理器
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
@@ -20,43 +19,22 @@ async def ping(request):
     return web.Response(text="pong", status=200)
 
 async def webhook_card(request):
-    await handle_webhook_card(request)
+    # 立即返回 200 状态码
+    asyncio.create_task(handle_webhook_card(request))
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
-logger = logging.getLogger(__name__)
-
-logger = logging.getLogger(__name__)
-
-def oapi_response_to_dict(oapi_resp):
-    return {
-        "status_code": oapi_resp.status_code,
-        "headers": dict(oapi_resp.headers),
-        "body": oapi_resp.body
-    }
-
 async def handle_webhook_card(request):
-    logger.info('模块: main.py - webhook_card: 处理卡片请求')
+    print('模    块: main.py - webhook_card: 试试手气')
     try:
         data = await request.read()
         oapi_request = OapiRequest(
             uri=request.path, body=data, header=OapiHeader(request.headers)
         )
-        
-        if asyncio.iscoroutinefunction(handle_card):
-            oapi_resp = await handle_card(feishu_conf, oapi_request)
-        else:
-            oapi_resp = await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
-        
-        # 将 OapiResponse 对象转换为字典
-        resp_dict = oapi_response_to_dict(oapi_resp)
-        
-        logger.debug(f"handle_webhook_card_oapi_request.body: {resp_dict}")
-        
-        # 返回可 JSON 序列化的字典
-        return web.json_response(resp_dict)
+        # 假设 handle_card 是一个同步函数，我们将其包装在 asyncio.to_thread 中
+        oapi_resp = await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
+        print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
     except Exception as e:
-        logger.error(f"处理卡片请求时发生错误: {str(e)}", exc_info=True)
-        return web.Response(status=500, text=str(e))
+        print(f"处理卡片请求时发生错误: {str(e)}")
 
 async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
