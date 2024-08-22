@@ -47,16 +47,18 @@ async def handle_webhook_card(path, headers, data):
         pass
 
 async def webhook_event(request):
-    try:
-        data = await request.read()
-        oapi_request = OapiRequest(
-            uri=request.path, body=data, header=OapiHeader(request.headers)
-        )
-        # 使用 asyncio.to_thread 来处理同步函数
-        await asyncio.to_thread(handle_event, feishu_conf, oapi_request)
-        return web.json_response({"message": "OK"})
-    except Exception:
-        return web.json_response({"message": "Error"}, status=500)
+    print('模    块: main.py - webhook_event: 直接输入')
+    data = await request.read()
+    oapi_request = OapiRequest(
+        uri=request.path, body=data, header=OapiHeader(request.headers)
+    )
+    event_data = await request.json()
+    # 打印接收到的事件数据
+    # print("Received event data:", event_data)
+
+    oapi_resp = handle_event(feishu_conf, oapi_request)
+    print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
+    return web.json_response({"message": "OK"})
 
 def app_main():
     app = web.Application()
