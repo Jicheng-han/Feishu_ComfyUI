@@ -25,16 +25,13 @@ async def webhook_card(request):
 
 async def handle_webhook_card(request):
     print('模    块: main.py - webhook_card: 试试手气')
-    try:
-        data = await request.read()
-        oapi_request = OapiRequest(
-            uri=request.path, body=data, header=OapiHeader(request.headers)
-        )
-        # 假设 handle_card 是一个同步函数，我们将其包装在 asyncio.to_thread 中
-        oapi_resp = await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
-        print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
-    except Exception as e:
-        print(f"处理卡片请求时发生错误: {str(e)}")
+    data = await request.read()
+    oapi_request = OapiRequest(
+        uri=request.path, body=data, header=OapiHeader(request.headers)
+    )
+    oapi_resp = handle_card(feishu_conf, oapi_request)
+    print(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
+    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def webhook_event(request):
     print('模    块: main.py - webhook_event: 直接输入')
