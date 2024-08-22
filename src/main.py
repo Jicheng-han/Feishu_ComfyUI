@@ -25,6 +25,15 @@ async def webhook_card(request):
 
 logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
+
+def oapi_response_to_dict(oapi_resp):
+    return {
+        "status_code": oapi_resp.status_code,
+        "headers": dict(oapi_resp.headers),
+        "body": oapi_resp.body
+    }
+
 async def handle_webhook_card(request):
     logger.info('模块: main.py - webhook_card: 处理卡片请求')
     try:
@@ -33,16 +42,18 @@ async def handle_webhook_card(request):
             uri=request.path, body=data, header=OapiHeader(request.headers)
         )
         
-        # 如果 handle_card 是同步函数，使用 asyncio.to_thread
         if asyncio.iscoroutinefunction(handle_card):
             oapi_resp = await handle_card(feishu_conf, oapi_request)
         else:
             oapi_resp = await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
         
-        logger.debug(f"handle_webhook_card_oapi_request.body: {oapi_resp}")
+        # 将 OapiResponse 对象转换为字典
+        resp_dict = oapi_response_to_dict(oapi_resp)
         
-        # 返回实际的响应内容
-        return web.json_response(oapi_resp)
+        logger.debug(f"handle_webhook_card_oapi_request.body: {resp_dict}")
+        
+        # 返回可 JSON 序列化的字典
+        return web.json_response(resp_dict)
     except Exception as e:
         logger.error(f"处理卡片请求时发生错误: {str(e)}", exc_info=True)
         return web.Response(status=500, text=str(e))
