@@ -6,7 +6,7 @@ import uuid
 import json
 import urllib.request
 import urllib.parse
-
+import asyncio
 #from larksuiteoapi import Config
 from urllib import request, parse
 
@@ -33,16 +33,16 @@ class MessageHandler:
     def __init__(self):
         pass
 
-    def handle_update_message_card(self, token, openId, prompt):
-        prompt = prompt + "retry_update_prompt"
-        messageCard = self.handle_prompt(prompt)
-        if messageCard is None:
-            print("handle_prompt returned None")
-            return None
-        messageCard["open_ids"] = [openId]
-        print(f'模    块: message_handler - handle_update_message_card')
-#        print(f'当前VAE: {sd_webui.get_sd_vae}')
-        return message_sender.update_message_card(token, messageCard)
+    async def handle_update_message_card(self, token, openId, prompt):
+      prompt = prompt + "retry_update_prompt"
+      messageCard = self.handle_prompt(prompt)
+      if messageCard is None:
+        print("handle_prompt returned None")
+        return None
+      messageCard["open_ids"] = [openId]
+      print(f'模    块: message_handler - handle_update_message_card')
+      await asyncio.sleep(0)  # Return 200 status code before continuing execution
+      return message_sender.update_message_card(token, messageCard)
     def update_prompt(self, data, new_prompt):
       for key, value in data.items():
         if isinstance(value, dict) and 'inputs' in value:
