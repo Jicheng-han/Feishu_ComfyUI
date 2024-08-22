@@ -323,7 +323,7 @@ class MessageHandler:
         # print (f'CCCCCCCCCCComfy_prompt:{comfy_prompt}')
         # set the seed for our KSampler node
         comfy_prompt["236"]["inputs"]["noise_seed"] = random.randint(0, 1000000000000000)            
-
+        comfy_prompt["250"]["inputs"]["seed"] = random.randint(0, 2147483647)      
         result = self.queue_prompt(comfy_prompt)
         # print(f"Resultzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: {result}")
         prompt_id = result['prompt_id']
