@@ -34,7 +34,7 @@ class MessageHandler:
     def __init__(self):
         pass
 
-    async def handle_update_message_card(self, token, openId, prompt):
+    def handle_update_message_card(self, token, openId, prompt):
       prompt = prompt + "retry_update_prompt"
       messageCard = self.handle_prompt(prompt)
       if messageCard is None:
@@ -42,7 +42,6 @@ class MessageHandler:
         return None
       messageCard["open_ids"] = [openId]
       print(f'模    块: message_handler - handle_update_message_card')
-      response = web.Response(status=200)
       return message_sender.update_message_card(token, messageCard)
     
     def update_prompt(self, data, new_prompt):
