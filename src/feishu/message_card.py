@@ -83,7 +83,7 @@ def handle_image_card(image_info, img_key_list, prompt):
                     "tag": "button",
                     "text": {
                         "tag": "plain_text",
-                        "content": "AI润色-30秒生成-耐心等待"
+                        "content": "试试手气-AI润色-30秒"
                     },
                     "type": "primary",
                     "value": {
