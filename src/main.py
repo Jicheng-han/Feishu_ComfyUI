@@ -20,23 +20,19 @@ async def ping(request):
 
 async def webhook_card(request):
     # 立即返回 200 状态码
-    asyncio.create_task(handle_webhook_card(request))
-    return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
-
-async def handle_webhook_card(request):
-    print('模    块: main.py - webhook_card: 试试手气')
-    
-    # Immediately respond with 200 OK
     response = web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
     await response.prepare(request)
     await response.write_eof()
 
-    # Continue processing the request asynchronously
-    asyncio.create_task(process_request(request))
+    # 创建一个异步任务来处理请求数据
+    asyncio.create_task(handle_webhook_card(request))
 
     return response
 
-async def process_request(request):
+async def handle_webhook_card(request):
+    print('模    块: main.py - webhook_card: 试试手气')
+    
+    # Continue processing the request asynchronously
     try:
         data = await request.read()
         oapi_request = OapiRequest(
