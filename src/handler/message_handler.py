@@ -9,6 +9,7 @@ import urllib.parse
 import asyncio
 #from larksuiteoapi import Config
 from urllib import request, parse
+from aiohttp import web
 
 from feishu.message_sender import message_sender
 from feishu.data_transfer import upload_image
@@ -41,7 +42,7 @@ class MessageHandler:
         return None
       messageCard["open_ids"] = [openId]
       print(f'模    块: message_handler - handle_update_message_card')
-      await asyncio.sleep(0)  # Return 200 status code before continuing execution
+      response = web.Response(status=200)
       return message_sender.update_message_card(token, messageCard)
     
     def update_prompt(self, data, new_prompt):
