@@ -14,7 +14,7 @@
 2. 异步问题：异步处理不太好，因为飞书3秒超时报错问题，导致用户在排队期间 点击重新生成按钮，会报错，虽然不影响使用，但是导致客户重复点击，增加服务器压力
 3. 交互问题：按钮不能置灰、按钮不能变更文案，交互体验较差
    
-飞书讨论群， https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=dbel773a-47ed-43f7-a8be-0ab4e691eb4c 
+[飞书讨论群](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=dbel773a-47ed-43f7-a8be-0ab4e691eb4c)
 
 ![screenshot-20240823-095849](https://github.com/user-attachments/assets/9fd0eabe-2b34-414c-bb75-8d95e9b39fec)
 
