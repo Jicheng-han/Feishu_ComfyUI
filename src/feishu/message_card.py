@@ -83,7 +83,7 @@ def handle_image_card(image_info, img_key_list, prompt):
                     "tag": "button",
                     "text": {
                         "tag": "plain_text",
-                        "content": "试试手气-AI润色-30秒"
+                        "content": "试试手气 - AI润色 - 30秒"
                     },
                     "type": "primary",
                     "value": {

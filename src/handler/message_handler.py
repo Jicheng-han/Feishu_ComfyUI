@@ -387,7 +387,7 @@ class MessageHandler:
         queue = self.get_queue()
         queue_length = len(queue["queue_running"]) + len(queue["queue_pending"])
 
-        message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等...")
+        message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等 ...")
 
         # 处理请求
         messageCard = self.handle_prompt(myevent.text)
