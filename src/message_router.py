@@ -60,9 +60,11 @@ def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> 
         if myevent.image_key is None:
             if myevent.text is not None:
                 if myevent.is_command_msg():
+                    print('飞书无法排队触发验证---异常触发')
                     done = command_handler.handle_command(myevent)
 
                 else:
+                    print('飞书无法排队触发验证--正常触发')
                     done = message_handler.handle_message(myevent)
 
         else:
