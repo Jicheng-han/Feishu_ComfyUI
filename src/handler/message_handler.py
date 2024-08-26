@@ -21,6 +21,7 @@ import time
 from service.aliyun_translator import aliyun_translator
 from enum import Enum
 
+
 server_address = "127.0.0.1:8188"
 client_id = str(uuid.uuid4())
 # TOKEN is stored in the file `./PASSWORD`, or you can obtain it from the command line window when ComfyUI starts.
@@ -382,14 +383,14 @@ class MessageHandler:
 
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
-    def handle_message(self, myevent: MyReceiveEvent):
+    async def handle_message(self, myevent: MyReceiveEvent):
         # 获取当前队列状态
-        queue = self.get_queue()
+        queue = await self.get_queue()  # 假设get_queue也是异步的
         queue_length = len(queue["queue_running"]) + len(queue["queue_pending"])
 
-        message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等 ...")
+        await message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等 ...")
 
         # 处理请求
-        messageCard = self.handle_prompt(myevent.text)
+        messageCard = await self.handle_prompt(myevent.text)  # 假设handle_prompt也是异步的
 
-        return message_sender.send_message_card(myevent, messageCard)
+        return await message_sender.send_message_card(myevent, messageCard)
