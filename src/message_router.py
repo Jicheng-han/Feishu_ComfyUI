@@ -7,8 +7,6 @@ from typing import Any
 from handler.command_handler import CommandHandler
 from handler.message_handler import MessageHandler
 from handler.image_handler import ImageHandler
-import asyncio
-from aiohttp import web
 
 from util.event_helper import MyReceiveEvent
 from feishu.message_sender import message_sender
@@ -25,7 +23,7 @@ command_handler = CommandHandler()
 image_handler = ImageHandler()
 
 
-async def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> Any:
+def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> Any:
     # ignore request if sender_type is not user
     if event.event.sender.sender_type != 'user':
         return
@@ -62,12 +60,10 @@ async def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEven
         if myevent.image_key is None:
             if myevent.text is not None:
                 if myevent.is_command_msg():
-                    print('飞书无法排队触发验证---异常触发')
                     done = command_handler.handle_command(myevent)
 
                 else:
-                    print('飞书无法排队触发验证--正常触发')
-                    done = await message_handler.handle_message(myevent)
+                    done = message_handler.handle_message(myevent)
 
         else:
             done = image_handler.handle_image(myevent)
@@ -80,4 +76,3 @@ async def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEven
 
     finally:
         mark_event_processed(event)
-#

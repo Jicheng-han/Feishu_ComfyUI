@@ -383,14 +383,14 @@ class MessageHandler:
 
         return handle_image_card({'model': 'abcd','infotexts': []}, images_key, prompts)
 
-    async def handle_message(self, myevent: MyReceiveEvent):
+    def handle_message(self, myevent: MyReceiveEvent):
         # 获取当前队列状态
-        queue = await self.get_queue()  # 假设get_queue也是异步的
+        queue = self.get_queue()
         queue_length = len(queue["queue_running"]) + len(queue["queue_pending"])
 
-        await message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等 ...")
+        message_sender.send_text_message(myevent, f"前面还有{queue_length}个任务，请稍等 ...")
 
         # 处理请求
-        messageCard = await self.handle_prompt(myevent.text)  # 假设handle_prompt也是异步的
+        messageCard = self.handle_prompt(myevent.text)
 
-        return await message_sender.send_message_card(myevent, messageCard)
+        return message_sender.send_message_card(myevent, messageCard)
