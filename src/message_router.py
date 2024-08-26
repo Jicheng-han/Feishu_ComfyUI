@@ -7,6 +7,8 @@ from typing import Any
 from handler.command_handler import CommandHandler
 from handler.message_handler import MessageHandler
 from handler.image_handler import ImageHandler
+import asyncio
+from aiohttp import web
 
 from util.event_helper import MyReceiveEvent
 from feishu.message_sender import message_sender
@@ -23,7 +25,7 @@ command_handler = CommandHandler()
 image_handler = ImageHandler()
 
 
-def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> Any:
+async def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> Any:
     # ignore request if sender_type is not user
     if event.event.sender.sender_type != 'user':
         return
@@ -65,7 +67,7 @@ def route_im_message(ctx: Context, conf: Config, event: MessageReceiveEvent) -> 
 
                 else:
                     print('飞书无法排队触发验证--正常触发')
-                    done = message_handler.handle_message(myevent)
+                    done = await message_handler.handle_message(myevent)
 
         else:
             done = image_handler.handle_image(myevent)
