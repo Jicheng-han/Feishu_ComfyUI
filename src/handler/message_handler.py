@@ -273,7 +273,7 @@ class MessageHandler:
               ],
               "debug": true,
               "url": "http://127.0.0.1:11434",
-              "model": "phi3:3.8b",
+              "model": "phi3:14b",
               "system": "",
               "seed": 231576411,
               "top_k": 40,
