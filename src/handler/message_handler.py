@@ -169,7 +169,7 @@ class MessageHandler:
           },
           "230": {
             "inputs": {
-              "clip_name1": "t5xxl_fp16.safetensors",
+              "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
               "clip_name2": "clip_l.safetensors",
               "type": "flux"
             },
@@ -180,7 +180,7 @@ class MessageHandler:
           },
           "231": {
             "inputs": {
-              "unet_name": "flux1-dev.safetensors",
+              "unet_name": "flux1-dev-fp8.safetensors",
               "weight_dtype": "default"
             },
             "class_type": "UNETLoader",
@@ -273,7 +273,7 @@ class MessageHandler:
               ],
               "debug": true,
               "url": "http://127.0.0.1:11434",
-              "model": "phi3:14b",
+              "model": "phi3:3.8b",
               "system": "",
               "seed": 231576411,
               "top_k": 40,
