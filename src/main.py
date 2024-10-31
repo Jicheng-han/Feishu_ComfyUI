@@ -10,12 +10,12 @@ from message_action import action_im_message
 from feishu.feishu_conf import feishu_conf
 from util.app_config import app_config
 from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
-import asyncio
 import logging
-from aiohttp import web
-import asyncio
-from aiohttp import web
-from base64 import b64decode
+import os
+
+# 获取环境变量
+ENCRYPT_KEY = app_config.APP_ENCRYPT_KEY
+VERIFICATION_TOKEN = app_config.APP_VERIFICATION_TOKEN
 
 # 注册事件处理器
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
@@ -36,62 +36,31 @@ async def webhook_card(request):
     # 立即返回 200 状态码
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
+async def webhook_event(request):
+    data = await request.read()
+    event_data = await request.json()
+    
+    # 添加URL验证处理逻辑
+    if event_data and "challenge" in event_data:
+        challenge = event_data.get("challenge")
+        logging.info(f"Handling URL verification. Challenge: {challenge}")
+        return web.json_response({"challenge": challenge})
+    
+    # 原有的事件处理逻辑
+    oapi_request = OapiRequest(
+        uri=request.path, body=data, header=OapiHeader(request.headers)
+    )
+    oapi_resp = handle_event(feishu_conf, oapi_request)
+    return web.json_response({"message": "OK"})
+
 async def handle_webhook_card(path, headers, data):
     try:
         oapi_request = OapiRequest(
             uri=path, body=data, header=OapiHeader(headers)
         )
-        # 使用 asyncio.to_thread 来处理同步函数
         await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
     except Exception:
         pass
-
-async def webhook_event(request):
-    try:
-        # 读取请求数据
-        data = await request.read()
-        logging.info(f"Received raw data: {data.decode('utf-8')}")
-        
-        event_data = await request.json()
-        logging.info(f"Parsed event data: {json.dumps(event_data, indent=2)}")
-        
-        # 处理加密数据
-        if "encrypt" in event_data:
-            # 使用 encrypt_key 而不是 verification_token
-            encrypt_key = feishu_conf.encrypt_key
-            logging.info(f"Using encrypt_key: {encrypt_key}")
-            
-            encrypted_data = event_data["encrypt"]
-            decrypted_data = decrypt(encrypt_key, encrypted_data)
-            logging.info(f"Decrypted raw data: {decrypted_data}")
-            
-            event_data = json.loads(decrypted_data)
-            logging.info(f"Decrypted event data: {json.dumps(event_data, indent=2)}")
-        
-        # 处理 URL 验证请求
-        if "type" in event_data and event_data["type"] == "url_verification":
-            challenge = event_data.get("challenge")
-            logging.info(f"Handling URL verification. Challenge: {challenge}")
-            return web.json_response({
-                "challenge": challenge,
-                "type": "url_verification"
-            }, headers={
-                'Content-Type': 'application/json; charset=utf-8'
-            })
-        
-        # 处理其他事件请求
-        oapi_request = OapiRequest(
-            uri=request.path, 
-            body=json.dumps(event_data).encode('utf-8'),
-            header=OapiHeader(request.headers)
-        )
-        
-        oapi_resp = handle_event(feishu_conf, oapi_request)
-        return web.json_response({"message": "OK"})
-        
-    except Exception as e:
-        logging.error(f"Error processing webhook event: {str(e)}", exc_info=True)
-        return web.json_response({"error": str(e)}, status=500)
 
 def app_main():
     app = web.Application()
