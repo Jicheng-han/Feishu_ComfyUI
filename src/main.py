@@ -15,7 +15,8 @@ import logging
 from aiohttp import web
 import asyncio
 from aiohttp import web
- 
+from larksuiteoapi.utils.crypto import decrypt
+from base64 import b64decode
 
 # 注册事件处理器
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
@@ -33,7 +34,7 @@ async def webhook_card(request):
     except Exception:
         pass
 
-    # 立即返回 200 状���码
+    # 立即返回 200 状态码
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def handle_webhook_card(path, headers, data):
@@ -57,9 +58,14 @@ async def webhook_event(request):
         
         # 处理加密数据
         if "encrypt" in event_data:
-            encrypt_key = feishu_conf.verification_token
+            # 使用 encrypt_key 而不是 verification_token
+            encrypt_key = feishu_conf.encrypt_key
+            logging.info(f"Using encrypt_key: {encrypt_key}")
+            
             encrypted_data = event_data["encrypt"]
             decrypted_data = decrypt(encrypt_key, encrypted_data)
+            logging.info(f"Decrypted raw data: {decrypted_data}")
+            
             event_data = json.loads(decrypted_data)
             logging.info(f"Decrypted event data: {json.dumps(event_data, indent=2)}")
         
