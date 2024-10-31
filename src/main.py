@@ -15,7 +15,15 @@ import logging
 from aiohttp import web
 import asyncio
 from aiohttp import web
- 
+import os
+import logging
+from flask import Flask, request, jsonify
+import lark_oapi as lark
+from lark_oapi.adapter.flask import *
+from lark_oapi.api.im.v1 import *
+import json
+import threading
+from lark_oapi.adapter.flask import *
  
 # 获取环境变量
 ENCRYPT_KEY = app_config.APP_ENCRYPT_KEY
@@ -64,22 +72,19 @@ async def handle_webhook_card(path, headers, data):
 #     return web.json_response({"message": "OK"})
 
 # 处理事件webhook
-async def webhook_event(request):
+async def webhook_event(post):
     # Handle URL verification
-    try:
-        event_data = await request.json()
-        if "challenge" in event_data:
-            return web.json_response({"challenge": event_data["challenge"]})
+    def event():
+ 
         
-        # Handle other events
-        data = await request.read()
-        oapi_request = OapiRequest(
-            uri=request.path, body=data, header=OapiHeader(request.headers)
-        )
-        asyncio.create_task(handle_event(feishu_conf, oapi_request))
-        return web.Response(status=200)
-    except Exception:
-        return web.Response(status=500)
+        # 处理URL验证请求
+        if request.json and "challenge" in request.json:
+            challenge = request.json.get("challenge")
+            return jsonify({"challenge": challenge})
+        
+        # 处理其他事件
+ 
+        return '', 200
 
 
 def app_main():
