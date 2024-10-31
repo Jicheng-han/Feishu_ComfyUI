@@ -15,7 +15,8 @@ import logging
 from aiohttp import web
 import asyncio
 from aiohttp import web
- 
+
+logging.basicConfig(level=logging.INFO)  # 或者使用 logging.DEBUG 获取更详细的日志
 
 # 注册事件处理器
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
@@ -47,17 +48,25 @@ async def handle_webhook_card(path, headers, data):
         pass
 
 async def webhook_event(request):
-    # print('模    块: main.py - webhook_event: 直接输入')
+    # 读取请求数据
     data = await request.read()
+    event_data = await request.json()
+    
+    # 处理 URL 验证请求
+    if event_data and "challenge" in event_data:
+        challenge = event_data.get("challenge")
+        logging.info(f"Handling URL verification. Challenge: {challenge}")
+        return web.json_response({"challenge": challenge})
+    
+    # 处理其他事件请求
     oapi_request = OapiRequest(
         uri=request.path, body=data, header=OapiHeader(request.headers)
     )
-    event_data = await request.json()
-    # 打印接收到的事件数据
-    # print("Received event data:", event_data)
-
+    
+    # 打印接收到的事件数据（可选）
+    # logging.debug("Received event data:", event_data)
+    
     oapi_resp = handle_event(feishu_conf, oapi_request)
-    # print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
     return web.json_response({"message": "OK"})
 
 def app_main():
