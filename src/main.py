@@ -33,7 +33,7 @@ async def webhook_card(request):
     except Exception:
         pass
 
-    # 立即返回 200 状态码
+    # 立即返回 200 状���码
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
 async def handle_webhook_card(path, headers, data):
@@ -47,18 +47,46 @@ async def handle_webhook_card(path, headers, data):
         pass
 
 async def webhook_event(request):
-    # print('模    块: main.py - webhook_event: 直接输入')
-    data = await request.read()
-    oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.headers)
-    )
-    event_data = await request.json()
-    # 打印接收到的事件数据
-    # print("Received event data:", event_data)
-
-    oapi_resp = handle_event(feishu_conf, oapi_request)
-    # print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
-    return web.json_response({"message": "OK"})
+    try:
+        # 读取请求数据
+        data = await request.read()
+        logging.info(f"Received raw data: {data.decode('utf-8')}")
+        
+        event_data = await request.json()
+        logging.info(f"Parsed event data: {json.dumps(event_data, indent=2)}")
+        
+        # 处理加密数据
+        if "encrypt" in event_data:
+            encrypt_key = feishu_conf.verification_token
+            encrypted_data = event_data["encrypt"]
+            decrypted_data = decrypt(encrypt_key, encrypted_data)
+            event_data = json.loads(decrypted_data)
+            logging.info(f"Decrypted event data: {json.dumps(event_data, indent=2)}")
+        
+        # 处理 URL 验证请求
+        if "type" in event_data and event_data["type"] == "url_verification":
+            challenge = event_data.get("challenge")
+            logging.info(f"Handling URL verification. Challenge: {challenge}")
+            return web.json_response({
+                "challenge": challenge,
+                "type": "url_verification"
+            }, headers={
+                'Content-Type': 'application/json; charset=utf-8'
+            })
+        
+        # 处理其他事件请求
+        oapi_request = OapiRequest(
+            uri=request.path, 
+            body=json.dumps(event_data).encode('utf-8'),
+            header=OapiHeader(request.headers)
+        )
+        
+        oapi_resp = handle_event(feishu_conf, oapi_request)
+        return web.json_response({"message": "OK"})
+        
+    except Exception as e:
+        logging.error(f"Error processing webhook event: {str(e)}", exc_info=True)
+        return web.json_response({"error": str(e)}, status=500)
 
 def app_main():
     app = web.Application()
