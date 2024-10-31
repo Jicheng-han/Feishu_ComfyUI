@@ -50,24 +50,42 @@ async def handle_webhook_card(path, headers, data):
 async def webhook_event(request):
     # 读取请求数据
     data = await request.read()
-    event_data = await request.json()
+    logging.info(f"Received raw data: {data.decode('utf-8')}")
     
-    # 处理 URL 验证请求
-    if event_data and "challenge" in event_data:
-        challenge = event_data.get("challenge")
-        logging.info(f"Handling URL verification. Challenge: {challenge}")
-        return web.json_response({"challenge": challenge})
-    
-    # 处理其他事件请求
-    oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.headers)
-    )
-    
-    # 打印接收到的事件数据（可选）
-    # logging.debug("Received event data:", event_data)
-    
-    oapi_resp = handle_event(feishu_conf, oapi_request)
-    return web.json_response({"message": "OK"})
+    try:
+        event_data = await request.json()
+        logging.info(f"Parsed event data: {json.dumps(event_data, indent=2)}")
+        
+        # 处理 URL 验证请求
+        if event_data and "challenge" in event_data:
+            challenge = event_data.get("challenge")
+            logging.info(f"Handling URL verification. Challenge: {challenge}")
+            # 严格按照飞书文档的格式返回
+            response = {
+                "challenge": challenge,
+                "token": event_data.get("token", ""),  # 如果有token也返回
+                "type": event_data.get("type", "")     # 如果有type也返回
+            }
+            return web.json_response(
+                response,
+                headers={
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            )
+        
+        # 处理其他事件请求
+        oapi_request = OapiRequest(
+            uri=request.path, body=data, header=OapiHeader(request.headers)
+        )
+        
+        oapi_resp = handle_event(feishu_conf, oapi_request)
+        logging.info(f"Event handled, response: {oapi_resp}")
+        return web.json_response({"message": "OK"})
+        
+    except Exception as e:
+        logging.error(f"Error processing webhook event: {str(e)}", exc_info=True)
+        return web.json_response({"error": "Internal server error"}, status=500)
 
 def app_main():
     app = web.Application()
