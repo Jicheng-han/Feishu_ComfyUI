@@ -10,13 +10,16 @@ from message_action import action_im_message
 from feishu.feishu_conf import feishu_conf
 from util.app_config import app_config
 from larksuiteoapi.service.im.v1.event import MessageReceiveEventHandler
+import asyncio
 import logging
-import os
-
+from aiohttp import web
+import asyncio
+from aiohttp import web
+ 
+ 
 # 获取环境变量
 ENCRYPT_KEY = app_config.APP_ENCRYPT_KEY
 VERIFICATION_TOKEN = app_config.APP_VERIFICATION_TOKEN
-
 # 注册事件处理器
 MessageReceiveEventHandler.set_callback(feishu_conf, route_im_message)
 set_card_callback(feishu_conf, action_im_message)
@@ -36,31 +39,48 @@ async def webhook_card(request):
     # 立即返回 200 状态码
     return web.Response(headers={'Content-Type': 'application/json'}, text="", status=200)
 
-async def webhook_event(request):
-    data = await request.read()
-    event_data = await request.json()
-    
-    # 添加URL验证处理逻辑
-    if event_data and "challenge" in event_data:
-        challenge = event_data.get("challenge")
-        logging.info(f"Handling URL verification. Challenge: {challenge}")
-        return web.json_response({"challenge": challenge})
-    
-    # 原有的事件处理逻辑
-    oapi_request = OapiRequest(
-        uri=request.path, body=data, header=OapiHeader(request.headers)
-    )
-    oapi_resp = handle_event(feishu_conf, oapi_request)
-    return web.json_response({"message": "OK"})
-
 async def handle_webhook_card(path, headers, data):
     try:
         oapi_request = OapiRequest(
             uri=path, body=data, header=OapiHeader(headers)
         )
+        # 使用 asyncio.to_thread 来处理同步函数
         await asyncio.to_thread(handle_card, feishu_conf, oapi_request)
     except Exception:
         pass
+
+# async def webhook_event(request):
+#     # print('模    块: main.py - webhook_event: 直接输入')
+#     data = await request.read()
+#     oapi_request = OapiRequest(
+#         uri=request.path, body=data, header=OapiHeader(request.headers)
+#     )
+#     event_data = await request.json()
+#     # 打印接收到的事件数据
+#     # print("Received event data:", event_data)
+
+#     oapi_resp = handle_event(feishu_conf, oapi_request)
+#     # print(f"handle_webhook_event_oapi_request.body: {oapi_resp}")
+#     return web.json_response({"message": "OK"})
+
+# 处理事件webhook
+async def webhook_event(request):
+    # Handle URL verification
+    try:
+        event_data = await request.json()
+        if "challenge" in event_data:
+            return web.json_response({"challenge": event_data["challenge"]})
+        
+        # Handle other events
+        data = await request.read()
+        oapi_request = OapiRequest(
+            uri=request.path, body=data, header=OapiHeader(request.headers)
+        )
+        asyncio.create_task(handle_event(feishu_conf, oapi_request))
+        return web.Response(status=200)
+    except Exception:
+        return web.Response(status=500)
+
 
 def app_main():
     app = web.Application()
